@@ -1,0 +1,9 @@
+*
+!*/
+
+!*.rst
+!*.md
+!doc/spec/conf.py
+
+!.gitignore
+!AUTHORS
