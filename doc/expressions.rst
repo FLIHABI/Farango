@@ -7,6 +7,14 @@ expressions.
 Binary Operators
 ----------------
 
+Binary operators are operators taking two parameters. Invoking an operator
+can be done with two possible syntaxes:
+
+* Operator-like: ``<expr> <op> <expr>``
+* Function-like: ``(<op>)(<expr>, <expr>)``
+
+The language shall natively provide the following operators:
+
 ======== ===========
 Operator Description
 ======== ===========
@@ -34,6 +42,10 @@ Operator Description
 Unary operators
 ---------------
 
+Unary operators, unlike binary operators, only take one parameter.
+
+The language shall natively provide the following operators:
+
 ========== ===========
 Operator   Description
 ========== ===========
@@ -49,6 +61,15 @@ Operator   Description
 
 Operator precedence
 -------------------
+
+Operators in an expression have evaluation priority: this is called
+precedence. An operator takes precedence over an other operator if it
+is evaluated before the other. As an example, ``*`` takes precedence over
+``+``, because ``a + b * c`` can be expanded to ``a + (b * c)``, and not
+``(a + b) * c``.
+
+Below is a table of operators sorted from high precedence (top) to low
+precedence (bottom):
 
 ==================== ====================================
 Operator             Precedence
@@ -87,3 +108,13 @@ Alternatively, one could implement the operator as:
 .. code-block:: farango
 
     (<>) = (!=)
+
+There are no requirements on the purity of user-defined operators, but
+programmers should aspire to make their operators pure.
+
+There are also no requirements on operators laws, with some exceptions on
+default operator overloads:
+
+* ``+``, ``*``, ``^``, ``|``, ``&``, ``==`` and ``!=`` shall be
+  associative and commutative.
+* All comparison operators shall be transitive.
