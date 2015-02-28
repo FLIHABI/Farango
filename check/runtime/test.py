@@ -83,15 +83,20 @@ def get_info(categories, name):
         raise
 
 
+def category_name(categories):
+    name = ''
+    for category in categories[:-1]:
+        name += category + '::'
+    return name + categories[-1]
+
+
 def run_test(binary, categories, name, timeout=None):
     test_info = get_info(categories, name)
     if timeout:
         test_info.timeout = timeout
 
-    test_prefix = ''
-    for category in categories:
-        test_prefix += '%s::' % category
-    print(Color.fg.green + '[ RUN      ]: %s%s ' % (test_prefix, name))
+    test_prefix = category_name(categories)
+    print(Color.fg.green + '[ RUN      ]: %s::%s' % (test_prefix, name))
 
     proc = out = err = None
     with process([binary] + test_info.parameters, timeout=test_info.timeout) as proc:
@@ -111,10 +116,10 @@ def run_test(binary, categories, name, timeout=None):
         fail_string += [message]
 
     if success:
-        print(Color.fg.green + '[       OK ]: %s%s' % (test_prefix, name))
+        print(Color.fg.green + '[       OK ]: %s::%s' % (test_prefix, name))
         return True
     else:
-        print(Color.fg.red + '[     FAIL ]: %s%s' % (test_prefix, name))
+        print(Color.fg.red + '[     FAIL ]: %s::%s' % (test_prefix, name))
         for msg in fail_string:
             error(msg)
         return False
@@ -164,15 +169,13 @@ def main(percent=False, timeout=None, binary=None):
     success = fail = 0.0
     local_test_count = 0
     for (categories, test) in walk_tests([], fetch_tests()):
-        category = categories[0]
-
         if type(test) is list:
-            info('%s (%d tests)' % (category, len(test)))
+            info('%s (%d tests)' % (category_name(categories), len(test)))
             local_test_count = len(test)
         elif test is None:
             ps = success / local_test_count * 100.0
             pf = fail / local_test_count * 100.0
-            important('Summary -- %d %% succeeded, %d %% failed' % (ps, pf))
+            important('Summary -- %d%% succeeded, %d%% failed' % (ps, pf))
 
             test_count += local_test_count
 
