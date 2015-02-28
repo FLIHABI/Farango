@@ -9,6 +9,9 @@
 !*.l
 !*.y
 
+!LICENSE
+!HEADER
+
 !.gitignore
 !AUTHORS
 !Makefile

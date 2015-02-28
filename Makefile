@@ -22,4 +22,7 @@ distclean: clean
 check: all
 	./check/test.sh
 
-.PHONY: all clean distclean
+relicense:
+	copyright-header --license-file HEADER -g -a "check/runtime:check/test.sh:src" -o .
+
+.PHONY: all clean distclean check relicense
