@@ -6,5 +6,9 @@
 !*.py
 !check/test.sh
 
+!*.l
+!*.y
+
 !.gitignore
 !AUTHORS
+!Makefile
