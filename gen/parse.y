@@ -105,6 +105,7 @@
 
 program
     : MODULE module_identifier SEMICOLON expression_list
+    ;
 
 import_identifier
     : dot_sequence module_identifier
@@ -126,7 +127,9 @@ expression_list
     | expression SEMICOLON expression_list
     ;
 
-identifier : IDENTIFIER { };
+identifier
+    : IDENTIFIER { }
+    ;
 
 literal
     : number
@@ -139,10 +142,12 @@ number
     ;
 
 type_decl
-    : TYPE LBRACE member_list RBRACE {};
+    : TYPE LBRACE member_list RBRACE {}
+    ;
 
 var_decl
     : identifier identifier
+    ;
 
 member_list
     : var_decl
@@ -159,8 +164,13 @@ value
     | LBRACE expression_list RBRACE
     ;
 
-member_access : value DOT identifier
-function_call : value LPAREN parameter_list RPAREN
+member_access
+    : value DOT identifier
+    ;
+
+function_call
+    : value LPAREN parameter_list RPAREN
+    ;
 
 binary_op
     : PLUS
@@ -182,25 +192,33 @@ binary_op
     | ASSIGN
     ;
 
-unary_op : BANG
-         | TILDE
-         | USER_OP
-         ;
+unary_op
+    : BANG
+    | TILDE
+    | USER_OP
+    ;
 
-operator : binary_op | BANG | TILDE;
+operator
+    : binary_op
+    | BANG
+    | TILDE
+    ;
 
-expression : value r_exp
-           | declaration
-           | unary_op expression
-           | MINUS expression %prec UMINUS
-           | PLUS expression %prec UPLUS
-           | IMPORT import_identifier
-           | if_expr
-           | while_expr
-           | for_expr
-           ;
+expression
+    : value r_exp
+    | declaration
+    | unary_op expression
+    | MINUS expression %prec UMINUS
+    | PLUS expression %prec UPLUS
+    | IMPORT import_identifier
+    | if_expr
+    | while_expr
+    | for_expr
+    ;
 
-r_exp : %empty | binary_op expression;
+r_exp
+    : %empty | binary_op expression
+    ;
 
 parameter_list
     : %empty
@@ -223,7 +241,8 @@ declaration
 
 if_expr
     : IF LPAREN expression RPAREN expression %prec THEN
-    | IF LPAREN expression RPAREN expression ELSE expression;
+    | IF LPAREN expression RPAREN expression ELSE expression
+    ;
 
 while_expr
     : WHILE LPAREN expression RPAREN expression
