@@ -3,7 +3,8 @@
 
 !*.rst
 !*.md
-!doc/conf.py
+!*.py
+!check/test.sh
 
 !.gitignore
 !AUTHORS
