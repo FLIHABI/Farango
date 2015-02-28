@@ -246,6 +246,8 @@ if_expr
 
 while_expr
     : WHILE LPAREN expression RPAREN expression
+    | DO expression WHILE LPAREN expression RPAREN
+    ;
 
 for_expr
     : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression
