@@ -1,5 +1,5 @@
 input = b"""
-module farango
+module farango;
 """
 
 rules = [ 'compare_exit_status' ]

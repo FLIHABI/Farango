@@ -1,4 +1,4 @@
-input = b'module farango'
+input = b'module farango;'
 
 exit_status = 0
 

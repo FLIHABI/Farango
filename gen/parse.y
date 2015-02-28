@@ -104,9 +104,7 @@
 %%
 
 program
-    : MODULE module_identifier expression_list
-    | NEWLINE
-    | NEWLINE program
+    : MODULE module_identifier SEMICOLON expression_list
 
 import_identifier
     : dot_sequence module_identifier
@@ -125,8 +123,7 @@ module_identifier
 
 expression_list
     : %empty
-    | NEWLINE expression_list
-    | expression NEWLINE expression_list
+    | expression SEMICOLON expression_list
     ;
 
 identifier : IDENTIFIER { };

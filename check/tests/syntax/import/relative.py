@@ -1,7 +1,7 @@
 input = b"""
-module test
+module test;
 
-import .relative
+import .relative;
 """
 
 rules = [ 'compare_exit_status' ]

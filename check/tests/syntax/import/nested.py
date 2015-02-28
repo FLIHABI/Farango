@@ -1,7 +1,7 @@
 input = b"""
-module test
+module test;
 
-import simple.nested.again
+import simple.nested.again;
 """
 
 rules = [ 'compare_exit_status' ]

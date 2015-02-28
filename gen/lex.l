@@ -111,7 +111,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "="          { return TOKEN(ASSIGN); }
 {USER_OP}    { return TOKEN(USER_OP); }
 {SPACE}      { }
-{NEWLINE}    { return TOKEN(NEWLINE); }
+{NEWLINE}    { }
 {INTEGER}    { return TOKEN(INTEGER); }
 {DOUBLE}     { return TOKEN(DOUBLE); }
 {IDENTIFIER} { return TOKEN(IDENTIFIER);  }
