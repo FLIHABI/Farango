@@ -196,6 +196,7 @@ expression : value r_exp
            | PLUS expression %prec UPLUS
            | IMPORT import_identifier
            | if_expr
+           | while_expr
            ;
 
 r_exp : %empty | binary_op expression;
@@ -222,6 +223,9 @@ declaration
 if_expr
     : IF LPAREN expression RPAREN expression %prec THEN
     | IF LPAREN expression RPAREN expression ELSE expression;
+
+while_expr
+    : WHILE LPAREN expression RPAREN expression
 
 %%
 
