@@ -28,8 +28,8 @@
 %token ELSE         "else"
 %token WHILE        "while"
 %token FOR          "for"
-%token FOREACH      "foreach"
 %token DO           "do"
+%token IN           "in"
 %token BREAK        "break"
 %token CONTINUE     "continue"
 %token FUNCTION     "fun"
@@ -197,6 +197,7 @@ expression : value r_exp
            | IMPORT import_identifier
            | if_expr
            | while_expr
+           | for_expr
            ;
 
 r_exp : %empty | binary_op expression;
@@ -226,6 +227,11 @@ if_expr
 
 while_expr
     : WHILE LPAREN expression RPAREN expression
+
+for_expr
+    : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression
+    | FOR LPAREN identifier IN expression RPAREN expression
+    ;
 
 %%
 

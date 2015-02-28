@@ -75,8 +75,8 @@ NEWLINE     \n\r|\r\n|\r|\n
 "else"       { return TOKEN(ELSE); }
 "while"      { return TOKEN(WHILE); }
 "for"        { return TOKEN(FOR); }
-"foreach"    { return TOKEN(FOREACH); }
 "do"         { return TOKEN(DO); }
+"in"         { return TOKEN(IN); }
 "break"      { return TOKEN(BREAK); }
 "continue"   { return TOKEN(CONTINUE); }
 "fun"        { return TOKEN(FUNCTION); }
