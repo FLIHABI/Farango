@@ -120,7 +120,7 @@
 %left OR
 %left AND
 %left MULT DIV
-%left UMINUS UPLUS
+%left UMINUS UPLUS ULNOT UNOT
 
 %start program
 
@@ -199,7 +199,7 @@ function_call
     : value LPAREN parameter_list RPAREN
     ;
 
-binary_op
+operator
     : PLUS
     | MINUS
     | MUL
@@ -217,16 +217,6 @@ binary_op
     | LESS_EQ
     | USER_OP
     | ASSIGN
-    ;
-
-unary_op
-    : BANG
-    | TILDE
-    | USER_OP
-    ;
-
-operator
-    : binary_op
     | BANG
     | TILDE
     ;
@@ -234,7 +224,9 @@ operator
 expression
     : value r_exp
     | declaration
-    | unary_op expression
+    | USER_OP expression
+    | BANG expression %prec ULNOT
+    | TILDE expression %prec UNOT
     | MINUS expression %prec UMINUS
     | PLUS expression %prec UPLUS
     | IMPORT import_identifier
@@ -244,7 +236,7 @@ expression
     ;
 
 r_exp
-    : %empty | binary_op expression
+    : %empty | operator expression
     ;
 
 parameter_list
