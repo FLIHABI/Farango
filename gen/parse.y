@@ -1,3 +1,4 @@
+//%
 /* This file is part of Farango.
  *
  * Copyright (c) 2015 FLIHABI.
