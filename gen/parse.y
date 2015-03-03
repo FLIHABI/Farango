@@ -245,8 +245,14 @@ parameter_list
     | parameter_list COMMA expression
     ;
 
+proto_parameter_list
+    : %empty
+    | var_decl
+    | var_decl COMMA expression
+    ;
+
 func_prototype
-    : FUNCTION identifier LPAREN parameter_list RPAREN
+    : FUNCTION identifier LPAREN proto_parameter_list RPAREN
     ;
 
 func_decl
