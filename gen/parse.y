@@ -241,14 +241,22 @@ r_exp
 
 parameter_list
     : %empty
-    | expression
-    | parameter_list COMMA expression
+    | parameter_list_rec
+    ;
+
+parameter_list_rec
+    : expression
+    | parameter_list_rec COMMA expression
     ;
 
 proto_parameter_list
     : %empty
-    | var_decl
-    | var_decl COMMA expression
+    | proto_parameter_list_rec
+    ;
+
+proto_parameter_list_rec
+    : var_decl
+    | proto_parameter_list_rec COMMA var_decl
     ;
 
 func_prototype
