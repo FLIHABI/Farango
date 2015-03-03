@@ -1,7 +1,7 @@
 input = b"""
 module test.function;
 
-fun test_function(param0, param1) = {
+fun test_function(type param0, type param1) = {
     
 };
 

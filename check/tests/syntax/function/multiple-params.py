@@ -1,7 +1,7 @@
 input = b"""
 module test.function;
 
-fun min2(a, b) = {
+fun min2(int a, int b) = {
     if (a > b) b else a;
 };
 
