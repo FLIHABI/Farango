@@ -2,7 +2,10 @@ CXX = g++
 CXXFLAGS = -DYYDEBUG=1 -Igen/
 TARGET = fgc
 
-all: $(TARGET)
+all: $(TARGET) src
+
+src :
+	cd src && make all;
 
 $(TARGET): gen/parse.cc gen/lex.cc
 	$(CXX) -DYYDEBUG=1 -o $@ $^
@@ -13,7 +16,9 @@ gen/parse.cc: gen/parse.y
 gen/lex.cc: gen/lex.l
 	flex -o $@ $<
 
+
 clean:
+	cd src && make clean
 	$(RM) gen/parse.cc gen/lex.cc
 
 distclean: clean
@@ -25,4 +30,4 @@ check: all
 relicense:
 	copyright-header --license-file HEADER -g -a "check/runtime:check/test.sh:src" -o .
 
-.PHONY: all clean distclean check relicense
+.PHONY: all clean distclean check relicense src

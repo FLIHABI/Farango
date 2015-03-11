@@ -79,8 +79,6 @@ namespace misc
   unique<T, C>::operator<(const value_type& rhs) const
   {
     C cmp;
-    assertion(obj_);
-    assertion(rhs.obj_);
     return cmp(*obj_, *rhs.obj_);
   }
 
