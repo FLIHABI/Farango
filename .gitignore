@@ -9,6 +9,10 @@
 !*.l
 !*.y
 
+!src/*/*.cc
+!src/*/*.hh
+!src/*/*.hxx
+
 !LICENSE
 !HEADER
 
