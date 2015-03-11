@@ -182,17 +182,17 @@ member_list
     ;
 
 value
-    : identifier
+    : lvalue
     | literal
-    | member_access
     | function_call
     | LPAREN expression RPAREN
     | LPAREN operator RPAREN
     | LBRACE expression_list RBRACE
     ;
 
+//Warning, can't do foo().toto
 member_access
-    : value DOT identifier
+    : lvalue DOT identifier 
     ;
 
 function_call
@@ -216,13 +216,18 @@ operator
     | LESS
     | LESS_EQ
     | USER_OP
-    | ASSIGN
     | BANG
     | TILDE
     ;
 
+lvalue
+    : member_access
+    | identifier
+    ;
+
 expression
     : value r_exp
+    | lvalue ASSIGN expression
     | declaration
     | USER_OP expression
     | BANG expression %prec ULNOT
