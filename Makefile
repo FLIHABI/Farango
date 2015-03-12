@@ -4,9 +4,6 @@ TARGET = fgc
 
 all: $(TARGET) src
 
-src :
-	cd src && make all;
-
 $(TARGET): gen/parse.cc gen/lex.cc
 	$(CXX) -DYYDEBUG=1 -o $@ $^
 
@@ -16,9 +13,7 @@ gen/parse.cc: gen/parse.y
 gen/lex.cc: gen/lex.l
 	flex -o $@ $<
 
-
 clean:
-	cd src && make clean
 	$(RM) gen/parse.cc gen/lex.cc
 
 distclean: clean
