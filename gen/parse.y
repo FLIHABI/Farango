@@ -151,7 +151,7 @@ module_identifier
 
 expression_list
     : %empty
-    | expression SEMICOLON expression_list
+    | expression_list SEMICOLON expression
     ;
 
 identifier
