@@ -224,7 +224,7 @@ operator /* ast exist */
     | GREATER_EQ /* ast exist */
     | LESS /* ast exist */
     | LESS_EQ /* ast exist */
-    | USER_OP /* ast exist */
+    | USER_OP /* FIXME */
     | BANG /* ast exist */
     | TILDE /* ast exist */
     ;
@@ -239,11 +239,11 @@ expression
     | value operator expression /* ast exist */
     | lvalue ASSIGN expression /* ast exist */
     | declaration
-    | USER_OP expression
-    | BANG expression %prec ULNOT
-    | TILDE expression %prec UNOT
-    | MINUS expression %prec UMINUS
-    | PLUS expression %prec UPLUS
+    | USER_OP expression /* FIXME */
+    | BANG expression %prec ULNOT /* ast exist */
+    | TILDE expression %prec UNOT /* ast exist */
+    | MINUS expression %prec UMINUS /* ast exist */
+    | PLUS expression %prec UPLUS /* ast exist */
     | IMPORT import_identifier
     | if_expr
     | while_expr
@@ -256,14 +256,14 @@ r_exp
     ;
 */
 
-parameter_list
-    : %empty
-    | parameter_list_rec
+parameter_list /* ast exist */
+    : %empty /* ast exist */
+    | parameter_list_rec /* ast exist */
     ;
 
-parameter_list_rec
-    : expression
-    | parameter_list_rec COMMA expression
+parameter_list_rec /* ast exist */
+    : expression /* ast exist */
+    | parameter_list_rec COMMA expression /* ast exist */
     ;
 
 proto_parameter_list
@@ -291,8 +291,8 @@ declaration
     ;
 
 if_expr
-    : IF LPAREN expression RPAREN expression %prec THEN
-    | IF LPAREN expression RPAREN expression ELSE expression
+    : IF LPAREN expression RPAREN expression THEN expression
+    | IF LPAREN expression RPAREN expression THEN expression ELSE expression
     ;
 
 while_expr

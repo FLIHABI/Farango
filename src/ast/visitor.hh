@@ -19,6 +19,7 @@ namespace ast
             virtual void operator()(Lvalue& e) = 0;
             virtual void operator()(MemberAccess& e) = 0;
             virtual void operator()(AssignExp& e) = 0;
+            virtual void operator()(UnaryExp& e) = 0;
 
     };
 } //ast

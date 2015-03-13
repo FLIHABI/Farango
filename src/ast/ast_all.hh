@@ -36,6 +36,7 @@ namespace ast
     class Lvalue; //FIXME, symbole
     class MemberAccess; //FIXME, symbole
     class AssignExp
+    class UnaryExp
 
     class Visitor;
 
