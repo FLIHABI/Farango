@@ -149,27 +149,27 @@ module_identifier
     | identifier DOT module_identifier
     ;
 
-expression_list
-    : %empty
-    | expression_list_rec
+expression_list /* ast exist */
+    : %empty /* ast exist */
+    | expression_list_rec /* ast exist */
     ;
 
-expression_list_rec
-    : expression SEMICOLON
-    | expression_list_rec expression SEMICOLON
+expression_list_rec /* ast exist */
+    : expression SEMICOLON /* ast exist */
+    | expression_list_rec expression SEMICOLON /* ast exist */
     ;
 
 identifier
     : IDENTIFIER { }
     ;
 
-literal
-    : number
+literal /* ast exist */
+    : number /* ast exist */
     | STRING {}
     ;
 
-number
-    : INTEGER
+number /* ast exist */
+    : INTEGER /* ast exist */
     | DOUBLE
     ;
 
@@ -178,7 +178,7 @@ type_decl
     ;
 
 var_decl
-    : identifier identifier
+    : VAR identifier COLON identifier /* ast exist */
     ;
 
 member_list
@@ -186,22 +186,22 @@ member_list
     | member_list SEMICOLON var_decl
     ;
 
-value
-    : lvalue
-    | literal
-    | function_call
-    | LPAREN expression RPAREN
-    | LPAREN operator RPAREN
-    | LBRACE expression_list RBRACE
+value /* ast exist */
+    : lvalue /* ast exist */
+    | literal /* ast exist */
+    | function_call /* ast exist */
+    | LPAREN expression RPAREN /* ast exist */
+    | LPAREN operator RPAREN /* ast exist */
+    | LBRACE expression_list RBRACE /* ast exist */
     ;
 
 //Warning, can't do foo().toto
-member_access
-    : lvalue DOT identifier 
+member_access /* ast exist */
+    : lvalue DOT identifier  /* ast exist */
     ;
 
-function_call
-    : value LPAREN parameter_list RPAREN
+function_call /* ast exist */
+    : value LPAREN parameter_list RPAREN /* ast exist */
     ;
 
 operator
@@ -225,14 +225,15 @@ operator
     | TILDE
     ;
 
-lvalue
-    : member_access
-    | identifier
+lvalue /* ast exist */
+    : member_access /* ast exist */
+    | identifier /* ast exist */
     ;
 
 expression
-    : value r_exp
-    | lvalue ASSIGN expression
+    : value /* ast exist */
+    | value operator expression /* ast exist */
+    | lvalue ASSIGN expression /* ast exist */
     | declaration
     | USER_OP expression
     | BANG expression %prec ULNOT
@@ -245,9 +246,11 @@ expression
     | for_expr
     ;
 
+/*
 r_exp
     : %empty | operator expression
     ;
+*/
 
 parameter_list
     : %empty
@@ -279,6 +282,7 @@ func_decl
 
 declaration
     : type_decl
+    | var_decl
     | func_decl
     ;
 
