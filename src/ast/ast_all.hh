@@ -35,8 +35,9 @@ namespace ast
     class BinaryExp; 
     class Lvalue; //FIXME, symbole
     class MemberAccess; //FIXME, symbole
-    class AssignExp
-    class UnaryExp
+    class AssignExp;
+    class UnaryExp;
+    class IfExp;
 
     class Visitor;
 
