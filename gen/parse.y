@@ -181,9 +181,13 @@ var_decl
     : VAR identifier COLON identifier /* ast exist */
     ;
 
+var_decl_inside
+    : identifier identifier /* ast exist */
+    ;
+
 member_list
-    : var_decl
-    | member_list SEMICOLON var_decl
+    : var_decl_inside
+    | member_list SEMICOLON var_decl_inside
     ;
 
 value /* ast exist */
@@ -268,8 +272,8 @@ proto_parameter_list
     ;
 
 proto_parameter_list_rec
-    : var_decl
-    | proto_parameter_list_rec COMMA var_decl
+    : var_decl_inside
+    | proto_parameter_list_rec COMMA var_decl_inside
     ;
 
 func_prototype
