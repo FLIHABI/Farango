@@ -208,25 +208,25 @@ function_call /* ast exist */
     : value LPAREN parameter_list RPAREN /* ast exist */
     ;
 
-operator
-    : PLUS
-    | MINUS
-    | MUL
-    | DIV
-    | EQUAL
-    | NEQUAL
-    | AND
-    | OR
-    | XOR
-    | LAND
-    | LOR
-    | GREATER
-    | GREATER_EQ
-    | LESS
-    | LESS_EQ
-    | USER_OP
-    | BANG
-    | TILDE
+operator /* ast exist */
+    : PLUS /* ast exist */
+    | MINUS /* ast exist */
+    | MUL /* ast exist */
+    | DIV /* ast exist */
+    | EQUAL /* ast exist */
+    | NEQUAL /* ast exist */
+    | AND /* ast exist */
+    | OR /* ast exist */
+    | XOR /* ast exist */
+    | LAND /* ast exist */
+    | LOR /* ast exist */
+    | GREATER /* ast exist */
+    | GREATER_EQ /* ast exist */
+    | LESS /* ast exist */
+    | LESS_EQ /* ast exist */
+    | USER_OP /* ast exist */
+    | BANG /* ast exist */
+    | TILDE /* ast exist */
     ;
 
 lvalue /* ast exist */
