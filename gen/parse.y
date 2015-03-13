@@ -245,8 +245,9 @@ expression
     | MINUS expression %prec UMINUS /* ast exist */
     | PLUS expression %prec UPLUS /* ast exist */
     | IMPORT import_identifier
-    | if_expr
-    | while_expr
+    | if_expr /* ast exist */
+    | while_expr /* ast exist */
+    | do_expr /* ast exist */
     | for_expr
     ;
 
@@ -290,14 +291,17 @@ declaration
     | func_decl
     ;
 
-if_expr
-    : IF LPAREN expression RPAREN expression THEN expression
-    | IF LPAREN expression RPAREN expression THEN expression ELSE expression
+if_expr/* ast exist */
+    : IF LPAREN expression RPAREN expression THEN expression/* ast exist */
+    | IF LPAREN expression RPAREN expression THEN expression ELSE expression/* ast exist */
     ;
 
-while_expr
-    : WHILE LPAREN expression RPAREN expression
-    | DO expression WHILE LPAREN expression RPAREN
+while_expr /* ast exist */
+    : WHILE LPAREN expression RPAREN expression /* ast exist */
+    ;
+
+do_expr /* ast exist */
+    : DO expression WHILE LPAREN expression RPAREN /* ast exist */
     ;
 
 for_expr

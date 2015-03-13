@@ -38,6 +38,8 @@ namespace ast
     class AssignExp;
     class UnaryExp;
     class IfExp;
+    class DoExp;
+    class WhileExp;
 
     class Visitor;
 

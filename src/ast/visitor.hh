@@ -21,6 +21,8 @@ namespace ast
             virtual void operator()(AssignExp& e) = 0;
             virtual void operator()(UnaryExp& e) = 0;
             virtual void operator()(IfExp& e) = 0;
+            virtual void operator()(DoExp& e) = 0;
+            virtual void operator()(WhileExp& e) = 0;
 
     };
 } //ast
