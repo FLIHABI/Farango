@@ -18,4 +18,9 @@
 
 !.gitignore
 !AUTHORS
-!Makefile
+!build.gradle
+
+!gradle/wrapper/*
+!gradle.properties
+!gradlew
+!gradlew.bat

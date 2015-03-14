@@ -1,0 +1,93 @@
+// vim: set ft=groovy
+defaultTasks 'release'
+
+// Apply plugins
+apply plugin: 'cpp'
+
+// Basic project information
+group = 'FLIHABI'
+version = '0.0.1-SNAPSHOT'
+
+// Extended project information
+ext.projectName = 'Farango Compiler'
+ext.inceptionYear = '2015'
+ext.packaging = 'tar'
+ext.url = ''
+ext.description = 'The reference compiler for the Farango programming language'
+ext.organization = 'FLIHABI'
+
+model {
+  components {
+    fgc(NativeExecutableSpec) {
+      sources {
+        cpp {
+          source {
+            srcDir 'src/'
+            include '**/*.cc'
+          }
+        }
+      }
+    }
+  }
+  buildTypes {
+    debug {}
+    release {}
+  }
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {}
+}
+
+task generateParser(type: Exec) {
+  workingDir 'src/parse/'
+  commandLine 'bison', '-dtv', '-o', 'parse.cc', 'parse.y'
+
+  outputs.files (['parse.cc', 'parse.hh', 'parse.output', 'stack.hh'].collect {
+    new File(workingDir, it)
+  })
+  clean.dependsOn cleanGenerateParser
+}
+
+task generateLexer(type: Exec) {
+  dependsOn generateParser
+  workingDir 'src/parse/'
+  commandLine 'flex', '-o', 'lex.cc', 'lex.l'
+
+  outputs.files (['lex.cc'].collect {
+    new File(workingDir, it)
+  })
+  clean.dependsOn cleanGenerateLexer
+}
+
+def binariesByType(buildType) {
+  binaries.matching {
+    it.buildable && it.buildType.name == buildType
+  }
+}
+
+task release {
+  dependsOn binariesByType('release')
+}
+
+task debug {
+  dependsOn binariesByType('debug')
+}
+
+gradle.projectsEvaluated {
+  tasks.releaseFgcExecutable.dependsOn generateLexer
+}
+
+binaries.all {
+  if (toolChain in Gcc || toolChain in Clang) {
+    cppCompiler.args "-Wall", "-Wextra", "-std=c++14"
+    if (buildType == buildTypes.debug) {
+      cppCompiler.args "-g -O0"
+    } else {
+      cppCompiler.args "-O3"
+    }
+  }
+}
