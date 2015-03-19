@@ -174,7 +174,7 @@ number /* ast exist */
     ;
 
 type_decl
-    : TYPE LBRACE member_list RBRACE {}
+    : TYPE identifier ASSIGN LBRACE member_list RBRACE {}
     ;
 
 var_decl
@@ -292,8 +292,8 @@ declaration
     ;
 
 if_expr/* ast exist */
-    : IF LPAREN expression RPAREN expression THEN expression/* ast exist */
-    | IF LPAREN expression RPAREN expression THEN expression ELSE expression/* ast exist */
+    : IF LPAREN expression RPAREN expression %prec THEN/* ast exist */
+    | IF LPAREN expression RPAREN expression ELSE expression/* ast exist */
     ;
 
 while_expr /* ast exist */
