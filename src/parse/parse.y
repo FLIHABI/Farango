@@ -203,17 +203,17 @@ type_union
     | type_union OR type_identifier
     ;
 
-var_decl
-    : VAR identifier COLON identifier /* ast exist */
+typed_var
+    : identifier COLON identifier
     ;
 
-var_decl_inside
-    : identifier identifier /* ast exist */
+var_decl
+    : VAR typed_var /* ast exist */
     ;
 
 member_list
-    : var_decl_inside
-    | member_list SEMICOLON var_decl_inside
+    : typed_var SEMICOLON
+    | member_list typed_var SEMICOLON
     ;
 
 value /* ast exist */
@@ -299,8 +299,8 @@ proto_parameter_list
     ;
 
 proto_parameter_list_rec
-    : var_decl_inside
-    | proto_parameter_list_rec COMMA var_decl_inside
+    : typed_var
+    | proto_parameter_list_rec COMMA typed_var
     ;
 
 func_prototype
