@@ -1,7 +1,7 @@
 input = b"""
 module test.function;
 
-fun identity(int e) = e;
+fun identity(e : int) = e;
 """
 
 rules = [ 'compare_exit_status' ]

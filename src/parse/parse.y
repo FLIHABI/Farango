@@ -173,21 +173,47 @@ number /* ast exist */
     | DOUBLE
     ;
 
+type_identifier
+    : identifier generics_list
+    ;
+
+generics_list
+    : %empty
+    | identifier
+    | LPAREN generics_list_inner RPAREN
+    ;
+
+generics_list_inner
+    : identifier
+    | generics_list_inner COMMA identifier
+    ;
+
 type_decl
-    : TYPE identifier ASSIGN LBRACE member_list RBRACE {}
+    : TYPE type_identifier ASSIGN type_spec
+    | TYPE type_identifier
+    ;
+
+type_spec
+    : LBRACE member_list RBRACE
+    | type_union
+    ;
+
+type_union
+    : type_identifier
+    | type_union OR type_identifier
+    ;
+
+typed_var
+    : identifier COLON identifier
     ;
 
 var_decl
-    : VAR identifier COLON identifier /* ast exist */
-    ;
-
-var_decl_inside
-    : identifier identifier /* ast exist */
+    : VAR typed_var /* ast exist */
     ;
 
 member_list
-    : var_decl_inside
-    | member_list SEMICOLON var_decl_inside
+    : typed_var SEMICOLON
+    | member_list typed_var SEMICOLON
     ;
 
 value /* ast exist */
@@ -273,8 +299,8 @@ proto_parameter_list
     ;
 
 proto_parameter_list_rec
-    : var_decl_inside
-    | proto_parameter_list_rec COMMA var_decl_inside
+    : typed_var
+    | proto_parameter_list_rec COMMA typed_var
     ;
 
 func_prototype
