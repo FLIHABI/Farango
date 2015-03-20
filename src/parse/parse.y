@@ -173,8 +173,34 @@ number /* ast exist */
     | DOUBLE
     ;
 
+type_identifier
+    : identifier generics_list
+    ;
+
+generics_list
+    : %empty
+    | identifier
+    | LPAREN generics_list_inner RPAREN
+    ;
+
+generics_list_inner
+    : identifier
+    | generics_list_inner COMMA identifier
+    ;
+
 type_decl
-    : TYPE LBRACE member_list RBRACE {}
+    : TYPE type_identifier ASSIGN type_spec
+    | TYPE type_identifier
+    ;
+
+type_spec
+    : LBRACE member_list RBRACE
+    | type_union
+    ;
+
+type_union
+    : type_identifier
+    | type_union OR type_identifier
     ;
 
 var_decl
