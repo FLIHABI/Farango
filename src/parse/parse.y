@@ -318,7 +318,7 @@ declaration
     ;
 
 if_expr/* ast exist */
-    : IF LPAREN expression RPAREN expression %prec THEN/* ast exist */
+    : IF LPAREN expression RPAREN expression %prec THEN /* ast exist */
     | IF LPAREN expression RPAREN expression ELSE expression/* ast exist */
     ;
 
