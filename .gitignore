@@ -9,9 +9,13 @@
 !*.l
 !*.y
 
+
 !src/*/*.cc
 !src/*/*.hh
 !src/*/*.hxx
+
+src/parse/*.cc
+src/parse/*.hh
 
 !LICENSE
 !HEADER
