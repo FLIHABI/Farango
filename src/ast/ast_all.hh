@@ -20,6 +20,9 @@
  *      Double
  *   Declaration*
  *    TypeDec
+ *    VarDec *
+ *    FunctionDec *
+ *     FunctionPrototype *
  *
  */
 
@@ -40,10 +43,15 @@ namespace ast
     class IfExp;
     class DoExp;
     class WhileExp;
+    class Declaration;
+    class VarDec;
+    class FunctionPrototype;
 
     class Visitor;
 
-    class Symbole; //from misc, FIXME
+    class Symbole
+    {
+    }; //from misc, FIXME
 }
 
 #endif /* AST_ALL_HH */

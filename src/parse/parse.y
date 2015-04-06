@@ -204,10 +204,10 @@ type_union
     ;
 
 typed_var
-    : identifier COLON identifier
+    : identifier COLON type_identifier
     ;
 
-var_decl
+var_decl /* ast exist */
     : VAR typed_var /* ast exist */
     ;
 
@@ -227,7 +227,7 @@ value /* ast exist */
 
 //Warning, can't do foo().toto
 member_access /* ast exist */
-    : lvalue DOT identifier  /* ast exist */
+    : value DOT identifier  /* ast exist */
     ;
 
 function_call /* ast exist */
@@ -250,10 +250,12 @@ operator /* ast exist */
     | GREATER_EQ /* ast exist */
     | LESS /* ast exist */
     | LESS_EQ /* ast exist */
-    | USER_OP /* FIXME */
     | BANG /* ast exist */
     | TILDE /* ast exist */
     ;
+
+//| USER_OP /* FIXME */
+
 
 lvalue /* ast exist */
     : member_access /* ast exist */
@@ -293,28 +295,28 @@ parameter_list_rec /* ast exist */
     | parameter_list_rec COMMA expression /* ast exist */
     ;
 
-proto_parameter_list
-    : %empty
-    | proto_parameter_list_rec
+proto_parameter_list /* ast exist */
+    : %empty /* ast exist */
+    | proto_parameter_list_rec /* ast exist */
     ;
 
-proto_parameter_list_rec
-    : typed_var
-    | proto_parameter_list_rec COMMA typed_var
+proto_parameter_list_rec /* ast exist */
+    : typed_var /* ast exist */
+    | proto_parameter_list_rec COMMA typed_var /* ast exist */
     ;
 
-func_prototype
-    : FUNCTION identifier LPAREN proto_parameter_list RPAREN
+func_prototype /* ast exist */
+    : FUNCTION identifier LPAREN proto_parameter_list RPAREN /* ast exist */
     ;
 
-func_decl
-    : func_prototype ASSIGN expression
+func_decl /* ast exist */
+    : func_prototype ASSIGN expression /* ast exist */
     ;
 
 declaration
     : type_decl
-    | var_decl
-    | func_decl
+    | var_decl /* ast exist */
+    | func_decl /* ast exist */
     ;
 
 if_expr/* ast exist */
@@ -332,7 +334,7 @@ do_expr /* ast exist */
 
 for_expr
     : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression
-    | FOR LPAREN identifier IN expression RPAREN expression
+    | FOR LPAREN identifier IN expression RPAREN expression /* Will disapear*/
     ;
 
 %%

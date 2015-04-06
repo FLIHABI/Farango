@@ -23,6 +23,9 @@ namespace ast
             virtual void operator()(IfExp& e) = 0;
             virtual void operator()(DoExp& e) = 0;
             virtual void operator()(WhileExp& e) = 0;
+            virtual void operator()(Declaration& e) = 0;
+            virtual void operator()(VarDec& e) = 0;
+            virtual void operator()(FunctionPrototype& e) = 0;
 
     };
 } //ast
