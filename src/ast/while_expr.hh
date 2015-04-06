@@ -23,7 +23,6 @@ namespace ast
                 v(*this);
             }
 
-
             std::shared_ptr<Exp> condition_get()
             {
                 return condition_;

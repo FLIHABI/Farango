@@ -329,7 +329,7 @@ do_expr /* ast exist */
     ;
 
 for_expr
-    : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression
+    : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression /* ast exist */
     | FOR LPAREN identifier IN expression RPAREN expression /* Will disapear*/
     ;
 
