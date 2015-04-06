@@ -45,6 +45,9 @@
     extern FILE* yyin;
 }
 
+%token <std::string>    STRING "string"
+%token <int>            INTEGER     "integer"
+
 /************************************************
  *                    TOKENS                    *
  ************************************************/
@@ -98,11 +101,8 @@
 %token ASSIGN       "="
 
 %token USER_OP      "USER_OP"
-%token INTEGER      "INTEGER"
 %token DOUBLE       "DOUBLE"
-%token STRING       "string"
-
-%token IDENTIFIER   "IDENTIFIER"
+%token IDENTIFIER   "ID"
 
 %token END_OF_FILE 0 "<EOF>"
 
@@ -132,6 +132,7 @@
 
 program
     : MODULE module_identifier SEMICOLON expression_list
+    | expression_list //Hack
     ;
 
 import_identifier
@@ -160,7 +161,7 @@ expression_list_rec /* ast exist */
     ;
 
 identifier
-    : IDENTIFIER { }
+    : IDENTIFIER {}
     ;
 
 literal /* ast exist */
@@ -169,7 +170,7 @@ literal /* ast exist */
     ;
 
 number /* ast exist */
-    : INTEGER /* ast exist */
+    : INTEGER {}/* ast exist */
     | DOUBLE
     ;
 

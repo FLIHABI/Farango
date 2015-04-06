@@ -37,6 +37,7 @@ int comment_nest_level = 0;
 typedef yy::parser::token token;
 
 #define TOKEN(type) yy::parser::make_ ## type()
+#define TOKEN_VAL(type, value) yy::parser::make_ ## type(value)
 #define ABORT(msg)                      \
     do {                                \
         std::cerr << msg << std::endl;  \
@@ -45,6 +46,7 @@ typedef yy::parser::token token;
 
 #define yyterminate() return TOKEN(END_OF_FILE)
 
+std::string buffer;
 %}
 
 %option noyywrap
@@ -63,17 +65,19 @@ NEWLINE     \n\r|\r\n|\r|\n
 
 %%
 
+
 "\"" {
+    buffer = "";
     BEGIN(STRING_STATE);
 }
 <STRING_STATE>
 {
-    "\\[\\\"vtrnfba]"    {}
+    "\\[\\\"vtrnfba]"    {buffer += yytext;}
     "\\".     { ABORT("Syntax error: string: invalid escaping"); }
     <<EOF>>   { ABORT("Syntax error: string: unterminated string"); }
-    "\""      { BEGIN(INITIAL); return TOKEN(STRING); }
+    "\""      { BEGIN(INITIAL); return TOKEN_VAL(STRING, buffer); }
     NEWLINE   { ABORT("Syntax error: string: unexpected line feed"); }
-    .         {}
+    .         { buffer += yytext; }
 }
 
 "\/\*" {
@@ -106,6 +110,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "break"      { return TOKEN(BREAK); }
 "continue"   { return TOKEN(CONTINUE); }
 "fun"        { return TOKEN(FUNCTION); }
+"var"        { return TOKEN(VAR); }
 "type"       { return TOKEN(TYPE); }
 "import"     { return TOKEN(IMPORT); }
 "module"     { return TOKEN(MODULE); }
@@ -138,7 +143,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 {USER_OP}    { return TOKEN(USER_OP); }
 {SPACE}      { }
 {NEWLINE}    { }
-{INTEGER}    { return TOKEN(INTEGER); }
+{INTEGER}    { return TOKEN_VAL(INTEGER, std::stoi(yytext)); }
 {DOUBLE}     { return TOKEN(DOUBLE); }
 {IDENTIFIER} { return TOKEN(IDENTIFIER);  }
 .            { ABORT("Syntax error, unexpected token '" << yytext << "'"); }
