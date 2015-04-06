@@ -42,6 +42,7 @@
     #include <cstdlib>
 
     #include "lib/symbol.hh"
+    #include "ast/all.hh"
 }
 
 %code
@@ -166,7 +167,7 @@ expression_list_rec /* ast exist */
     ;
 
 identifier
-    : IDENTIFIER {}
+    : IDENTIFIER {} /* ast exist */
     ;
 
 literal /* ast exist */

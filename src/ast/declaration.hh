@@ -1,4 +1,4 @@
-#ifndef DECLARATION_HHj
+#ifndef DECLARATION_HH
 # define DECLARATION_HH
 
 # include "exp.hh"

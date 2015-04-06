@@ -28,6 +28,8 @@
  *
  */
 
+# include "lib/symbol.hh"
+
 namespace ast
 {
     class Ast;
@@ -55,10 +57,7 @@ namespace ast
     class TypeUnion;
 
     class Visitor;
-
-    class Symbole
-    {
-    }; //from misc, FIXME
+    using Symbole = misc::symbol;
 }
 
 #endif /* AST_ALL_HH */
