@@ -46,6 +46,7 @@ task generateParser(type: Exec) {
   workingDir 'src/parse/'
   commandLine 'bison', '-dtv', '-o', 'parse.cc', 'parse.y'
 
+  inputs.files  (['parse.y'].collect { new File(workingDir, it) })
   outputs.files (['parse.cc', 'parse.hh', 'parse.output', 'stack.hh'].collect {
     new File(workingDir, it)
   })
@@ -57,6 +58,7 @@ task generateLexer(type: Exec) {
   workingDir 'src/parse/'
   commandLine 'flex', '-o', 'lex.cc', 'lex.l'
 
+  inputs.files  (['lex.l'].collect { new File(workingDir, it) })
   outputs.files (['lex.cc'].collect {
     new File(workingDir, it)
   })
