@@ -28,7 +28,9 @@
 
 #include <iostream>
 #include <sstream>
+
 #include "parse.hh"
+#include "lib/symbol.hh"
 
 int comment_nest_level = 0;
 
@@ -145,6 +147,6 @@ NEWLINE     \n\r|\r\n|\r|\n
 {NEWLINE}    { }
 {INTEGER}    { return TOKEN_VAL(INTEGER, std::stoi(yytext)); }
 {DOUBLE}     { return TOKEN(DOUBLE); }
-{IDENTIFIER} { return TOKEN(IDENTIFIER);  }
+{IDENTIFIER} { return TOKEN_VAL(IDENTIFIER, misc::symbol(yytext));  }
 .            { ABORT("Syntax error, unexpected token '" << yytext << "'"); }
 %%

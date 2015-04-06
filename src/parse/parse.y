@@ -35,18 +35,24 @@
 %define api.token.constructor
 %define api.value.type variant
 
-%code
+%code requires
 {
     #include <iostream>
     #include <cstdio>
     #include <cstdlib>
 
+    #include "lib/symbol.hh"
+}
+
+%code
+{
     yy::parser::symbol_type yylex();
     extern FILE* yyin;
 }
 
-%token <std::string>    STRING "string"
-%token <int>            INTEGER     "integer"
+%token <std::string>    STRING       "string"
+%token <int>            INTEGER      "integer"
+%token <misc::symbol>   IDENTIFIER   "ID"
 
 /************************************************
  *                    TOKENS                    *
@@ -102,7 +108,6 @@
 
 %token USER_OP      "USER_OP"
 %token DOUBLE       "DOUBLE"
-%token IDENTIFIER   "ID"
 
 %token END_OF_FILE 0 "<EOF>"
 
