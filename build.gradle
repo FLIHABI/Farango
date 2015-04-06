@@ -25,6 +25,9 @@ model {
             srcDir 'src/'
             include '**/*.cc'
           }
+          exportedHeaders {
+              srcDir 'src/'
+          }
         }
       }
     }
