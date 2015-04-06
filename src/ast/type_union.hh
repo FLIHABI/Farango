@@ -5,6 +5,7 @@
 
 # include "vardec.hh"
 # include "type_prototype.hh"
+# include "visitor.hh"
 
 namespace ast
 {

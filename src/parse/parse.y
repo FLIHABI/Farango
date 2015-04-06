@@ -190,13 +190,13 @@ generics_list_inner /* ast exist */
 
 type_decl
     : TYPE type_identifier ASSIGN LBRACE member_list RBRACE /* ast exist */
-    | TYPE type_identifier ASSIGN type_union
+    | TYPE type_identifier ASSIGN type_union /* ast exist */
     | TYPE type_identifier /* ast exist */
     ;
 
 type_union
-    : type_identifier
-    | type_union OR type_identifier
+    : type_identifier /* ast exist */
+    | type_union OR type_identifier /* ast exist */
     ;
 
 typed_var /* ast exist */
@@ -262,7 +262,7 @@ expression
     : value /* ast exist */
     | value operator expression /* ast exist */
     | lvalue ASSIGN expression /* ast exist */
-    | declaration
+    | declaration /* ast exist */
     | USER_OP expression /* FIXME */
     | BANG expression %prec ULNOT /* ast exist */
     | TILDE expression %prec UNOT /* ast exist */
@@ -310,7 +310,7 @@ func_decl /* ast exist */
     ;
 
 declaration
-    : type_decl
+    : type_decl /* ast exist */
     | var_decl /* ast exist */
     | func_decl /* ast exist */
     ;
