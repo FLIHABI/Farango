@@ -26,7 +26,11 @@ namespace ast
             virtual void operator()(Declaration& e) = 0;
             virtual void operator()(VarDec& e) = 0;
             virtual void operator()(FunctionPrototype& e) = 0;
-
+            virtual void operator()(FunctionDec& e) = 0;
+            virtual void operator()(TypeIdentifier& e) = 0;
+            virtual void operator()(TypePrototype& e) = 0;
+            virtual void operator()(TypeStruct& e) = 0;
+            virtual void operator()(TypeUnion& e) = 0;
     };
 } //ast
 

@@ -20,12 +20,14 @@ namespace ast
                 v(*this);
             }
 
-            Symbole name_get()
+            Symbole& name_get()
             {
                 return name_;
             }
 
         protected:
+            Declaration()
+            {};
             Symbole name_;
 
     };

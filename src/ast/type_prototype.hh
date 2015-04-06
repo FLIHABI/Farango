@@ -1,7 +1,6 @@
-#ifndef VARDEC_HH
-# define VARDEC_HH
+#ifndef TYPE_PROTOTYPE_HH
+# define TYPE_PROTOTYPE_HH
 
-# include <vector>
 # include <memory>
 
 # include "type_identifier.hh"
@@ -10,15 +9,16 @@
 
 namespace ast
 {
-    class VarDec : Declaration
+    class TypePrototype : public Declaration
     {
         public:
-            VarDec(Symbole name, std::shared_ptr<TypeIdentifier> type)
-                : Declaration(name)
-                , type_(type)
-            {};
+            TypePrototype(std::shared_ptr<TypeIdentifier> type)
+                : type_(type)
+            {
+                name_ = type->type_name_get();
+            };
 
-            virtual ~VarDec()
+            virtual ~TypePrototype()
             {};
 
             void virtual accept(Visitor& v)
@@ -31,10 +31,9 @@ namespace ast
                 return type_;
             }
 
-
-        protected:
+        private:
             std::shared_ptr<TypeIdentifier> type_;
+
     };
 }
-
-#endif /* VARDEC_HH */
+# endif /* TYPE_PROTOTYPE_HH */

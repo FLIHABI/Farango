@@ -173,29 +173,25 @@ number /* ast exist */
     | DOUBLE
     ;
 
-type_identifier
-    : identifier generics_list
+type_identifier /* ast exist */
+    : identifier generics_list /* ast exist */
     ;
 
-generics_list
-    : %empty
-    | identifier
-    | LPAREN generics_list_inner RPAREN
+generics_list /* ast exist */
+    : %empty /* ast exist */
+    | identifier /* ast exist */
+    | LPAREN generics_list_inner RPAREN /* ast exist */
     ;
 
-generics_list_inner
-    : identifier
-    | generics_list_inner COMMA identifier
+generics_list_inner /* ast exist */
+    : identifier /* ast exist */
+    | generics_list_inner COMMA identifier /* ast exist */
     ;
 
 type_decl
-    : TYPE type_identifier ASSIGN type_spec
-    | TYPE type_identifier
-    ;
-
-type_spec
-    : LBRACE member_list RBRACE
-    | type_union
+    : TYPE type_identifier ASSIGN LBRACE member_list RBRACE /* ast exist */
+    | TYPE type_identifier ASSIGN type_union
+    | TYPE type_identifier /* ast exist */
     ;
 
 type_union
@@ -203,17 +199,17 @@ type_union
     | type_union OR type_identifier
     ;
 
-typed_var
-    : identifier COLON type_identifier
+typed_var /* ast exist */
+    : identifier COLON type_identifier /* ast exist */
     ;
 
 var_decl /* ast exist */
     : VAR typed_var /* ast exist */
     ;
 
-member_list
-    : typed_var SEMICOLON
-    | member_list typed_var SEMICOLON
+member_list /* ast exist */
+    : typed_var SEMICOLON /* ast exist */
+    | member_list typed_var SEMICOLON /* ast exist */
     ;
 
 value /* ast exist */

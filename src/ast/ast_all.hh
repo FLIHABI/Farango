@@ -4,6 +4,7 @@
 /*
  * Operator *
  * Ast *
+ *  TypeIdentifier * //FIXME:Need change to differencies creation and instantiation (genericity)
  *  Exp *
  *   ExpList *
  *   AssignExp *
@@ -19,10 +20,11 @@
  *      Int *
  *      Double
  *   Declaration*
- *    TypeDec
+ *    TypePrototype *
+ *     TypeStruct *
  *    VarDec *
- *    FunctionDec *
- *     FunctionPrototype *
+ *    FunctionPrototype *
+ *     FunctionDec *
  *
  */
 
@@ -35,7 +37,7 @@ namespace ast
     class Literal;
     class FunCall;
     class ParamList;
-    class BinaryExp; 
+    class BinaryExp;
     class Lvalue; //FIXME, symbole
     class MemberAccess; //FIXME, symbole
     class AssignExp;
@@ -46,6 +48,11 @@ namespace ast
     class Declaration;
     class VarDec;
     class FunctionPrototype;
+    class FunctionDec;
+    class TypeIdentifier;
+    class TypePrototype;
+    class TypeStruct;
+    class TypeUnion;
 
     class Visitor;
 
