@@ -21,7 +21,7 @@ namespace ast
             void virtual accept(Visitor& v);
 
             void push(std::shared_ptr<Exp> e);
-            std::vector<std::shared_ptr<Exp>>& get_list();
+            std::vector<std::shared_ptr<Exp>>& list_get();
 
         private:
             std::vector<std::shared_ptr<Exp>> list_;

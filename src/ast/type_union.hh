@@ -25,7 +25,7 @@ namespace ast
                 v(*this);
             }
 
-            std::vector<TypeIdentifier>& unionss_get()
+            std::vector<TypeIdentifier>& unions_get()
             {
                 return unions_;
             }

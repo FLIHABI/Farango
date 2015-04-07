@@ -23,12 +23,12 @@ namespace ast
                 v(*this);
             }
             
-            std::shared_ptr<Value> get_value()
+            std::shared_ptr<Value> value_get()
             {
                 return value_;
             }
 
-            std::shared_ptr<ExpList> get_list()
+            std::shared_ptr<ExpList> list_get()
             {
                 return list_;
             }

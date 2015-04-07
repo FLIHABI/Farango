@@ -12,7 +12,7 @@ namespace ast
         list_.push_back(e);
     }
 
-    std::vector<std::shared_ptr<Exp>>& ExpList::get_list()
+    std::vector<std::shared_ptr<Exp>>& ExpList::list_get()
     {
         return list_;
     }
