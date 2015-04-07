@@ -24,6 +24,9 @@
  * License and see <http://goo.gl/t8dfl6> for the full license, including
  * the MIT license.
  */
+
+%option noyywrap
+%option nounput
 %{
 
 #include <iostream>
@@ -34,7 +37,7 @@
 
 int comment_nest_level = 0;
 
-#define YY_DECL yy::parser::symbol_type yylex()
+#define YY_DECL yy::parser::symbol_type yylex(std::string lol)
 
 typedef yy::parser::token token;
 
@@ -51,8 +54,6 @@ typedef yy::parser::token token;
 std::string buffer;
 %}
 
-%option noyywrap
-%option nounput
 
 %x STRING_STATE
 %x COMMENT_STATE

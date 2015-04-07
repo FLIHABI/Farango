@@ -35,19 +35,22 @@
 %define api.token.constructor
 %define api.value.type variant
 
+%param { std::string result}
+
 %code requires
 {
     #include <iostream>
     #include <cstdio>
     #include <cstdlib>
+    #include <memory>
 
     #include "lib/symbol.hh"
     #include "ast/all.hh"
 }
 
-%code
+%code provides
 {
-    yy::parser::symbol_type yylex();
+    yy::parser::symbol_type yylex(std::string lol);
     extern FILE* yyin;
 }
 
@@ -352,7 +355,8 @@ void yy::parser::error(const std::string& msg) {
 }
 
 int main (int argc, char **argv) {
-    yy::parser parser;
+    std::string lol;
+    yy::parser parser(lol);
     if (argc > 1)
         yyin = fopen(argv[1], "r");
     parser.set_debug_level(1);
