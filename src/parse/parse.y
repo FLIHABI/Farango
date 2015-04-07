@@ -356,11 +356,9 @@ void yy::parser::error(const std::string& msg) {
 }
 
 int main (int argc, char **argv) {
-    std::string lol;
     parse::FgcParser fp;
-    yy::parser parser(fp);
+    FILE* in = stdin;
     if (argc > 1)
-        yyin = fopen(argv[1], "r");
-    parser.set_debug_level(1);
-    parser.parse();
+        in = fopen(argv[1], "r");
+    fp.parse(in);
 }

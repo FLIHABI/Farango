@@ -9,7 +9,9 @@ namespace parse
     class FgcParser
     {
         public:
+            void parse(FILE* in);
             std::shared_ptr<ast::Ast> ast_;
+
     };
 }
 
