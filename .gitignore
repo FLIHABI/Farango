@@ -14,8 +14,11 @@
 !src/*/*.hh
 !src/*/*.hxx
 
-src/parse/*.cc
-src/parse/*.hh
+src/parse/parse.hh
+src/parse/parse.cc
+src/parse/parse.output
+src/parse/stack.hh
+src/parse/lex.cc
 
 !LICENSE
 !HEADER

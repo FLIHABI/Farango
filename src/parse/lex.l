@@ -32,12 +32,12 @@
 #include <iostream>
 #include <sstream>
 
-#include "parse.hh"
+#include "parse/parse.hh"
 #include "lib/symbol.hh"
 
 int comment_nest_level = 0;
 
-#define YY_DECL yy::parser::symbol_type yylex(std::string lol)
+#define YY_DECL yy::parser::symbol_type yylex(parse::FgcParser& fp)
 
 typedef yy::parser::token token;
 

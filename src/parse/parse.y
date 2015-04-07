@@ -35,7 +35,7 @@
 %define api.token.constructor
 %define api.value.type variant
 
-%param { std::string result}
+%param { parse::FgcParser& fp}
 
 %code requires
 {
@@ -44,13 +44,14 @@
     #include <cstdlib>
     #include <memory>
 
+    #include "parse/fgc_parser.hh"
     #include "lib/symbol.hh"
     #include "ast/all.hh"
 }
 
 %code provides
 {
-    yy::parser::symbol_type yylex(std::string lol);
+    yy::parser::symbol_type yylex(parse::FgcParser& fp);
     extern FILE* yyin;
 }
 
@@ -356,7 +357,8 @@ void yy::parser::error(const std::string& msg) {
 
 int main (int argc, char **argv) {
     std::string lol;
-    yy::parser parser(lol);
+    parse::FgcParser fp;
+    yy::parser parser(fp);
     if (argc > 1)
         yyin = fopen(argv[1], "r");
     parser.set_debug_level(1);
