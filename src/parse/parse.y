@@ -47,6 +47,7 @@
     #include "parse/fgc_parser.hh"
     #include "lib/symbol.hh"
     #include "ast/all.hh"
+    #include "ast/default_visitor.hh"
     #include "lib/symbol.hh"
 }
 
@@ -398,4 +399,6 @@ int main (int argc, char **argv) {
     if (argc > 1)
         in = fopen(argv[1], "r");
     fp.parse(in);
+    ast::DefaultVisitor v;
+    v(*fp.ast_);
 }

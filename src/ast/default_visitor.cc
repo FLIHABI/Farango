@@ -3,6 +3,12 @@
 
 namespace ast
 {
+    DefaultVisitor::DefaultVisitor()
+    {}
+
+    DefaultVisitor::~DefaultVisitor()
+    {}
+
     void DefaultVisitor::operator()(AssignExp& e)
     {
         e.lvalue_get()->accept(*this);
@@ -11,6 +17,7 @@ namespace ast
 
     void DefaultVisitor::operator()(Ast& a)
     {
+        a.accept(*this);
     }
 
     void DefaultVisitor::operator()(BinaryExp& e)
