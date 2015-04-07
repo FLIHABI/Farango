@@ -17,7 +17,8 @@ namespace ast
                 , body_(body)
             {};
 
-            virtual ~DoExp();
+            virtual ~DoExp()
+            {};
 
             void virtual accept(Visitor& v)
             {

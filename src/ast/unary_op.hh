@@ -9,7 +9,7 @@
 
 namespace ast
 {
-    class UnaryExp : Exp
+    class UnaryExp : public Exp
     {
         public:
             UnaryExp(Operator op, std::shared_ptr<Exp> exp)
@@ -17,7 +17,8 @@ namespace ast
                 , exp_(exp)
             {};
 
-            ~UnaryExp();
+            virtual ~UnaryExp()
+            {};
 
             Operator op_get()
             {

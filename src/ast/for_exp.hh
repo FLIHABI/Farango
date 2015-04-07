@@ -8,7 +8,7 @@
 
 namespace ast
 {
-    class ForExp : public Ast
+    class ForExp : public Exp
     {
         public:
             ForExp(std::shared_ptr<Exp> init, std::shared_ptr<Exp> condition,
@@ -19,7 +19,8 @@ namespace ast
                 , body_(body)
             {};
 
-            virtual ~ForExp();
+            virtual ~ForExp()
+            {};
 
             void virtual accept(Visitor& v)
             {

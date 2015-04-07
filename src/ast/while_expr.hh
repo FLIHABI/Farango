@@ -16,7 +16,8 @@ namespace ast
                 , body_(body)
             {};
 
-            virtual ~WhileExp();
+            virtual ~WhileExp()
+            {};
 
             void virtual accept(Visitor& v)
             {

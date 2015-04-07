@@ -8,8 +8,10 @@ namespace ast
     class Literal : public Value
     {
         public:
-            Literal();
-            virtual ~Literal();
+            Literal()
+            {};
+            virtual ~Literal()
+            {};
 
             void virtual accept(Visitor& v) = 0;
     };

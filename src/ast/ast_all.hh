@@ -10,7 +10,6 @@
  *   AssignExp *
  *   Value *
  *    FunCall *
- *    Literal *
  *    BinaryExp *
  *    Lvalue .
  *    MemberAccess .
@@ -55,6 +54,8 @@ namespace ast
     class TypePrototype;
     class TypeStruct;
     class TypeUnion;
+    class String;
+    class InnerExp;
 
     class Visitor;
     using Symbole = misc::symbol;

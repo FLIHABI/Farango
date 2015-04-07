@@ -13,8 +13,10 @@ namespace ast
     class ExpList : public Value
     {
         public:
-            ExpList();
-            virtual ~ExpList();
+            ExpList()
+            {};
+            virtual ~ExpList()
+            {};
 
             void virtual accept(Visitor& v);
 

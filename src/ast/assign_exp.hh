@@ -16,7 +16,8 @@ namespace ast
                 , exp_(exp)
             {}
 
-            virtual ~AssignExp();
+            virtual ~AssignExp()
+            {};
 
             void virtual accept(Visitor& v)
             {

@@ -8,8 +8,10 @@ namespace ast
     class Visitor
     {
         public:
-            Visitor();
-            virtual ~Visitor();
+            Visitor()
+            {};
+            virtual ~Visitor()
+            {};
 
             virtual void operator()(AssignExp& e) = 0;
             virtual void operator()(Ast& a) = 0;
@@ -37,6 +39,8 @@ namespace ast
             virtual void operator()(Value& e) = 0;
             virtual void operator()(VarDec& e) = 0;
             virtual void operator()(WhileExp& e) = 0;
+            virtual void operator()(String& e) = 0;
+            virtual void operator()(InnerExp& e) = 0;
 
             template <class E> void operator()(E* e);
             template <typename E> void accept(E* e);

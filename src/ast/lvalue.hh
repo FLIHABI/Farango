@@ -14,7 +14,8 @@ namespace ast
             Lvalue(Symbole s)
                 : s_(s)
             {}
-            virtual ~Lvalue();
+            virtual ~Lvalue()
+            {};
 
             void virtual accept(Visitor& v)
             {

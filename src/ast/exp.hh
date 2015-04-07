@@ -9,8 +9,10 @@ namespace ast
     class Exp : public Ast
     {
         public:
-            Exp();
-            virtual ~Exp();
+            Exp()
+            {};
+            virtual ~Exp()
+            {};
 
             void virtual accept(Visitor& v) = 0;
     };

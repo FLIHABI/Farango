@@ -10,7 +10,7 @@
 
 namespace ast
 {
-    class VarDec : Declaration
+    class VarDec : public Declaration
     {
         public:
             VarDec(Symbole name, std::shared_ptr<TypeIdentifier> type)

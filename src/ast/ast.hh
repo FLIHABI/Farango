@@ -8,8 +8,10 @@ namespace ast
     class Ast
     {
         public:
-            Ast();
-            virtual ~Ast();
+            Ast()
+            {}
+            virtual ~Ast()
+            {}
 
             void virtual accept(Visitor& v) = 0;
     };

@@ -8,8 +8,10 @@ namespace ast
     class Value : public Exp
     {
         public:
-            Value();
-            virtual ~Value();
+            Value()
+            {};
+            virtual ~Value()
+            {};
 
             void virtual accept(Visitor& v) = 0;
     };

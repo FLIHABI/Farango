@@ -16,6 +16,7 @@
 #include "member_access.hh"
 #include "number.hh"
 #include "operator.hh"
+#include "string.hh"
 #include "type_identifier.hh"
 #include "type_prototype.hh"
 #include "type_struct.hh"
@@ -25,3 +26,4 @@
 #include "vardec.hh"
 #include "visitor.hh"
 #include "while_expr.hh"
+#include "inner_exp.hh"

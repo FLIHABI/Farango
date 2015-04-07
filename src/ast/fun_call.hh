@@ -14,7 +14,9 @@ namespace ast
                 : value_(value)
                 , list_(list)
             {};
-            virtual ~FunCall();
+
+            virtual ~FunCall()
+            {};
 
             void virtual accept(Visitor& v)
             {

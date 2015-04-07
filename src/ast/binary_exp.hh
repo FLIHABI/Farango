@@ -10,7 +10,7 @@
 
 namespace ast
 {
-    class BinaryExp : Value
+    class BinaryExp : public Value
     {
         public:
             BinaryExp(std::shared_ptr<Value> valuel, Operator op, std::shared_ptr<Exp> expr)
@@ -19,7 +19,8 @@ namespace ast
                 , expr_(expr)
             {}
 
-            ~BinaryExp();
+            virtual ~BinaryExp()
+            {};
 
             void virtual accept(Visitor& v)
             {

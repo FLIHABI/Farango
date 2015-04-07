@@ -14,9 +14,10 @@ namespace ast
             MemberAccess(std::shared_ptr<Value> lval, Symbole s)
                 : Lvalue(s)
                 , lval_(lval)
-            {}
+            {};
 
-            ~MemberAccess();
+            virtual ~MemberAccess()
+            {};
 
             void virtual accept(Visitor& v)
             {

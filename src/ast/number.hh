@@ -5,11 +5,13 @@
 
 namespace ast
 {
-    class Number : Literal
+    class Number : public Literal
     {
         public:
-            Number();
-            virtual ~Number();
+            Number()
+            {};
+            virtual ~Number()
+            {};
 
             void virtual accept(Visitor& v) = 0;
     };

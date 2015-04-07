@@ -7,7 +7,7 @@
 # include "exp.hh"
 namespace ast
 {
-    class IfExp
+    class IfExp : public Exp
     {
         public:
             IfExp(std::shared_ptr<Exp> if_exp, std::shared_ptr<Exp> then_exp, 
@@ -17,7 +17,8 @@ namespace ast
                 , else_(else_exp)
             {};
 
-            ~IfExp();
+            virtual ~IfExp()
+            {};
 
 
             void virtual accept(Visitor& v)

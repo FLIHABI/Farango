@@ -1,18 +1,19 @@
-#ifndef INT_HH
-# define INT_HH
+#ifndef STRING_HH
+# define STRING_HH
 
 #include "visitor.hh"
-#include "number.hh"
+#include "literal.hh"
 
 namespace ast
 {
-    class Int : public Number
+    class String : public Literal
     {
         public:
-            Int(int value)
+            String(std::string value)
                 : value_(value)
             {};
-            virtual ~Int()
+
+            virtual ~String()
             {};
 
             void virtual accept(Visitor& v)
@@ -20,19 +21,19 @@ namespace ast
                 v(*this);
             }
 
-            int get_value() const
+            std::string get_value() const
             {
                 return value_;
             };
 
-            void set_value(int value)
+            void set_value(std::string value)
             {
                 value_ = value;
             }
 
         private:
-            int value_;
+            std::string value_;
     };
 }
 
-#endif /* INT_HH */
+#endif /* STRING_HH */
