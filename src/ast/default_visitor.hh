@@ -1,7 +1,11 @@
-#include "visitor.h"
+#ifndef DEFAULT_VISITOR_HH
+# define DEFAULT_VISITOR_HH
+#include "visitor.hh"
 
-namespace ast {
-    class DefaultVisitor : public virtual Visitor {
+namespace ast
+{
+    class DefaultVisitor : public virtual Visitor
+    {
         public:
             using Visitor::operator();
 
@@ -25,7 +29,6 @@ namespace ast {
             virtual void operator()(Lvalue& e) override;
             virtual void operator()(MemberAccess& e) override;
             virtual void operator()(Number& e) override;
-            virtual void operator()(Operator& e) override;
             virtual void operator()(TypeIdentifier& e) override;
             virtual void operator()(TypePrototype& e) override;
             virtual void operator()(TypeStruct& e) override;
@@ -34,7 +37,8 @@ namespace ast {
             virtual void operator()(Value& e) override;
             virtual void operator()(VarDec& e) override;
             virtual void operator()(WhileExp& e) override;
+            virtual void operator()(String& e) override;
+            virtual void operator()(InnerExp& e) override;
     };
 }
-
-#endif /* VISITOR_HH */
+#endif /* DEFAULT_VISITOR_HH */
