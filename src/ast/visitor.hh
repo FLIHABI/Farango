@@ -30,7 +30,6 @@ namespace ast
             virtual void operator()(Lvalue& e) = 0;
             virtual void operator()(MemberAccess& e) = 0;
             virtual void operator()(Number& e) = 0;
-            virtual void operator()(Operator& e) = 0;
             virtual void operator()(TypeIdentifier& e) = 0;
             virtual void operator()(TypePrototype& e) = 0;
             virtual void operator()(TypeStruct& e) = 0;

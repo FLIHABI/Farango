@@ -56,6 +56,10 @@ namespace ast
     class TypeUnion;
     class String;
     class InnerExp;
+    class ForExp;
+    class Int;
+    class Number;
+    class TypeIdentifier;
 
     class Visitor;
     using Symbole = misc::symbol;
