@@ -24,7 +24,6 @@ namespace ast
                 v(*this);
             }
 
-            
             std::shared_ptr<Lvalue> lvalue_get()
             {
                 return lvalue_;

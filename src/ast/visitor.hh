@@ -40,6 +40,8 @@ namespace ast
             virtual void operator()(WhileExp& e) = 0;
             virtual void operator()(String& e) = 0;
             virtual void operator()(InnerExp& e) = 0;
+            virtual void operator()(ExpListInner& e) = 0;
+            virtual void operator()(ExpListFunction& e) = 0;
 
             template <class E> void operator()(E* e);
             template <typename E> void accept(E* e);

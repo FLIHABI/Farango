@@ -26,6 +26,37 @@ namespace ast
         private:
             std::vector<std::shared_ptr<Exp>> list_;
     };
+
+    class ExpListInner : public ExpList
+    {
+        public:
+            ExpListInner()
+            {};
+
+            ExpListInner(ExpList& e)
+                 : ExpList(e)
+            {};
+            virtual ~ExpListInner()
+            {};
+
+            void virtual accept(Visitor& v)
+            {
+                v(*this);
+            }
+    };
+
+    class ExpListFunction : public ExpList
+    {
+        public:
+            ExpListFunction()
+            {};
+            virtual ~ExpListFunction()
+            {};
+            void virtual accept(Visitor& v)
+            {
+                v(*this);
+            }
+    };
 }
 
 #endif /* EXP_LIST_HH */

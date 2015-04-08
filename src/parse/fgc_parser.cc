@@ -7,7 +7,7 @@ namespace parse
     {
         yyin = in;
         yy::parser p(*this);
-        p.set_debug_level(1);
+        //p.set_debug_level(1);
         p.parse();
     }
 }

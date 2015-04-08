@@ -46,6 +46,18 @@ namespace ast
             exp->accept(*this);
     }
 
+    void DefaultVisitor::operator()(ExpListInner& e)
+    {
+        for (auto exp : e.list_get())
+            exp->accept(*this);
+    }
+
+    void DefaultVisitor::operator()(ExpListFunction& e)
+    {
+        for (auto exp : e.list_get())
+            exp->accept(*this);
+    }
+
     void DefaultVisitor::operator()(ForExp& e)
     {
         e.init_get()->accept(*this);

@@ -22,7 +22,7 @@ namespace ast
             {
                 v(*this);
             }
-            
+
             std::shared_ptr<Value> value_get()
             {
                 return value_;

@@ -48,6 +48,7 @@
     #include "lib/symbol.hh"
     #include "ast/all.hh"
     #include "ast/default_visitor.hh"
+    #include "ast/pretty_print.hh"
     #include "lib/symbol.hh"
 }
 
@@ -253,7 +254,7 @@ value /* ast exist */
     | literal { $$ = $1;}
     | function_call { $$ = $1; }
     | LPAREN expression RPAREN { $$ = std::make_shared<ast::InnerExp>($2); }
-    | LBRACE expression_list RBRACE {$$ = $2; }
+    | LBRACE expression_list RBRACE {$$ = std::make_shared<ast::ExpListInner>(*$2); }
     ;
 /*
    | LPAREN operator RPAREN //FIXME: Not in ast
@@ -322,12 +323,12 @@ r_exp
 */
 
 parameter_list /* ast exist */
-    : %empty {$$ = std::make_shared<ast::ExpList>();}
+    : %empty {$$ = std::make_shared<ast::ExpListFunction>();}
     | parameter_list_rec {$$ = $1;}
     ;
 
 parameter_list_rec /* ast exist */
-    : expression {$$ = std::make_shared<ast::ExpList>(); $$->push($1); }
+    : expression {$$ = std::make_shared<ast::ExpListFunction>(); $$->push($1); }
     | parameter_list_rec COMMA expression {$$ = $1; $$->push($3); }
     ;
 
@@ -399,6 +400,5 @@ int main (int argc, char **argv) {
     if (argc > 1)
         in = fopen(argv[1], "r");
     fp.parse(in);
-    ast::DefaultVisitor v;
-    v(*fp.ast_);
+    std::cout << *(fp.ast_);
 }

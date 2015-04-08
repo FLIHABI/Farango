@@ -1,26 +1,38 @@
-#ifndef DEFAULT_VISITOR_HH
-# define DEFAULT_VISITOR_HH
-#include "visitor.hh"
+/*
+ * Use to test visitor
+ */
+
+#ifndef PRETTY_PRINT_HH
+# define PRETTY_PRINT_HH
+
+# include <iostream>
+
+# include "default_visitor.hh"
 
 namespace ast
 {
-    class DefaultVisitor : public virtual Visitor
+    class PrettyPrinter : public DefaultVisitor
     {
         public:
-            using Visitor::operator();
+            PrettyPrinter(std::ostream& o)
+                : out_(o)
+            {};
 
-            DefaultVisitor();
-            virtual ~DefaultVisitor();
+            ~PrettyPrinter()
+            {};
 
             virtual void operator()(AssignExp& e) override;
             virtual void operator()(Ast& a) override;
+            /*
             virtual void operator()(BinaryExp& e) override;
-            virtual void operator()(Declaration& e) override;
+            */
             virtual void operator()(DoExp& e) override;
-            virtual void operator()(Exp& e) override;
             virtual void operator()(ExpList& e) override;
+            virtual void operator()(ExpListFunction& e) override;
+            virtual void operator()(ExpListInner& e) override;
             virtual void operator()(ForExp& e) override;
             virtual void operator()(FunCall& e) override;
+            /*
             virtual void operator()(FunctionDec& e) override;
             virtual void operator()(FunctionPrototype& e) override;
             virtual void operator()(IfExp& e) override;
@@ -39,8 +51,14 @@ namespace ast
             virtual void operator()(WhileExp& e) override;
             virtual void operator()(String& e) override;
             virtual void operator()(InnerExp& e) override;
-            virtual void operator()(ExpListInner& e) override;
-            virtual void operator()(ExpListFunction& e) override;
+            */
+
+        private:
+            std::ostream& out_;
+
     };
+
+    std::ostream& operator<<(std::ostream& out, Ast& ast);
 }
-#endif /* DEFAULT_VISITOR_HH */
+
+#endif /* PRETTY_PRINT_HH */

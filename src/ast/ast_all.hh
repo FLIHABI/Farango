@@ -60,6 +60,8 @@ namespace ast
     class Int;
     class Number;
     class TypeIdentifier;
+    class ExpListInner;
+    class ExpListFunction;
 
     class Visitor;
     using Symbole = misc::symbol;
