@@ -14,12 +14,12 @@ namespace ast
     class FunctionDec : public FunctionPrototype
     {
         public:
-            FunctionDec(Symbole name, std::shared_ptr<Exp> body)
+            FunctionDec(std::shared_ptr<Id> name, std::shared_ptr<Exp> body)
                 : FunctionPrototype(name)
                 , body_(body)
             {};
 
-            FunctionDec(Symbole name, std::vector<VarDec> params,
+            FunctionDec(std::shared_ptr<Id> name, std::vector<VarDec> params,
                     std::shared_ptr<Exp> body)
                 : FunctionPrototype(name, params)
                 , body_(body)

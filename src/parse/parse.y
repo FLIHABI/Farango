@@ -125,7 +125,7 @@
 %type <std::shared_ptr<ast::Value>> value
 %type <std::shared_ptr<ast::Lvalue>> lvalue member_access
 %type <ast::Operator> operator
-%type <misc::symbol> identifier
+%type <std::shared_ptr<ast::Id>> identifier
 %type <std::shared_ptr<ast::ExpList>> expression_list expression_list_rec parameter_list parameter_list_rec
 %type <std::shared_ptr<ast::FunCall>> function_call
 %type <std::shared_ptr<ast::IfExp>> if_expr
@@ -137,7 +137,7 @@
 %type <std::shared_ptr<ast::VarDec>> var_decl typed_var
 %type <std::shared_ptr<ast::FunctionPrototype>> func_decl func_prototype
 %type <std::shared_ptr<ast::TypeIdentifier>> type_identifier
-%type <std::vector<misc::symbol>> generics_list generics_list_inner
+%type <std::vector<std::shared_ptr<ast::Id>>> generics_list generics_list_inner
 %type <std::vector<ast::VarDec>> member_list proto_parameter_list proto_parameter_list_rec
 %type <std::vector<ast::TypeIdentifier>> type_union
 /************************************************
@@ -197,7 +197,7 @@ expression_list_rec /* ast exist */
     ;
 
 identifier
-    : IDENTIFIER { $$ = $1;} /* ast exist */
+    : IDENTIFIER { $$ = std::make_shared<ast::Id>($1);} /* ast exist */
     ;
 
 literal /* ast exist */
@@ -215,13 +215,13 @@ type_identifier /* ast exist */
     ;
 
 generics_list /* ast exist */
-    : %empty {$$ = std::vector<misc::symbol>();}
-    | identifier {$$ = std::vector<misc::symbol>(); $$.push_back($1); }
+    : %empty {$$ = std::vector<std::shared_ptr<ast::Id>>();}
+    | identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
     | LPAREN generics_list_inner RPAREN { $$  = $2; }
     ;
 
 generics_list_inner /* ast exist */
-    : identifier {$$ = std::vector<misc::symbol>(); $$.push_back($1); }
+    : identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
     | generics_list_inner COMMA identifier {$$ = $1; $1.push_back($3); }
     ;
 

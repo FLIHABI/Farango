@@ -1,22 +1,23 @@
 #ifndef TYPE_IDENTIFIER_HH
 # define TYPE_IDENTIFIER_HH
 
-#include <vector>
+# include <vector>
+# include <memory>
 
-#include "ast.hh"
-#include "visitor.hh"
+# include "ast.hh"
+# include "visitor.hh"
 
 namespace ast
 {
     class TypeIdentifier : public Ast
     {
         public:
-            TypeIdentifier(Symbole type_name, std::vector<Symbole> specs)
+            TypeIdentifier(std::shared_ptr<Id> type_name, std::vector<std::shared_ptr<Id>> specs)
                 : type_name_(type_name)
                 , specs_(specs)
             {};
 
-            TypeIdentifier(Symbole type_name)
+            TypeIdentifier(std::shared_ptr<Id> type_name)
                 : type_name_(type_name)
             {};
 
@@ -28,19 +29,19 @@ namespace ast
                 v(*this);
             }
 
-            Symbole& type_name_get()
+            std::shared_ptr<Id>& type_name_get()
             {
                 return type_name_;
             }
 
-            std::vector<Symbole>& specs_get()
+            std::vector<std::shared_ptr<Id>>& specs_get()
             {
                 return specs_;
             }
 
         private:
-            Symbole type_name_;
-            std::vector<Symbole> specs_;
+            std::shared_ptr<Id> type_name_;
+            std::vector<std::shared_ptr<Id>> specs_;
     };
 }
 

@@ -15,12 +15,12 @@ namespace ast
     class FunctionPrototype : public Declaration
     {
         public:
-            FunctionPrototype(Symbole name)
+            FunctionPrototype(std::shared_ptr<Id> name)
                 : Declaration(name)
                 , params_()
             {};
 
-            FunctionPrototype(Symbole name, std::vector<VarDec> params)
+            FunctionPrototype(std::shared_ptr<Id> name, std::vector<VarDec> params)
                 : Declaration(name)
                 , params_(params)
             {};

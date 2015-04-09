@@ -2,6 +2,7 @@
 # define DECLARATION_HH
 
 # include "exp.hh"
+# include "id.hh"
 # include "visitor.hh"
 
 namespace ast
@@ -9,7 +10,7 @@ namespace ast
     class Declaration : public Exp
     {
         public:
-            Declaration(Symbole name)
+            Declaration(std::shared_ptr<Id> name)
                 : name_(name)
             {};
             virtual ~Declaration()
@@ -20,7 +21,7 @@ namespace ast
                 v(*this);
             }
 
-            Symbole& name_get()
+            std::shared_ptr<Id>& name_get()
             {
                 return name_;
             }
@@ -28,7 +29,7 @@ namespace ast
         protected:
             Declaration()
             {};
-            Symbole name_;
+            std::shared_ptr<Id> name_;
 
     };
 }

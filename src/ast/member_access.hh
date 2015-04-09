@@ -11,7 +11,7 @@ namespace ast
     class MemberAccess : public Lvalue
     {
         public:
-            MemberAccess(std::shared_ptr<Value> lval, Symbole s)
+            MemberAccess(std::shared_ptr<Value> lval, std::shared_ptr<Id> s)
                 : Lvalue(s)
                 , lval_(lval)
             {};

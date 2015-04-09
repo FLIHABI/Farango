@@ -62,9 +62,9 @@ namespace ast
     class TypeIdentifier;
     class ExpListInner;
     class ExpListFunction;
+    class Id;
 
     class Visitor;
-    using Symbole = misc::symbol;
 }
 
 #endif /* AST_ALL_HH */

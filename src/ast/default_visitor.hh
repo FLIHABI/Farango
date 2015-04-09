@@ -42,6 +42,7 @@ namespace ast
             virtual void operator()(InnerExp& e) override;
             virtual void operator()(ExpListInner& e) override;
             virtual void operator()(ExpListFunction& e) override;
+            virtual void operator()(Id& e) override;
     };
 }
 #endif /* DEFAULT_VISITOR_HH */

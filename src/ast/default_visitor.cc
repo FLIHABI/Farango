@@ -165,4 +165,8 @@ namespace ast
     {
         e.exp_get()->accept(*this);
     }
+
+    void DefaultVisitor::operator()(Id& e)
+    {
+    }
 }

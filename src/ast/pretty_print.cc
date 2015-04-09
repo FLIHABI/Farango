@@ -94,7 +94,7 @@ namespace ast
 
     void PrettyPrinter::operator()(FunctionDec& e)
     {
-        out_ << "fun " << e.name_get() << "(";
+        out_ << "fun " << *e.name_get() << "(";
         auto b = e.params_get().begin();
         auto end = e.params_get().end();
         while (b != end)
@@ -107,7 +107,7 @@ namespace ast
 
     void PrettyPrinter::operator()(FunctionPrototype& e)
     {
-        out_ << "fun " << e.name_get() << "(";
+        out_ << "fun " << *e.name_get() << "(";
         auto b = e.params_get().begin();
         auto end = e.params_get().end();
         while (b != end)
@@ -133,21 +133,22 @@ namespace ast
 
     void PrettyPrinter::operator()(Lvalue& e)
     {
-        out_ << e.s_get();
+        out_ << *e.s_get();
     }
 
     void PrettyPrinter::operator()(MemberAccess& e)
     {
-        out_ << *e.lval_get() << "." << e.s_get();
+        out_ << *e.lval_get() << "." << *e.s_get();
     }
 
     void PrettyPrinter::operator()(TypeIdentifier& e)
     {
-        out_ << e.type_name_get();
+        out_ << *e.type_name_get();
         if (e.specs_get().size() == 0)
             return;
         else if (e.specs_get().size() == 1)
-            out_ << " " << e.specs_get()[0];
+            out_ << " " << *e.specs_get()[0];
+
         else
         {
             auto b = e.specs_get().begin();
@@ -194,7 +195,7 @@ namespace ast
     {
         if (e.decl_get())
             out_ << "var ";
-        out_ << e.name_get() << " : " << *e.type_get();
+        out_ << *e.name_get() << " : " << *e.type_get();
     }
 
     void PrettyPrinter::operator()(WhileExp& e)
@@ -225,5 +226,10 @@ namespace ast
     {
         //FIXME, ugly
         out_ << op_print[e.op_get()] << *e.exp_get();
+    }
+
+    void PrettyPrinter::operator()(Id& e)
+    {
+        out_ << e.dec_get();
     }
 }

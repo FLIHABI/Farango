@@ -16,7 +16,7 @@ namespace compile {
     }
 
     void Compile::operator()(ast::Int& e) {
-        emitter_.emit<OP_PUSH, uint64_t>(e.get_value());
+        emitter_.emit<OP_PUSH, uint64_t>(e.value_get());
     }
 
 }

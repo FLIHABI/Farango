@@ -48,6 +48,7 @@ namespace ast
             virtual void operator()(WhileExp& e) override;
             virtual void operator()(String& e) override;
             virtual void operator()(InnerExp& e) override;
+            virtual void operator()(Id& e) override;
 
         private:
             std::ostream& out_;
