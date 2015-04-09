@@ -230,6 +230,6 @@ namespace ast
 
     void PrettyPrinter::operator()(Id& e)
     {
-        out_ << e.dec_get();
+        out_ << e.s_get();
     }
 }
