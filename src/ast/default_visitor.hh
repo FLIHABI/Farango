@@ -1,6 +1,7 @@
 #ifndef DEFAULT_VISITOR_HH
 # define DEFAULT_VISITOR_HH
-#include "visitor.hh"
+
+# include "visitor.hh"
 
 namespace ast
 {
