@@ -205,7 +205,7 @@ namespace ast
 
     void PrettyPrinter::operator()(String& e)
     {
-        out_ << e.value_get();
+        out_ << "\"" << e.value_get() << "\"";
     }
 
     void PrettyPrinter::operator()(InnerExp& e)
@@ -216,14 +216,14 @@ namespace ast
     void PrettyPrinter::operator()(BinaryExp& e)
     {
         //FIXME, ugly
-        out_ << e.valuel_get()
+        out_ << *e.valuel_get()
              << " " << op_print[e.op_get()] << " "
-             << e.expr_get();
+             << *e.expr_get();
     }
 
     void PrettyPrinter::operator()(UnaryExp& e)
     {
         //FIXME, ugly
-        out_ << op_print[e.op_get()] << e.exp_get();
+        out_ << op_print[e.op_get()] << *e.exp_get();
     }
 }
