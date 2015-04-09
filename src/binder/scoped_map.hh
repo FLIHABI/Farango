@@ -31,7 +31,10 @@ namespace binder
             void push_dec(std::shared_ptr<ast::FunctionDec> d);
             void push_dec(std::shared_ptr<ast::FunctionPrototype> d);
 
-            std::shared_ptr<ast::Declaration> get_declaration(misc::symbol);
+            std::shared_ptr<ast::Declaration> get_s_declaration(misc::symbol);
+            unsigned get_s_age(misc::symbol) const;
+
+            unsigned get_age() const;
 
         private:
             std::map<misc::symbol, std::stack<std::pair<std::shared_ptr<ast::Declaration>, unsigned>>> map_;
