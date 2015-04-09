@@ -21,12 +21,12 @@ namespace ast
                 v(*this);
             }
 
-            std::string get_value() const
+            std::string value_get() const
             {
                 return value_;
             };
 
-            void set_value(std::string value)
+            void value_get(std::string value)
             {
                 value_ = value;
             }

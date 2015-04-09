@@ -27,7 +27,6 @@ namespace ast
                 v(*this);
             }
 
-            
             std::shared_ptr<Value> valuel_get()
             {
                 return valuel_;

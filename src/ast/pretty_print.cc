@@ -4,6 +4,26 @@
 
 namespace ast
 {
+    std::string op_print[] = {
+        "+",
+        "-",
+        "*",
+        "/",
+        "==",
+        "!=",
+        "&",
+        "|",
+        "^",
+        "&&",
+        "||",
+        ">",
+        ">=",
+        "<",
+        "<=",
+        "!",
+        "~"
+    };
+
     std::ostream& operator<<(std::ostream& out, Ast& ast)
     {
         PrettyPrinter p(out);
@@ -70,5 +90,140 @@ namespace ast
     void PrettyPrinter::operator()(FunCall& e)
     {
         out_ << *e.value_get() << "(" << *e.list_get() << ")";
+    }
+
+    void PrettyPrinter::operator()(FunctionDec& e)
+    {
+        out_ << "fun " << e.name_get() << "(";
+        auto b = e.params_get().begin();
+        auto end = e.params_get().end();
+        while (b != end)
+        {
+            out_ << *b;
+            out_ << (++b == end ? "" : ", ");
+        }
+        out_ << ") =" << *e.body_get();
+    }
+
+    void PrettyPrinter::operator()(FunctionPrototype& e)
+    {
+        out_ << "fun " << e.name_get() << "(";
+        auto b = e.params_get().begin();
+        auto end = e.params_get().end();
+        while (b != end)
+        {
+            out_ << *b;
+            out_ << (++b == end ? "" : ", ");
+        }
+        out_ << ")";
+    }
+
+    void PrettyPrinter::operator()(IfExp& e)
+    {
+        out_ << "if (" << *e.if_get() << ") "
+             <<  *e.then_get();
+        if (e.else_get())
+            out_ << " else" << *e.else_get();
+    }
+
+    void PrettyPrinter::operator()(Int& e)
+    {
+        out_ << e.value_get();
+    }
+
+    void PrettyPrinter::operator()(Lvalue& e)
+    {
+        out_ << e.s_get();
+    }
+
+    void PrettyPrinter::operator()(MemberAccess& e)
+    {
+        out_ << *e.lval_get() << "." << e.s_get();
+    }
+
+    void PrettyPrinter::operator()(TypeIdentifier& e)
+    {
+        out_ << e.type_name_get();
+        if (e.specs_get().size() == 0)
+            return;
+        else if (e.specs_get().size() == 1)
+            out_ << " " << e.specs_get()[0];
+        else
+        {
+            auto b = e.specs_get().begin();
+            auto end = e.specs_get().end();
+            out_ << " (";
+            while (b != end)
+            {
+                out_ << *b;
+                out_ << (++b == end ? "" : ", ");
+            }
+            out_ << ")";
+        }
+    }
+
+    void PrettyPrinter::operator()(TypePrototype& e)
+    {
+        out_ << "type " << *e.type_get();
+    }
+
+    void PrettyPrinter::operator()(TypeStruct& e)
+    {
+        out_ << "type " << *e.type_get() << " = {" << misc::incendl;
+        for (auto& v : e.members_get())
+        {
+            out_ << v << ";" << misc::iendl;
+        }
+        out_ << misc::decendl<< "}";
+    }
+
+    void PrettyPrinter::operator()(TypeUnion& e)
+    {
+        out_ << "type " << *e.type_get() << " =" << misc::incendl;
+        auto b = e.unions_get().begin();
+        auto end = e.unions_get().end();
+        while (b != end)
+        {
+            out_ << *b;
+            out_ << misc::iendl << (++b == end ? "" : "| ");
+        }
+        out_ << misc::decendl;
+    }
+
+    void PrettyPrinter::operator()(VarDec& e)
+    {
+        if (e.decl_get())
+            out_ << "var ";
+        out_ << e.name_get() << " : " << *e.type_get();
+    }
+
+    void PrettyPrinter::operator()(WhileExp& e)
+    {
+        out_ << "while (" << *e.condition_get() << ") "
+             << *e.body_get();
+    }
+
+    void PrettyPrinter::operator()(String& e)
+    {
+        out_ << e.value_get();
+    }
+
+    void PrettyPrinter::operator()(InnerExp& e)
+    {
+        out_ << "(" << *e.exp_get() << ")";
+    }
+
+    void PrettyPrinter::operator()(BinaryExp& e)
+    {
+        //FIXME, ugly
+        out_ << e.valuel_get()
+             << " " << op_print[e.op_get()] << " "
+             << e.expr_get();
+    }
+
+    void PrettyPrinter::operator()(UnaryExp& e)
+    {
+        //FIXME, ugly
+        out_ << op_print[e.op_get()] << e.exp_get();
     }
 }

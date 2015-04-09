@@ -31,9 +31,19 @@ namespace ast
                 return type_;
             }
 
+            void decl_set(bool b)
+            {
+                decl_ = b;
+            }
+
+            bool decl_get()
+            {
+                return decl_;
+            }
 
         protected:
             std::shared_ptr<TypeIdentifier> type_;
+            bool decl_ = false;
     };
 }
 

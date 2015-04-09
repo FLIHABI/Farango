@@ -20,12 +20,12 @@ namespace ast
                 v(*this);
             }
 
-            int get_value() const
+            int value_get() const
             {
                 return value_;
             };
 
-            void set_value(int value)
+            void value_set(int value)
             {
                 value_ = value;
             }

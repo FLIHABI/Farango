@@ -10,7 +10,7 @@ namespace ast
     class IfExp : public Exp
     {
         public:
-            IfExp(std::shared_ptr<Exp> if_exp, std::shared_ptr<Exp> then_exp, 
+            IfExp(std::shared_ptr<Exp> if_exp, std::shared_ptr<Exp> then_exp,
                   std::shared_ptr<Exp> else_exp)
                 : if_(if_exp)
                 , then_(then_exp)

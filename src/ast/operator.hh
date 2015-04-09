@@ -1,6 +1,8 @@
 #ifndef OPERATOR_HH
 # define OPERATOR_HH
 
+# include <string>
+
 namespace ast
 {
     enum Operator
@@ -23,6 +25,7 @@ namespace ast
         BANG,
         TILDE,
     };
+
 }
 
 #endif /* OPERATOR_HH */
