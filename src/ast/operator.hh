@@ -11,6 +11,7 @@ namespace ast
         MINUS,
         MUL,
         DIV,
+        MOD,
         EQUAL,
         NEQUAL,
         AND,
