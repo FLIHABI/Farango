@@ -28,6 +28,7 @@ model {
           exportedHeaders {
               srcDir 'src/'
           }
+          lib project: ':dependencies:commons', library: 'libcommons'
         }
       }
     }
@@ -36,13 +37,6 @@ model {
     debug {}
     release {}
   }
-}
-
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {}
 }
 
 task generateParser(type: Exec) {
@@ -84,6 +78,7 @@ task debug {
 
 gradle.projectsEvaluated {
   tasks.releaseFgcExecutable.dependsOn generateLexer
+  tasks.debugFgcExecutable.dependsOn   generateLexer
 }
 
 binaries.all {
