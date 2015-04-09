@@ -31,8 +31,9 @@ namespace ast
                 return type_;
             }
 
-        private:
+        protected:
             std::shared_ptr<TypeIdentifier> type_;
+            std::shared_ptr<TypePrototype> type_dec_; //Should be an union or a struct
 
     };
 }

@@ -2,10 +2,13 @@
 # define FUNCTION_PROTOTPE_HH
 
 # include <vector>
+# include <memory>
 
+# include "ast_all.hh"
 # include "declaration.hh"
 # include "vardec.hh"
 # include "visitor.hh"
+
 
 namespace ast
 {
@@ -35,8 +38,14 @@ namespace ast
                 return params_;
             }
 
+            std::shared_ptr<FunctionDec> func_dec_get()
+            {
+                return func_dec_;
+            }
+
         protected:
             std::vector<VarDec> params_;
+            std::shared_ptr<FunctionDec> func_dec_;
     };
 }
 
