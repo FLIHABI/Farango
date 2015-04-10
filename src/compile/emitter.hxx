@@ -18,7 +18,8 @@ namespace compile {
         static_assert(bytecode::has_parameter(b),
                 "Bytecode has no parameter.");
 
-        buf_ << b << arg;
+        buf_ << b;
+        vector_stream::write(buf_, arg);
     }
 }
 

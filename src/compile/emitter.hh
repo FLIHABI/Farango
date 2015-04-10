@@ -20,6 +20,7 @@ namespace compile {
     friend std::ostream& operator<<(std::ostream& os, const Emitter& e);
     };
 
+    std::ostream& operator<<(std::ostream& os, const Emitter& e);
 }
 
 # include "emitter.hxx"

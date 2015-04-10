@@ -9,6 +9,9 @@ namespace compile {
         using super = ast::DefaultVisitor;
 
     public:
+        void write(const char* filename);
+
+        virtual void operator()(ast::Ast& a) override;
         virtual void operator()(ast::BinaryExp& e) override;
         virtual void operator()(ast::Int& e) override;
 
