@@ -22,12 +22,12 @@ namespace binder
             void start_scop();
             void end_scop();
 
-            void push_dec(std::shared_ptr<ast::Declaration> d);
+            void push_dec(ast::Declaration& d);
 
-            void push_dec(std::shared_ptr<ast::TypeUnion> d);
-            void push_dec(std::shared_ptr<ast::TypeStruct> d);
+            void push_dec(ast::TypeUnion& d);
+            void push_dec(ast::TypeStruct& d);
 
-            void push_dec(std::shared_ptr<ast::FunctionDec> d);
+            void push_dec(ast::FunctionDec& d);
 
             std::shared_ptr<ast::Declaration> get_s_declaration(misc::symbol);
             unsigned get_s_age(misc::symbol) const;

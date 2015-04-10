@@ -1,5 +1,6 @@
 #include "binder.hh"
 
+#if 0
 namespace binder
 {
     Binder::Binder()
@@ -45,3 +46,4 @@ namespace binder
         s_map_.end_scop();
     }
 }
+#endif

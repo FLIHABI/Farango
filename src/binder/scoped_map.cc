@@ -19,8 +19,9 @@ namespace binder
         history_.pop();
     }
 
-    void ScopedMap::push_dec(std::shared_ptr<ast::Declaration> d)
+    void ScopedMap::push_dec(ast::Declaration& d_)
     {
+        std::shared_ptr<ast::Declaration>d = std::make_shared<ast::Declaration>(d_, [](void *){});
         misc::symbol s = d->name_get()->s_get();
         if (map_[s].size() == 0)
         {
@@ -37,18 +38,21 @@ namespace binder
         }
     }
 
-    void ScopedMap::push_dec(std::shared_ptr<ast::TypeUnion> d)
+    void ScopedMap::push_dec(ast::TypeUnion& d_)
     {
+        std::shared_ptr<ast::TypePrototype> d = std::make_shared<ast::TypePrototype>(d_, [](void *){});
         push_dec_p_<ast::TypePrototype>(d);
     }
 
-    void ScopedMap::push_dec(std::shared_ptr<ast::TypeStruct> d)
+    void ScopedMap::push_dec(ast::TypeStruct& d_)
     {
+        std::shared_ptr<ast::TypePrototype> d = std::make_shared<ast::TypePrototype>(d_, [](void *){});
         push_dec_p_<ast::TypePrototype>(d);
     }
 
-    void ScopedMap::push_dec(std::shared_ptr<ast::FunctionDec> d)
+    void ScopedMap::push_dec(ast::FunctionDec& d_)
     {
+        std::shared_ptr<ast::FunctionDec> d(&d_, [](void *){});
         push_dec_p_<ast::FunctionPrototype>(d);
     }
 
