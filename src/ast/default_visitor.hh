@@ -22,8 +22,10 @@ namespace ast
             virtual void operator()(ExpList& e) override;
             virtual void operator()(ForExp& e) override;
             virtual void operator()(FunCall& e) override;
+
             virtual void operator()(FunctionDec& e) override;
             virtual void operator()(FunctionPrototype& e) override;
+
             virtual void operator()(IfExp& e) override;
             virtual void operator()(Int& e) override;
             virtual void operator()(Literal& e) override;
