@@ -31,9 +31,19 @@ namespace ast
                 return type_;
             }
 
+            std::shared_ptr<TypePrototype> type_dec_get()
+            {
+                return type_dec_;
+            }
+
+            void type_dec_set(std::shared_ptr<TypePrototype> t)
+            {
+                type_dec_ = t;
+            }
+
         protected:
             std::shared_ptr<TypeIdentifier> type_;
-            std::shared_ptr<TypePrototype> type_dec_; //Should be an union or a struct
+            std::shared_ptr<TypePrototype> type_dec_ = nullptr; //Should be an union or a struct
 
     };
 }

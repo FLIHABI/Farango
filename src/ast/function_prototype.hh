@@ -43,6 +43,11 @@ namespace ast
                 return func_dec_;
             }
 
+            void func_dec_set(std::shared_ptr<FunctionDec> d)
+            {
+                func_dec_ = d;
+            }
+
         protected:
             std::vector<VarDec> params_;
             std::shared_ptr<FunctionDec> func_dec_;
