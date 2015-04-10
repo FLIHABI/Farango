@@ -9,10 +9,9 @@
 !*.l
 !*.y
 
-
-!src/*/*.cc
-!src/*/*.hh
-!src/*/*.hxx
+!*.cc
+!*.hh
+!*.hxx
 
 src/parse/parse.hh
 src/parse/parse.cc
