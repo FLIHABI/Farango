@@ -1,6 +1,6 @@
 #ifndef BINDER_HH
 # define BINDER_HH
-
+#if 0
 # include "scoped_map.hh"
 # include "ast/default_visitor.hh"
 
@@ -41,4 +41,5 @@ namespace binder
     };
 }
 
+#endif
 #endif /* BINDER_HH */
