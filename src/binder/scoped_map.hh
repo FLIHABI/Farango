@@ -35,6 +35,9 @@ namespace binder
             unsigned get_age() const;
 
         private:
+            template <typename T>
+            void push_dec_p_(std::shared_ptr<T> t);
+
             std::map<misc::symbol, std::stack<std::pair<std::shared_ptr<ast::Declaration>, unsigned>>> map_;
             std::stack<misc::symbol> history_;
             unsigned age_;

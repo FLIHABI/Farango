@@ -38,19 +38,19 @@ namespace ast
                 return params_;
             }
 
-            std::shared_ptr<FunctionDec> func_dec_get()
+            std::shared_ptr<FunctionPrototype> type_dec_get()
             {
-                return func_dec_;
+                return type_dec_;
             }
 
-            void func_dec_set(std::shared_ptr<FunctionDec> d)
+            void type_dec_set(std::shared_ptr<FunctionPrototype> d)
             {
-                func_dec_ = d;
+                type_dec_ = d;
             }
 
         protected:
             std::vector<VarDec> params_;
-            std::shared_ptr<FunctionDec> func_dec_;
+            std::shared_ptr<FunctionPrototype> type_dec_ = nullptr;
     };
 }
 
