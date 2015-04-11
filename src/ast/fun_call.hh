@@ -10,7 +10,7 @@ namespace ast
     class FunCall : public Value
     {
         public:
-            FunCall(std::shared_ptr<Value> value, std::shared_ptr<ExpList> list)
+            FunCall(std::shared_ptr<Value> value, std::shared_ptr<ExpListFunction> list)
                 : value_(value)
                 , list_(list)
             {};
@@ -28,14 +28,14 @@ namespace ast
                 return value_;
             }
 
-            std::shared_ptr<ExpList> list_get()
+            std::shared_ptr<ExpListFunction> list_get()
             {
                 return list_;
             }
 
         private:
             std::shared_ptr<Value> value_;
-            std::shared_ptr<ExpList> list_; //Using explist in function, FIXME later ?
+            std::shared_ptr<ExpListFunction> list_; //Using explist in function, FIXME later ?
     };
 }
 

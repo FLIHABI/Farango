@@ -62,7 +62,7 @@ namespace ast
         auto end = e.list_get().end();
         while (b != end)
         {
-            out_ << *b;
+            out_ << **b;
             out_ << (++b == end ? "" : ", ");
         }
 

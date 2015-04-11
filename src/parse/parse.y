@@ -287,7 +287,7 @@ member_access /* ast exist */
     ;
 
 function_call /* ast exist */
-    : value LPAREN parameter_list RPAREN { $$ = std::make_shared<ast::FunCall>($1, $3);}
+    : value LPAREN parameter_list RPAREN { $$ = std::make_shared<ast::FunCall>($1, std::make_shared<ast::ExpListFunction>(*$3));}
     ;
 
 operator /* ast exist */

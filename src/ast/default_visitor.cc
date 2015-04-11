@@ -40,6 +40,7 @@ namespace ast
 
     void DefaultVisitor::operator()(Exp& e)
     {
+        e.accept(*this);
     }
 
     void DefaultVisitor::operator()(ExpList& e)
@@ -163,6 +164,7 @@ namespace ast
 
     void DefaultVisitor::operator()(Value& e)
     {
+        e.accept(*this);
     }
 
     void DefaultVisitor::operator()(VarDec& e)

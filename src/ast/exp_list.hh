@@ -50,6 +50,10 @@ namespace ast
         public:
             ExpListFunction()
             {};
+
+            ExpListFunction(ExpList& e)
+                 : ExpList(e)
+            {};
             virtual ~ExpListFunction()
             {};
             void virtual accept(Visitor& v)
