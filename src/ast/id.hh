@@ -36,9 +36,14 @@ namespace ast
                 return dec_;
             };
 
+            void dec_set(std::shared_ptr<Declaration> d)
+            {
+                dec_ = d;
+            };
+
         private:
             misc::symbol s_;
-            std::shared_ptr<Declaration> dec_;
+            std::shared_ptr<Declaration> dec_ = nullptr;
     };
 }
 

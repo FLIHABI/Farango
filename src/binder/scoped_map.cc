@@ -33,6 +33,7 @@ namespace binder
             if (old_ == age_)
             {
                 //FIXME ERROR: var already def;
+                return;
             }
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
         }
@@ -75,6 +76,7 @@ namespace binder
                 if (p == nullptr || p->type_dec_get() != nullptr)
                 {
                     //FIXME ERROR: var already def;
+                    return;
                 }
                 p->type_dec_set(d);
             }

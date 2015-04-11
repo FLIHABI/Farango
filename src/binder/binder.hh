@@ -4,7 +4,6 @@
 # include "scoped_map.hh"
 # include "ast/default_visitor.hh"
 
-#if 0
 namespace binder
 {
     class Binder : public ast::DefaultVisitor
@@ -25,9 +24,6 @@ namespace binder
             virtual void operator()(ast::Lvalue& e) override;
             virtual void operator()(ast::MemberAccess& e) override;
 
-            /* Context dependant, FIXME later
-            virtual void operator()(ast::TypeIdentifier& e) override;
-            */
             virtual void operator()(ast::TypePrototype& e) override;
             virtual void operator()(ast::TypeStruct& e) override;
             virtual void operator()(ast::TypeUnion& e) override;
@@ -35,13 +31,10 @@ namespace binder
             virtual void operator()(ast::VarDec& e) override;
             virtual void operator()(ast::WhileExp& e) override;
 
-            virtual void operator()(ast::InnerExp& e) override;
             virtual void operator()(ast::ExpListInner& e) override;
-            virtual void operator()(ast::ExpListFunction& e) override;
             virtual void operator()(ast::Id& e) override;
         private:
             ScopedMap s_map_;
     };
 }
-#endif
 #endif /* BINDER_HH */
