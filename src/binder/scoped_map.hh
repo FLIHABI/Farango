@@ -30,9 +30,9 @@ namespace binder
             void push_dec(ast::FunctionDec& d);
 
             std::shared_ptr<ast::Declaration> get_s_declaration(misc::symbol);
-            unsigned get_s_age(misc::symbol) const;
+            unsigned get_s_age(misc::symbol);
 
-            unsigned get_age() const;
+            unsigned get_age();
 
         private:
             template <typename T>

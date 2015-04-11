@@ -81,4 +81,25 @@ namespace binder
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
         }
     }
+
+
+
+    std::shared_ptr<ast::Declaration> ScopedMap::get_s_declaration(misc::symbol s)
+    {
+        if (map_[s].size() == 0)
+            return nullptr;
+        return map_[s].top().first;
+    }
+
+    unsigned ScopedMap::get_s_age(misc::symbol s)
+    {
+        if (map_[s].size() == 0)
+            return 0;
+        return map_[s].top().second;
+    }
+
+    unsigned ScopedMap::get_age()
+    {
+        return age_;
+    }
 }

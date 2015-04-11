@@ -355,6 +355,7 @@ func_prototype /* ast exist */
 
 func_decl /* ast exist */
     : func_prototype ASSIGN expression { $$ = std::make_shared<ast::FunctionDec>(*$1, $3); }
+    | func_prototype { $$ = $1; }
     ;
 
 declaration
