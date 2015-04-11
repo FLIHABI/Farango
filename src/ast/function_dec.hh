@@ -19,12 +19,6 @@ namespace ast
                 , body_(body)
             {};
 
-            FunctionDec(std::shared_ptr<Id> name, std::vector<VarDec> params,
-                    std::shared_ptr<Exp> body)
-                : FunctionPrototype(name, params)
-                , body_(body)
-            {};
-
             FunctionDec(FunctionPrototype& f, std::shared_ptr<Exp> body)
                 : FunctionPrototype(f)
                 , body_(body)

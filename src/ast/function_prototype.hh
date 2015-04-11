@@ -20,9 +20,10 @@ namespace ast
                 , params_()
             {};
 
-            FunctionPrototype(std::shared_ptr<Id> name, std::vector<VarDec> params)
+            FunctionPrototype(std::shared_ptr<Id> name, std::vector<VarDec> params, std::shared_ptr<TypeIdentifier> return_t)
                 : Declaration(name)
                 , params_(params)
+                , return_t_(return_t)
             {};
 
             virtual ~FunctionPrototype()
@@ -38,6 +39,11 @@ namespace ast
                 return params_;
             }
 
+            std::shared_ptr<TypeIdentifier>& return_t_get()
+            {
+                return return_t_;
+            }
+
             std::shared_ptr<FunctionPrototype> type_dec_get()
             {
                 return type_dec_;
@@ -50,6 +56,7 @@ namespace ast
 
         protected:
             std::vector<VarDec> params_;
+            std::shared_ptr<TypeIdentifier> return_t_;
             std::shared_ptr<FunctionPrototype> type_dec_ = nullptr;
     };
 }

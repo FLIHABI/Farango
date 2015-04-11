@@ -102,7 +102,10 @@ namespace ast
             out_ << *b;
             out_ << (++b == end ? "" : ", ");
         }
-        out_ << ") =" << *e.body_get();
+        out_ << ")";
+        if (e.return_t_get())
+            out_ << " : " << *e.return_t_get();
+        out_ << " = " << *e.body_get();
     }
 
     void PrettyPrinter::operator()(FunctionPrototype& e)
@@ -116,6 +119,8 @@ namespace ast
             out_ << (++b == end ? "" : ", ");
         }
         out_ << ")";
+        if (e.return_t_get())
+            out_ << " : " << *e.return_t_get();
     }
 
     void PrettyPrinter::operator()(IfExp& e)

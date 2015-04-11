@@ -343,9 +343,13 @@ proto_parameter_list_rec /* ast exist */
     ;
 
 func_prototype /* ast exist */
-    : FUNCTION identifier LPAREN proto_parameter_list RPAREN
+    : FUNCTION identifier LPAREN proto_parameter_list RPAREN COLON type_identifier
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $4);
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $4, $7);
+        }
+    | FUNCTION identifier LPAREN proto_parameter_list RPAREN
+        {
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $4, nullptr);
         }
     ;
 

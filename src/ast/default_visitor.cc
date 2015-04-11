@@ -74,6 +74,9 @@ namespace ast
 
     void DefaultVisitor::operator()(FunctionDec& e)
     {
+        e.name_get()->accept(*this);
+        if (e.return_t_get())
+            e.return_t_get()->accept(*this);
         for (auto& var: e.params_get())
             var.accept(*this);
         e.body_get()->accept(*this);
@@ -81,6 +84,9 @@ namespace ast
 
     void DefaultVisitor::operator()(FunctionPrototype& e)
     {
+        e.name_get()->accept(*this);
+        if (e.return_t_get())
+            e.return_t_get()->accept(*this);
         for (auto& var: e.params_get())
             var.accept(*this);
     }
