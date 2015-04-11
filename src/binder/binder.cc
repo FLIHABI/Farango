@@ -55,7 +55,6 @@ namespace binder
     void Binder::operator()(ast::FunctionPrototype& e)
     {
         s_map_.push_dec(e);
-        e.name_get()->accept(*this);
 
         s_map_.start_scop();
         for (auto& var: e.params_get())
@@ -99,7 +98,6 @@ namespace binder
     void Binder::operator()(ast::TypePrototype& e)
     {
         s_map_.push_dec(e);
-        e.name_get()->accept(*this);
     }
 
     void Binder::operator()(ast::TypeStruct& e)
@@ -108,7 +106,10 @@ namespace binder
         e.name_get()->accept(*this);
         s_map_.start_scop();
         for (auto& aux : e.type_get()->specs_get())
+        {
             s_map_.push_dec(*aux);
+            aux->name_get()->accept(*this);
+        }
         for (auto& var : e.members_get())
             var.accept(*this);
         s_map_.end_scop();
@@ -120,7 +121,10 @@ namespace binder
         e.name_get()->accept(*this);
         s_map_.start_scop();
         for (auto& aux : e.type_get()->specs_get())
+        {
             s_map_.push_dec(*aux);
+            aux->name_get()->accept(*this);
+        }
         for (auto& id : e.unions_get())
             id.accept(*this);
         s_map_.end_scop();

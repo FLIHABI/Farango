@@ -120,7 +120,8 @@ namespace ast
         }
         out_ << ")";
         if (e.return_t_get())
-            out_ << " : " << *e.return_t_get();
+            out_ << " : " << *e.return_t_get()
+                 << " /* " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(IfExp& e)
@@ -192,7 +193,8 @@ namespace ast
 
     void PrettyPrinter::operator()(TypePrototype& e)
     {
-        out_ << "type " << *e.type_get();
+        out_ << "type " << *e.type_get()
+             << " /* " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(TypeStruct& e)
@@ -257,6 +259,6 @@ namespace ast
 
     void PrettyPrinter::operator()(Id& e)
     {
-        out_ << e.s_get() << "/* " << e.dec_get() << " */";
+        out_ << e.s_get() << " /* " << e.dec_get() << " */ ";
     }
 }
