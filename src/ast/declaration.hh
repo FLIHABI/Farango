@@ -21,7 +21,7 @@ namespace ast
                 v(*this);
             }
 
-            std::shared_ptr<Id>& name_get()
+            virtual std::shared_ptr<Id>& name_get()
             {
                 return name_;
             }

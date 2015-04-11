@@ -12,7 +12,7 @@ namespace ast
     class TypeUnion : public TypePrototype
     {
         public:
-            TypeUnion(std::shared_ptr<TypeIdentifier> type, std::vector<TypeIdentifier> unions)
+            TypeUnion(std::shared_ptr<TypeIdentifierDec> type, std::vector<TypeIdentifierUse> unions)
                 : TypePrototype(type)
                 , unions_(unions)
             {};
@@ -25,13 +25,13 @@ namespace ast
                 v(*this);
             }
 
-            std::vector<TypeIdentifier>& unions_get()
+            std::vector<TypeIdentifierUse>& unions_get()
             {
                 return unions_;
             }
 
         private:
-            std::vector<TypeIdentifier> unions_;
+            std::vector<TypeIdentifierUse> unions_;
     };
 }
 

@@ -4,6 +4,7 @@
 # include "scoped_map.hh"
 # include "ast/default_visitor.hh"
 
+#if 0
 namespace binder
 {
     class Binder : public ast::DefaultVisitor
@@ -42,5 +43,5 @@ namespace binder
             ScopedMap s_map_;
     };
 }
-
+#endif
 #endif /* BINDER_HH */

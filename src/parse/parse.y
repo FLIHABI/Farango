@@ -136,10 +136,12 @@
 %type <std::shared_ptr<ast::TypePrototype>> type_decl
 %type <std::shared_ptr<ast::VarDec>> var_decl typed_var
 %type <std::shared_ptr<ast::FunctionPrototype>> func_decl func_prototype
-%type <std::shared_ptr<ast::TypeIdentifier>> type_identifier
-%type <std::vector<std::shared_ptr<ast::Id>>> generics_list generics_list_inner
+%type <std::shared_ptr<ast::TypeIdentifierUse>> type_identifier_use
+%type <std::shared_ptr<ast::TypeIdentifierDec>> type_identifier_dec
+%type <std::vector<std::shared_ptr<ast::Id>>> generics_list_use generics_list_inner_use
+%type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec
 %type <std::vector<ast::VarDec>> member_list proto_parameter_list proto_parameter_list_rec
-%type <std::vector<ast::TypeIdentifier>> type_union
+%type <std::vector<ast::TypeIdentifierUse>> type_union
 /************************************************
  *                  PRECEDENCE                  *
  ************************************************/
@@ -210,34 +212,53 @@ number /* ast exist */
     | DOUBLE { $$ = std::make_shared<ast::Int>(-1); } /* FIXME */
     ;
 
-type_identifier /* ast exist */
-    : identifier generics_list { $$ = std::make_shared<ast::TypeIdentifier>($1, $2);}
+/* */
+type_identifier_dec /* ast exist */
+    : identifier generics_list_dec { $$ = std::make_shared<ast::TypeIdentifierDec>($1, $2);}
     ;
 
-generics_list /* ast exist */
+generics_list_dec /* ast exist */
+    : %empty {$$ = std::vector<std::shared_ptr<ast::Declaration>>();}
+    | identifier {$$ = std::vector<std::shared_ptr<ast::Declaration>>(); $$.push_back(std::make_shared<ast::Declaration>($1)); }
+    | LPAREN generics_list_inner_dec RPAREN { $$ = $2; }
+    ;
+
+generics_list_inner_dec /* ast exist */
+    : identifier {$$ = std::vector<std::shared_ptr<ast::Declaration>>(); $$.push_back(std::make_shared<ast::Declaration>($1)); }
+    | generics_list_inner_dec COMMA identifier {$$ = $1; $1.push_back(std::make_shared<ast::Declaration>($3)); }
+    ;
+/* */
+
+/* */
+type_identifier_use /* ast exist */
+    : identifier generics_list_use { $$ = std::make_shared<ast::TypeIdentifierUse>($1, $2);}
+    ;
+
+generics_list_use /* ast exist */
     : %empty {$$ = std::vector<std::shared_ptr<ast::Id>>();}
     | identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
-    | LPAREN generics_list_inner RPAREN { $$  = $2; }
+    | LPAREN generics_list_inner_use RPAREN { $$ = $2; }
     ;
 
-generics_list_inner /* ast exist */
+generics_list_inner_use /* ast exist */
     : identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
-    | generics_list_inner COMMA identifier {$$ = $1; $1.push_back($3); }
+    | generics_list_inner_use COMMA identifier {$$ = $1; $1.push_back($3); }
     ;
+/* */
 
 type_decl
-    : TYPE type_identifier ASSIGN LBRACE member_list RBRACE {$$ = std::make_shared<ast::TypeStruct>($2, $5); }
-    | TYPE type_identifier ASSIGN type_union {$$ = std::make_shared<ast::TypeUnion>($2, $4); }
-    | TYPE type_identifier {$$ = std::make_shared<ast::TypePrototype>($2); }
+    : TYPE type_identifier_dec ASSIGN LBRACE member_list RBRACE {$$ = std::make_shared<ast::TypeStruct>($2, $5); }
+    | TYPE type_identifier_dec ASSIGN type_union {$$ = std::make_shared<ast::TypeUnion>($2, $4); }
+    | TYPE type_identifier_dec {$$ = std::make_shared<ast::TypePrototype>($2); }
     ;
 
 type_union
-    : type_identifier { $$ = std::vector<ast::TypeIdentifier>(), $$.push_back(*$1); }
-    | type_union OR type_identifier { $$ = $1, $$.push_back(*$3); }
+    : type_identifier_use { $$ = std::vector<ast::TypeIdentifierUse>(), $$.push_back(*$1); }
+    | type_union OR type_identifier_use { $$ = $1, $$.push_back(*$3); }
     ;
 
 typed_var /* ast exist */
-    : identifier COLON type_identifier { $$ = std::make_shared<ast::VarDec>($1, $3); }
+    : identifier COLON type_identifier_use { $$ = std::make_shared<ast::VarDec>($1, $3); }
     ;
 
 var_decl /* ast exist */
@@ -343,7 +364,7 @@ proto_parameter_list_rec /* ast exist */
     ;
 
 func_prototype /* ast exist */
-    : FUNCTION identifier LPAREN proto_parameter_list RPAREN COLON type_identifier
+    : FUNCTION identifier LPAREN proto_parameter_list RPAREN COLON type_identifier_use
         {
             $$ = std::make_shared<ast::FunctionPrototype>($2, $4, $7);
         }

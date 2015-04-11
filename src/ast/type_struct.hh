@@ -11,7 +11,7 @@ namespace ast
     class TypeStruct : public TypePrototype
     {
         public:
-            TypeStruct(std::shared_ptr<TypeIdentifier> type, std::vector<VarDec> members)
+            TypeStruct(std::shared_ptr<TypeIdentifierDec> type, std::vector<VarDec> members)
                 : TypePrototype(type)
                 , members_(members)
             {};

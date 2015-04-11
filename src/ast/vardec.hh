@@ -13,7 +13,7 @@ namespace ast
     class VarDec : public Declaration
     {
         public:
-            VarDec(std::shared_ptr<Id> name, std::shared_ptr<TypeIdentifier> type)
+            VarDec(std::shared_ptr<Id> name, std::shared_ptr<TypeIdentifierUse> type)
                 : Declaration(name)
                 , type_(type)
             {};
@@ -26,7 +26,7 @@ namespace ast
                 v(*this);
             }
 
-            std::shared_ptr<TypeIdentifier> type_get()
+            std::shared_ptr<TypeIdentifierUse> type_get()
             {
                 return type_;
             }
@@ -42,7 +42,7 @@ namespace ast
             }
 
         protected:
-            std::shared_ptr<TypeIdentifier> type_;
+            std::shared_ptr<TypeIdentifierUse> type_;
             bool decl_ = false;
     };
 }

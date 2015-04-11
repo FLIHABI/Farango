@@ -12,7 +12,7 @@ namespace ast
     class TypePrototype : public Declaration
     {
         public:
-            TypePrototype(std::shared_ptr<TypeIdentifier> type)
+            TypePrototype(std::shared_ptr<TypeIdentifierDec> type)
                 : type_(type)
             {
                 name_ = type->type_name_get();
@@ -26,7 +26,7 @@ namespace ast
                 v(*this);
             }
 
-            std::shared_ptr<TypeIdentifier> type_get()
+            std::shared_ptr<TypeIdentifierDec> type_get()
             {
                 return type_;
             }
@@ -42,7 +42,7 @@ namespace ast
             }
 
         protected:
-            std::shared_ptr<TypeIdentifier> type_;
+            std::shared_ptr<TypeIdentifierDec> type_;
             std::shared_ptr<TypePrototype> type_dec_ = nullptr; //Should be an union or a struct
 
     };

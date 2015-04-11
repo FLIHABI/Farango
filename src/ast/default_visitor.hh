@@ -32,7 +32,8 @@ namespace ast
             virtual void operator()(Lvalue& e) override;
             virtual void operator()(MemberAccess& e) override;
             virtual void operator()(Number& e) override;
-            virtual void operator()(TypeIdentifier& e) override;
+            virtual void operator()(TypeIdentifierUse& e) override;
+            virtual void operator()(TypeIdentifierDec& e) override;
             virtual void operator()(TypePrototype& e) override;
             virtual void operator()(TypeStruct& e) override;
             virtual void operator()(TypeUnion& e) override;

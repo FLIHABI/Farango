@@ -4,7 +4,7 @@
 /*
  * Operator *
  * Ast *
- *  TypeIdentifier * //FIXME:Need change to differencies creation and instantiation (genericity)
+ *  TypeIdentifier *
  *  Exp *
  *   ExpList *
  *   AssignExp *
@@ -50,7 +50,6 @@ namespace ast
     class VarDec;
     class FunctionPrototype;
     class FunctionDec;
-    class TypeIdentifier;
     class TypePrototype;
     class TypeStruct;
     class TypeUnion;
@@ -59,12 +58,17 @@ namespace ast
     class ForExp;
     class Int;
     class Number;
-    class TypeIdentifier;
     class ExpListInner;
     class ExpListFunction;
     class Id;
+    template <typename T>
+    class TypeIdentifier;
+
+    using TypeIdentifierDec = TypeIdentifier<Declaration>;
+    using TypeIdentifierUse = TypeIdentifier<Id>;
 
     class Visitor;
+
 }
 
 #endif /* AST_ALL_HH */

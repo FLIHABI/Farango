@@ -1,5 +1,5 @@
 #include "binder.hh"
-
+#if 0
 namespace binder
 {
     Binder::Binder()
@@ -80,7 +80,24 @@ namespace binder
 
     void Binder::operator()(ast::MemberAccess& e)
     {
-        //FIXME Check the field later
+        //FIXME Check the field later (TypeChecker)
         Binder::operator()(*e.s_get());
     }
+
+    void Binder::operator()(ast::TypePrototype& e)
+    {
+        s_map_.push_dec(e);
+    }
+
+    void Binder::operator()(ast::TypeStruct& e)
+    {
+        s_map_.push_dec(e);
+        s_map_.start_scop();
+        for (auto& aux : e.type_get()->specs_get())
+        {
+            s_map_.push_dec(*aux);
+        }
+        s_map_.end_scop();
+    }
 }
+#endif

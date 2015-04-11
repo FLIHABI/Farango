@@ -1,5 +1,6 @@
 #include "default_visitor.hh"
 #include "all.hh"
+#include "type_identifier.hh"
 
 namespace ast
 {
@@ -28,6 +29,7 @@ namespace ast
 
     void DefaultVisitor::operator()(Declaration& e)
     {
+        e.name_get()->accept(*this);
     }
 
     void DefaultVisitor::operator()(DoExp& e)
@@ -109,6 +111,7 @@ namespace ast
 
     void DefaultVisitor::operator()(Lvalue& e)
     {
+        e.s_get()->accept(*this);
     }
 
     void DefaultVisitor::operator()(MemberAccess& e)
@@ -120,8 +123,18 @@ namespace ast
     {
     }
 
-    void DefaultVisitor::operator()(TypeIdentifier& e)
+    void DefaultVisitor::operator()(TypeIdentifierDec& e)
     {
+        e.type_name_get()->accept(*this);
+        for (auto& aux : e.specs_get())
+            aux->accept(*this);
+    }
+
+    void DefaultVisitor::operator()(TypeIdentifierUse& e)
+    {
+        e.type_name_get()->accept(*this);
+        for (auto& aux : e.specs_get())
+            aux->accept(*this);
     }
 
     void DefaultVisitor::operator()(TypePrototype& e)
