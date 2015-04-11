@@ -1,4 +1,6 @@
 #include "parse/parse.hh"
+#include "binder/binder.hh"
+#include "ast/pretty_print.hh"
 #include "compile/compiler.hh"
 
 void yy::parser::error(const std::string& msg) {
@@ -12,11 +14,17 @@ int main (int argc, char **argv) {
     if (argc > 1)
         in = fopen(argv[1], "r");
     fp.parse(in);
-    std::cout << *(fp.ast_);
 
+    binder::Binder b;
+    b(*fp.ast_);
+
+    std::cout << *fp.ast_;
+
+    /*
     compile::Compile c;
 
     c(*fp.ast_);
 
     c.write("out.fge");
+    */
 }

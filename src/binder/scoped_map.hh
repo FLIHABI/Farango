@@ -40,7 +40,7 @@ namespace binder
 
             std::map<misc::symbol, std::stack<std::pair<std::shared_ptr<ast::Declaration>, unsigned>>> map_;
             std::stack<misc::symbol> history_;
-            unsigned age_;
+            unsigned age_ = 0;
     };
 }
 

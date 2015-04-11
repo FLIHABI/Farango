@@ -26,6 +26,7 @@ namespace binder
         if (map_[s].size() == 0)
         {
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
+            history_.push(s);
         }
         else
         {
@@ -36,6 +37,7 @@ namespace binder
                 return;
             }
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
+            history_.push(s);
         }
     }
 
@@ -65,6 +67,7 @@ namespace binder
         if (map_[s].size() == 0)
         {
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
+            history_.push(s);
         }
         else
         {
@@ -81,6 +84,7 @@ namespace binder
                 p->type_dec_set(d);
             }
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
+            history_.push(s);
         }
     }
 

@@ -124,6 +124,8 @@ namespace binder
     void Binder::operator()(ast::VarDec& e)
     {
         s_map_.push_dec(e);
+
+        e.name_get()->accept(*this);
         e.type_get()->accept(*this);
     }
 
