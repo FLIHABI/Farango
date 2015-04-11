@@ -1,6 +1,6 @@
 #ifndef BINDER_HH
 # define BINDER_HH
-#if 0
+
 # include "scoped_map.hh"
 # include "ast/default_visitor.hh"
 
@@ -24,7 +24,9 @@ namespace binder
             virtual void operator()(ast::Lvalue& e) override;
             virtual void operator()(ast::MemberAccess& e) override;
 
+            /* Context dependant, FIXME later
             virtual void operator()(ast::TypeIdentifier& e) override;
+            */
             virtual void operator()(ast::TypePrototype& e) override;
             virtual void operator()(ast::TypeStruct& e) override;
             virtual void operator()(ast::TypeUnion& e) override;
@@ -41,5 +43,4 @@ namespace binder
     };
 }
 
-#endif
 #endif /* BINDER_HH */
