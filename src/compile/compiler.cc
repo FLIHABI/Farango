@@ -5,6 +5,8 @@
 
 namespace compile {
 
+    static uint16_t reg_counter = 0;
+
     void Compile::operator()(ast::Ast& a) {
         super::operator()(a);
         emitter_.emit<OP_HALT>();
@@ -20,6 +22,37 @@ namespace compile {
             case ast::MOD:   emitter_.emit<OP_MOD>(); break;
             default: break;
         };
+    }
+
+    void Compile::operator()(ast::Lvalue &e) {
+        super::operator()(e);
+        std::shared_ptr<ast::Declaration> decl = e.s_get()->dec_get();
+
+        if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
+            emitter_.emit<OP_PUSHR>(vardec->register_number_get());
+        } else {
+            std::cerr << "Could not resolve symbol";
+            // TODO: proper error handling
+        }
+    }
+
+    void Compile::operator()(ast::VarDec &e) {
+        binder_(e);
+        super ::operator()(e);
+
+        e.register_number_set(reg_counter++);
+    }
+
+    void Compile::operator()(ast::AssignExp &e) {
+        binder_(e);
+        super::operator()(*e.exp_get());
+
+        std::shared_ptr<ast::Declaration> decl = e.lvalue_get()->s_get()->dec_get();
+
+        if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
+            emitter_.emit<OP_POPR>(vardec->register_number_get());
+        }
+
     }
 
     void Compile::operator()(ast::Int& e) {

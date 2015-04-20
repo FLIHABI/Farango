@@ -41,9 +41,18 @@ namespace ast
                 return decl_;
             }
 
+            inline uint16_t register_number_get() {
+                return register_number_;
+            }
+
+            inline void register_number_set(const uint16_t num) {
+                register_number_ = num;
+            }
+
         protected:
             std::shared_ptr<TypeIdentifierUse> type_;
             bool decl_ = false;
+            uint16_t register_number_;
     };
 }
 
