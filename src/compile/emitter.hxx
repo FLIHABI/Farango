@@ -10,7 +10,8 @@ namespace compile {
         static_assert(!bytecode::has_parameter(b),
                 "Bytecode has a parameter.");
 
-        buf_ << b;
+        const char bytecode = b;
+        buf_.push_back(bytecode);
     }
 
     template<Bytecode b, typename T>
@@ -18,7 +19,8 @@ namespace compile {
         static_assert(bytecode::has_parameter(b),
                 "Bytecode has no parameter.");
 
-        buf_ << b;
+        const char bytecode = b;
+        buf_.push_back(bytecode);
         vector_stream::write(buf_, arg);
     }
 }
