@@ -12,28 +12,28 @@ namespace binder
 
     void Binder::operator()(ast::Ast& e)
     {
-        DefaultVisitor::operator()(e);
+        super::operator()(e);
     }
 
     void Binder::operator()(ast::DoExp& e)
     {
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.body_get());
+        super::operator()(*e.body_get());
         s_map_.end_scop();
 
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.condition_get());
+        super::operator()(*e.condition_get());
         s_map_.end_scop();
     }
 
     void Binder::operator()(ast::ForExp& e)
     {
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.init_get());
-        DefaultVisitor::operator()(*e.condition_get());
-        DefaultVisitor::operator()(*e.end_get());
+        super::operator()(*e.init_get());
+        super::operator()(*e.condition_get());
+        super::operator()(*e.end_get());
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.body_get());
+        super::operator()(*e.body_get());
         s_map_.end_scop();
         s_map_.end_scop();
     }
@@ -46,7 +46,7 @@ namespace binder
         s_map_.start_scop();
         for (auto& var: e.params_get())
             var.accept(*this);
-        DefaultVisitor::operator()(*e.body_get());
+        super::operator()(*e.body_get());
         s_map_.end_scop();
         if (e.return_t_get())
             e.return_t_get()->accept(*this);
@@ -68,16 +68,16 @@ namespace binder
     void Binder::operator()(ast::IfExp& e)
     {
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.if_get());
+        super::operator()(*e.if_get());
 
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.then_get());
+        super::operator()(*e.then_get());
         s_map_.end_scop();
 
         if (e.else_get())
         {
             s_map_.start_scop();
-            DefaultVisitor::operator()(*e.else_get());
+            super::operator()(*e.else_get());
             s_map_.end_scop();
         }
 
@@ -141,15 +141,15 @@ namespace binder
     void Binder::operator()(ast::WhileExp& e)
     {
         s_map_.start_scop();
-        DefaultVisitor::operator()(*e.condition_get());
-        DefaultVisitor::operator()(*e.body_get());
+        super::operator()(*e.condition_get());
+        super::operator()(*e.body_get());
         s_map_.end_scop();
     }
 
     void Binder::operator()(ast::ExpListInner& e)
     {
         s_map_.start_scop();
-        DefaultVisitor::operator()(e);
+        super::operator()(e);
         s_map_.end_scop();
     }
 
@@ -157,4 +157,5 @@ namespace binder
     {
         e.dec_set(s_map_.get_s_declaration(e.s_get()));
     }
+
 }

@@ -8,6 +8,8 @@ namespace binder
 {
     class Binder : public ast::DefaultVisitor
     {
+        using super = ast::DefaultVisitor;
+
         public:
             Binder();
             ~Binder();
