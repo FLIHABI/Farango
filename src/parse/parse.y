@@ -97,6 +97,7 @@
 %token MINUS        "-"
 %token MUL          "*"
 %token DIV          "/"
+%token MODULO       "%"
 %token EQUAL        "=="
 %token NEQUAL       "!="
 %token LESS         "<"
@@ -111,6 +112,9 @@
 
 %token BANG         "!"
 %token TILDE        "~"
+
+%token LSHIFT       "<<"
+%token RSHIFT       ">>"
 
 %token ASSIGN       "="
 

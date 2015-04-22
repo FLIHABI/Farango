@@ -131,6 +131,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "-"          { return TOKEN(MINUS); }
 "*"          { return TOKEN(MUL); }
 "/"          { return TOKEN(DIV); }
+"%"          { return TOKEN(MODULO); }
 "=="         { return TOKEN(EQUAL); }
 "!="         { return TOKEN(NEQUAL); }
 "&&"         { return TOKEN(LAND); }
@@ -143,6 +144,8 @@ NEWLINE     \n\r|\r\n|\r|\n
 "&"          { return TOKEN(AND); }
 "|"          { return TOKEN(OR); }
 "="          { return TOKEN(ASSIGN); }
+"<<"         { return TOKEN(LSHIFT); }
+">>"         { return TOKEN(RSHIFT); }
 {USER_OP}    { return TOKEN(USER_OP); }
 {SPACE}      { }
 {NEWLINE}    { }
