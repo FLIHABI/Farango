@@ -313,6 +313,8 @@ operator /* ast exist */
     | LESS_EQ { $$ = ast::Operator::LESS_EQ; }
     | BANG { $$ = ast::Operator::BANG; }
     | TILDE { $$ = ast::Operator::TILDE; }
+    | LSHIFT { $$ = ast::Operator::LSHIFT; }
+    | RSHIFT { $$ = ast::Operator::RSHIFT; }
     ;
 
 //| USER_OP /* FIXME */

@@ -25,6 +25,8 @@ namespace ast
         LESS_EQ,
         BANG,
         TILDE,
+        LSHIFT,
+        RSHIFT
     };
 
 }
