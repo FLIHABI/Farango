@@ -30,6 +30,11 @@ namespace ast
                 return value_;
             }
 
+            std::vector<std::shared_ptr<Id>>& generics_instance_get()
+            {
+                return generics_instance_;
+            }
+
             std::shared_ptr<ExpListFunction> list_get()
             {
                 return list_;

@@ -89,12 +89,38 @@ namespace ast
 
     void PrettyPrinter::operator()(FunCall& e)
     {
-        out_ << *e.value_get() << "(" << *e.list_get() << ")";
+        out_ << *e.value_get();
+        if (e.generics_instance_get().size() > 0)
+        {
+            out_ << "::<";
+            auto b = e.generics_instance_get().begin();
+            auto end = e.generics_instance_get().end();
+            while (b != end)
+            {
+                out_ << **b;
+                out_ << (++b == end ? ">" : ", ");
+            }
+        }
+        out_ << "(" << *e.list_get() << ")";
     }
 
     void PrettyPrinter::operator()(FunctionDec& e)
     {
-        out_ << "fun " << *e.name_get() << "(";
+        out_ << "fun " << *e.name_get();
+
+        if (e.generics_get().size() > 0)
+        {
+            out_ << "<";
+            auto b = e.generics_get().begin();
+            auto end = e.generics_get().end();
+            while (b != end)
+            {
+                out_ << *(*b)->name_get();
+                out_ << (++b == end ? ">" : ", ");
+            }
+        }
+
+        out_ << "(";
         auto b = e.params_get().begin();
         auto end = e.params_get().end();
         while (b != end)
@@ -110,7 +136,22 @@ namespace ast
 
     void PrettyPrinter::operator()(FunctionPrototype& e)
     {
-        out_ << "fun " << *e.name_get() << "(";
+        out_ << "fun " << *e.name_get();
+
+        if (e.generics_get().size() > 0)
+        {
+            out_ << "<";
+            auto b = e.generics_get().begin();
+            auto end = e.generics_get().end();
+            while (b != end)
+            {
+                out_ << *(*b)->name_get();
+                out_ << (++b == end ? ">" : ", ");
+            }
+        }
+
+        out_ << "(";
+
         auto b = e.params_get().begin();
         auto end = e.params_get().end();
         while (b != end)
@@ -184,7 +225,7 @@ namespace ast
             out_ << " (";
             while (b != end)
             {
-                out_ << *b;
+                out_ << *(*b)->name_get();
                 out_ << (++b == end ? "" : ", ");
             }
             out_ << ")";

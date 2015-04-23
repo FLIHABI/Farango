@@ -232,7 +232,7 @@ generics_list_dec /* ast exist */
 
 generics_list_inner_dec /* ast exist */
     : identifier {$$ = std::vector<std::shared_ptr<ast::Declaration>>(); $$.push_back(std::make_shared<ast::Declaration>($1)); }
-    | generics_list_inner_dec COMMA identifier {$$ = $1; $1.push_back(std::make_shared<ast::Declaration>($3)); }
+    | generics_list_inner_dec COMMA identifier {$$ = $1; $$.push_back(std::make_shared<ast::Declaration>($3)); }
     ;
 /* */
 
@@ -249,7 +249,7 @@ generics_list_use /* ast exist */
 
 generics_list_inner_use /* ast exist */
     : identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
-    | generics_list_inner_use COMMA identifier {$$ = $1; $1.push_back($3); }
+    | generics_list_inner_use COMMA identifier {$$ = $1; $$.push_back($3); }
     ;
 /* */
 
