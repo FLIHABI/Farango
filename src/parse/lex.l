@@ -119,6 +119,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "module"     { return TOKEN(MODULE); }
 ","          { return TOKEN(COMMA); }
 ":"          { return TOKEN(COLON); }
+"::<"        { return TOKEN(DCOLON); }
 ";"          { return TOKEN(SEMICOLON); }
 "("          { return TOKEN(LPAREN); }
 ")"          { return TOKEN(RPAREN); }

@@ -84,6 +84,7 @@
 
 %token COMMA        ","
 %token COLON        ":"
+%token DCOLON       "::<"
 %token SEMICOLON    ";"
 %token LPAREN       "("
 %token RPAREN       ")"
@@ -126,9 +127,9 @@
 %type <std::shared_ptr<ast::Exp>> expression
 %type <std::shared_ptr<ast::Literal>> literal
 %type <std::shared_ptr<ast::Number>> number
-%type <std::shared_ptr<ast::Value>> value
+%type <std::shared_ptr<ast::Value>> value binop
 %type <std::shared_ptr<ast::Lvalue>> lvalue member_access
-%type <ast::Operator> operator
+//%type <ast::Operator> operator
 %type <std::shared_ptr<ast::Id>> identifier
 %type <std::shared_ptr<ast::ExpList>> expression_list expression_list_rec parameter_list parameter_list_rec
 %type <std::shared_ptr<ast::FunCall>> function_call
@@ -142,8 +143,8 @@
 %type <std::shared_ptr<ast::FunctionPrototype>> func_decl func_prototype
 %type <std::shared_ptr<ast::TypeIdentifierUse>> type_identifier_use
 %type <std::shared_ptr<ast::TypeIdentifierDec>> type_identifier_dec
-%type <std::vector<std::shared_ptr<ast::Id>>> generics_list_use generics_list_inner_use
-%type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec
+%type <std::vector<std::shared_ptr<ast::Id>>> generics_list_use generics_list_inner_use function_use_generics_list
+%type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec function_def_generics_list
 %type <std::vector<ast::VarDec>> member_list proto_parameter_list proto_parameter_list_rec
 %type <std::vector<ast::TypeIdentifierUse>> type_union
 /************************************************
@@ -161,6 +162,8 @@
 %left AND
 %left MULT DIV
 %left UMINUS UPLUS ULNOT UNOT
+
+%left GLESS
 
 %start program
 
@@ -286,16 +289,21 @@ value /* ast exist */
    | LPAREN operator RPAREN //FIXME: Not in ast
 */
 
-//Warning, can't do foo().toto
 member_access /* ast exist */
     : value DOT identifier  {$$ = std::make_shared<ast::MemberAccess>($1, $3); }
     ;
 
-function_call /* ast exist */
-    : value LPAREN parameter_list RPAREN { $$ = std::make_shared<ast::FunCall>($1, std::make_shared<ast::ExpListFunction>(*$3));}
+function_use_generics_list
+    : %empty {}
+    | DCOLON generics_list_inner_use GREATER { $$ = $2; }
     ;
 
-operator /* ast exist */
+function_call /* ast exist */
+    : value function_use_generics_list LPAREN parameter_list RPAREN { $$ = std::make_shared<ast::FunCall>($1, std::make_shared<ast::ExpListFunction>(*$4));}
+    ;
+
+/*
+operator
     : PLUS { $$ = ast::Operator::PLUS; }
     | MINUS { $$ = ast::Operator::MINUS; }
     | MUL { $$ = ast::Operator::MUL; }
@@ -316,6 +324,27 @@ operator /* ast exist */
     | LSHIFT { $$ = ast::Operator::LSHIFT; }
     | RSHIFT { $$ = ast::Operator::RSHIFT; }
     ;
+*/
+
+binop
+    : value PLUS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::PLUS, $3); }
+    | value MINUS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::MINUS, $3); }
+    | value MUL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::MUL, $3); }
+    | value DIV expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::DIV, $3); }
+    | value EQUAL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::EQUAL, $3); }
+    | value NEQUAL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::NEQUAL, $3); }
+    | value AND expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::AND, $3); }
+    | value OR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::OR, $3); }
+    | value XOR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::XOR, $3); }
+    | value LAND expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LAND, $3); }
+    | value LOR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LOR, $3); }
+    | value GREATER expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER, $3); }
+    | value GREATER_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER_EQ, $3); }
+    | value LESS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS, $3); }
+    | value LESS_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS_EQ, $3); }
+    | value LSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LSHIFT, $3); }
+    | value RSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::RSHIFT, $3); }
+    ;
 
 //| USER_OP /* FIXME */
 
@@ -327,7 +356,8 @@ lvalue /* ast exist */
 
 expression
     : value { $$ = $1; }
-    | value operator expression { $$ = std::make_shared<ast::BinaryExp>($1, $2, $3); }
+    | binop { $$ = $1; }
+    //| lvalue operator expression { $$ = std::make_shared<ast::BinaryExp>($1, $2, $3); }
     | lvalue ASSIGN expression { $$ = std::make_shared<ast::AssignExp>($1, $3); }
     | declaration { $$ = $1; }
     | BANG expression %prec ULNOT { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::BANG, $2); }
@@ -370,14 +400,19 @@ proto_parameter_list_rec /* ast exist */
     | proto_parameter_list_rec COMMA typed_var  { $$ = $1; $$.push_back(*$3);}
     ;
 
+function_def_generics_list
+    : %empty {$$ = std::vector<std::shared_ptr<ast::Declaration>>();}
+    | LESS generics_list_inner_dec GREATER { $$ = $2; }
+    ;
+
 func_prototype /* ast exist */
-    : FUNCTION identifier LPAREN proto_parameter_list RPAREN COLON type_identifier_use
+    : FUNCTION identifier function_def_generics_list LPAREN proto_parameter_list RPAREN COLON type_identifier_use
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $4, $7);
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $5, $8);
         }
-    | FUNCTION identifier LPAREN proto_parameter_list RPAREN
+    | FUNCTION identifier function_def_generics_list LPAREN proto_parameter_list RPAREN
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $4, nullptr);
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $5, nullptr);
         }
     ;
 
