@@ -14,13 +14,8 @@ namespace ast
     class FunctionDec : public FunctionPrototype
     {
         public:
-            FunctionDec(std::shared_ptr<Id> name, std::shared_ptr<Exp> body)
-                : FunctionPrototype(name)
-                , body_(body)
-            {};
-
-            FunctionDec(FunctionPrototype& f, std::shared_ptr<Exp> body)
-                : FunctionPrototype(f)
+            FunctionDec(std::shared_ptr<FunctionPrototype> f, std::shared_ptr<Exp> body)
+                : FunctionPrototype(*f)
                 , body_(body)
             {};
 

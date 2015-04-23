@@ -15,13 +15,9 @@ namespace ast
     class FunctionPrototype : public Declaration
     {
         public:
-            FunctionPrototype(std::shared_ptr<Id> name)
+            FunctionPrototype(std::shared_ptr<Id> name, std::vector<std::shared_ptr<Declaration>> generic, std::vector<VarDec> params, std::shared_ptr<TypeIdentifierUse> return_t)
                 : Declaration(name)
-                , params_()
-            {};
-
-            FunctionPrototype(std::shared_ptr<Id> name, std::vector<VarDec> params, std::shared_ptr<TypeIdentifierUse> return_t)
-                : Declaration(name)
+                , generics_(generic)
                 , params_(params)
                 , return_t_(return_t)
             {};
@@ -32,6 +28,11 @@ namespace ast
             void virtual accept(Visitor& v)
             {
                 v(*this);
+            }
+
+            std::vector<std::shared_ptr<Declaration>>& generics_get()
+            {
+                return generics_;
             }
 
             std::vector<VarDec>& params_get()
@@ -55,6 +56,7 @@ namespace ast
             }
 
         protected:
+            std::vector<std::shared_ptr<Declaration>> generics_;
             std::vector<VarDec> params_;
             std::shared_ptr<TypeIdentifierUse> return_t_;
             std::shared_ptr<FunctionPrototype> type_dec_ = nullptr;

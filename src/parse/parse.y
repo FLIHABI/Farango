@@ -408,16 +408,16 @@ function_def_generics_list
 func_prototype /* ast exist */
     : FUNCTION identifier function_def_generics_list LPAREN proto_parameter_list RPAREN COLON type_identifier_use
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $5, $8);
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, $8);
         }
     | FUNCTION identifier function_def_generics_list LPAREN proto_parameter_list RPAREN
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $5, nullptr);
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, nullptr);
         }
     ;
 
 func_decl /* ast exist */
-    : func_prototype ASSIGN expression { $$ = std::make_shared<ast::FunctionDec>(*$1, $3); }
+    : func_prototype ASSIGN expression { $$ = std::make_shared<ast::FunctionDec>($1, $3); }
     | func_prototype { $$ = $1; }
     ;
 
