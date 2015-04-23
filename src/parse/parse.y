@@ -299,7 +299,7 @@ function_use_generics_list
     ;
 
 function_call /* ast exist */
-    : value function_use_generics_list LPAREN parameter_list RPAREN { $$ = std::make_shared<ast::FunCall>($1, std::make_shared<ast::ExpListFunction>(*$4));}
+    : value function_use_generics_list LPAREN parameter_list RPAREN { $$ = std::make_shared<ast::FunCall>($1, $2, std::make_shared<ast::ExpListFunction>(*$4));}
     ;
 
 /*
