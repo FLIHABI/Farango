@@ -46,6 +46,7 @@ namespace ast
             virtual void operator()(TypeStruct& e) override;
             virtual void operator()(TypeUnion& e) override;
             virtual void operator()(VarDec& e) override;
+            virtual void operator()(VarAssign& e) override;
             virtual void operator()(WhileExp& e) override;
             virtual void operator()(String& e) override;
             virtual void operator()(InnerExp& e) override;

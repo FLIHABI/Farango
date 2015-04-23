@@ -28,3 +28,4 @@
 #include "while_expr.hh"
 #include "inner_exp.hh"
 #include "id.hh"
+#include "varassign.hh"

@@ -227,6 +227,13 @@ namespace ast
         out_ << *e.name_get() << " : " << *e.type_get();
     }
 
+    void PrettyPrinter::operator()(VarAssign& e)
+    {
+        out_ << "var ";
+        out_ << *e.name_get() << " : " << *e.type_get();
+        out_ << " = " << *e.value_get();
+    }
+
     void PrettyPrinter::operator()(WhileExp& e)
     {
         out_ << "while (" << *e.condition_get() << ") "

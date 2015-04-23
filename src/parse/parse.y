@@ -267,6 +267,7 @@ typed_var /* ast exist */
 
 var_decl /* ast exist */
     : VAR typed_var { $$ = $2; $$->decl_set(true);}
+    | VAR typed_var ASSIGN expression { $$ = std::make_shared<ast::VarAssign>($2, $4);}
     ;
 
 member_list /* ast exist */

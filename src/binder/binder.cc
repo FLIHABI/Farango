@@ -138,6 +138,16 @@ namespace binder
         e.type_get()->accept(*this);
     }
 
+    void Binder::operator()(ast::VarAssign& e)
+    {
+        e.value_get()->accept(*this);
+
+        s_map_.push_dec(e);
+
+        e.name_get()->accept(*this);
+        e.type_get()->accept(*this);
+    }
+
     void Binder::operator()(ast::WhileExp& e)
     {
         s_map_.start_scop();

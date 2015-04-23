@@ -61,6 +61,7 @@ namespace ast
     class ExpListInner;
     class ExpListFunction;
     class Id;
+    class VarAssign;
     template <typename T>
     class TypeIdentifier;
 

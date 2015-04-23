@@ -31,6 +31,7 @@ namespace binder
             virtual void operator()(ast::TypeUnion& e) override;
 
             virtual void operator()(ast::VarDec& e) override;
+            virtual void operator()(ast::VarAssign& e) override;
             virtual void operator()(ast::WhileExp& e) override;
 
             virtual void operator()(ast::ExpListInner& e) override;

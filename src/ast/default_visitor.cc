@@ -172,6 +172,12 @@ namespace ast
         e.type_get()->accept(*this);
     }
 
+    void DefaultVisitor::operator()(VarAssign& e)
+    {
+        e.value_get()->accept(*this);
+        e.type_get()->accept(*this);
+    }
+
     void DefaultVisitor::operator()(WhileExp& e)
     {
         e.condition_get()->accept(*this);
