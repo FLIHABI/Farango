@@ -72,6 +72,8 @@ namespace ast
     void DefaultVisitor::operator()(FunCall& e)
     {
         e.value_get()->accept(*this);
+        for (auto id : e.generics_instance_get())
+            id->accept(*this);
         e.list_get()->accept(*this);
     }
 

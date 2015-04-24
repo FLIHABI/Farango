@@ -44,7 +44,11 @@ namespace binder
         s_map_.push_dec(e);
         e.name_get()->accept(*this);
         s_map_.start_scop();
-        for (auto& var: e.params_get())
+
+        for (auto& decs : e.generics_get())
+            s_map_.push_dec(*decs);
+
+        for (auto& var : e.params_get())
             var.accept(*this);
         super::operator()(*e.body_get());
         s_map_.end_scop();
@@ -57,7 +61,11 @@ namespace binder
         s_map_.push_dec(e);
 
         s_map_.start_scop();
-        for (auto& var: e.params_get())
+
+        for (auto& decs : e.generics_get())
+            s_map_.push_dec(*decs);
+
+        for (auto& var : e.params_get())
             var.accept(*this);
         s_map_.end_scop();
 
@@ -167,5 +175,4 @@ namespace binder
     {
         e.dec_set(s_map_.get_s_declaration(e.s_get()));
     }
-
 }
