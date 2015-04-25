@@ -1,12 +1,19 @@
 #ifndef TYPE_CHECKER_HH
 # define TYPE_CHECKER_HH
 
+# include <memory>
 # include "ast/default_visitor.hh"
+# include "lib/error.hh"
 
 namespace typechecker
 {
-    class TypeChecker : public virtual ast::DefaultVisitor
+    class TypeChecker : public ast::DefaultVisitor
     {
+        using super = ast::DefaultVisitor;
+
+        public:
+            TypeChecker(misc::error& e);
+            ~TypeChecker();
             virtual void operator()(ast::AssignExp& e) override;
             virtual void operator()(ast::Ast& a) override;
             virtual void operator()(ast::BinaryExp& e) override;
@@ -41,6 +48,12 @@ namespace typechecker
             virtual void operator()(ast::ExpListFunction& e) override;
             virtual void operator()(ast::Id& e) override;
             virtual void operator()(ast::VarAssign& e) override;
+
+        private:
+            bool is_equal(std::shared_ptr<ast::Declaration> a,
+                          std::shared_ptr<ast::Declaration> b);
+            bool is_int(std::shared_ptr<ast::Declaration> a);
+            misc::error& e_;
     };
 }
 

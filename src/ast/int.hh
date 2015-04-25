@@ -1,8 +1,9 @@
 #ifndef INT_HH
 # define INT_HH
 
-#include "visitor.hh"
-#include "number.hh"
+# include "visitor.hh"
+# include "number.hh"
+# include "primitive_dec.hh"
 
 namespace ast
 {
@@ -11,7 +12,9 @@ namespace ast
         public:
             Int(int value)
                 : value_(value)
-            {};
+            {
+                type_value_ = IntDec::get_def();
+            };
             virtual ~Int()
             {};
 

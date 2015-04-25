@@ -41,8 +41,8 @@ namespace ast
         private:
             std::shared_ptr<Id> type_name_;
             std::vector<std::shared_ptr<T>> specs_;
-    };
 
+    };
 }
 
 #endif /* TYPE_IDENTIFIER_HH */

@@ -43,8 +43,7 @@ namespace ast
 
         protected:
             std::shared_ptr<TypeIdentifierDec> type_;
-            std::shared_ptr<TypePrototype> type_dec_ = nullptr; //Should be an union or a struct
-
+            std::shared_ptr<TypePrototype> type_dec_ = nullptr;
     };
 }
 # endif /* TYPE_PROTOTYPE_HH */

@@ -30,7 +30,6 @@ namespace ast
             Declaration()
             {};
             std::shared_ptr<Id> name_;
-
     };
 }
 #endif /* DECLARATION_HH */

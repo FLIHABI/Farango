@@ -1,4 +1,3 @@
-#include "ast/primitive_dec.hh"
 #include "binder.hh"
 
 namespace binder
