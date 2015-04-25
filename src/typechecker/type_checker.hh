@@ -17,15 +17,18 @@ namespace typechecker
             virtual void operator()(ast::AssignExp& e) override;
             virtual void operator()(ast::Ast& a) override;
             virtual void operator()(ast::BinaryExp& e) override;
-            virtual void operator()(ast::Declaration& e) override;
             virtual void operator()(ast::DoExp& e) override;
-            virtual void operator()(ast::Exp& e) override;
             virtual void operator()(ast::ExpList& e) override;
+            virtual void operator()(ast::ExpListInner& e) override;
+            virtual void operator()(ast::ExpListFunction& e) override;
             virtual void operator()(ast::ForExp& e) override;
             virtual void operator()(ast::FunCall& e) override;
 
+#if 0
             virtual void operator()(ast::FunctionDec& e) override;
             virtual void operator()(ast::FunctionPrototype& e) override;
+            virtual void operator()(ast::Exp& e) override;
+            virtual void operator()(ast::Declaration& e) override;
 
             virtual void operator()(ast::IfExp& e) override;
             virtual void operator()(ast::Int& e) override;
@@ -44,10 +47,9 @@ namespace typechecker
             virtual void operator()(ast::WhileExp& e) override;
             virtual void operator()(ast::String& e) override;
             virtual void operator()(ast::InnerExp& e) override;
-            virtual void operator()(ast::ExpListInner& e) override;
-            virtual void operator()(ast::ExpListFunction& e) override;
             virtual void operator()(ast::Id& e) override;
             virtual void operator()(ast::VarAssign& e) override;
+#endif
 
         private:
             bool is_equal(std::shared_ptr<ast::Declaration> a,

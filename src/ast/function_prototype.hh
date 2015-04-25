@@ -40,12 +40,12 @@ namespace ast
                 return params_;
             }
 
-            std::shared_ptr<TypePrototype> type_dec_get()
+            std::shared_ptr<FunctionPrototype> type_dec_get()
             {
                 return type_dec_;
             }
 
-            void type_dec_set(std::shared_ptr<TypePrototype> t)
+            void type_dec_set(std::shared_ptr<FunctionPrototype> t)
             {
                 type_dec_ = t;
             }
@@ -59,7 +59,7 @@ namespace ast
             std::vector<std::shared_ptr<Declaration>> generics_;
             std::vector<VarDec> params_;
             std::shared_ptr<TypeIdentifierUse> return_t_;
-            std::shared_ptr<TypePrototype> type_dec_ = nullptr;
+            std::shared_ptr<FunctionPrototype> type_dec_ = nullptr;
     };
 }
 

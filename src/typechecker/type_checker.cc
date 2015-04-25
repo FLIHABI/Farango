@@ -95,4 +95,42 @@ namespace typechecker
         }
         e.type_value_set(e.body_get()->type_value_get());
     }
+
+    void TypeChecker::operator()(ast::FunCall& e)
+    {
+        super::operator()(e);
+        std::shared_ptr<ast::Id> id =
+            std::dynamic_pointer_cast<ast::Id>(e.value_get());
+        if (!id)
+        {
+            //FIXME error
+            //Something happen, we only support name () function call
+        }
+        std::shared_ptr<ast::FunctionDec> def =
+            std::dynamic_pointer_cast<ast::FunctionDec>(id->dec_get());
+        if (!def)
+        {
+            //FIXME error
+            //id is not a function
+        }
+
+        if (e.list_get()->list_get().size() != def->params_get().size())
+        {
+            //FIXME error
+            //
+        }
+
+        for (unsigned i = 0; i < def->params_get().size(); i++)
+        {
+            auto a = e.list_get()->list_get()[i]->type_value_get().lock();
+            auto b = def->params_get()[i].type_get();
+            if (!is_equal(a, b->type_value_get().lock())) // TypeChecker should have a pointer to they definition
+            {
+                //FIXME error
+                // bad parameter
+            }
+        }
+
+        //FIXME check return value
+    }
 }

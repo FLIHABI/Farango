@@ -12,7 +12,7 @@
 namespace ast
 {
     template <typename T>
-    class TypeIdentifier : public Ast
+    class TypeIdentifier : public Exp
     {
         public:
             TypeIdentifier(std::shared_ptr<Id> type_name, std::vector<std::shared_ptr<T>> specs)
