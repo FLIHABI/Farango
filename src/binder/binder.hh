@@ -3,6 +3,7 @@
 
 # include "scoped_map.hh"
 # include "ast/default_visitor.hh"
+# include "lib/error.hh"
 
 namespace binder
 {
@@ -11,6 +12,7 @@ namespace binder
         using super = ast::DefaultVisitor;
 
         public:
+            Binder(misc::error& e);
             Binder();
             ~Binder();
 
@@ -36,8 +38,10 @@ namespace binder
 
             virtual void operator()(ast::ExpListInner& e) override;
             virtual void operator()(ast::Id& e) override;
+
         private:
             ScopedMap s_map_;
+            misc::error e_;
     };
 }
 #endif /* BINDER_HH */

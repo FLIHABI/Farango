@@ -1,13 +1,25 @@
+#include "ast/primitive_dec.hh"
 #include "binder.hh"
 
 namespace binder
 {
+    Binder::Binder(misc::error& e)
+        : e_(e)
+    {
+        s_map_.start_scop();
+        s_map_.push_dec(*ast::IntDec::get_def());
+    }
+
     Binder::Binder()
     {
+        s_map_.start_scop();
+        s_map_.push_dec(*ast::IntDec::get_def());
     }
+
 
     Binder::~Binder()
     {
+        s_map_.end_scop();
     }
 
     void Binder::operator()(ast::Ast& e)

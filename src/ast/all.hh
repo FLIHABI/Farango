@@ -2,6 +2,7 @@
 #include "ast.hh"
 #include "binary_exp.hh"
 #include "declaration.hh"
+#include "primitive_dec.hh"
 #include "do_expr.hh"
 #include "exp.hh"
 #include "exp_list.hh"
