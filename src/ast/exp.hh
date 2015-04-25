@@ -23,6 +23,11 @@ namespace ast
                 return type_value_;
             }
 
+            void type_value_set(std::weak_ptr<Declaration> t)
+            {
+                type_value_ = t;
+            }
+
         protected:
             std::weak_ptr<Declaration> type_value_;
 
