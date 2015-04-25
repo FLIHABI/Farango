@@ -1,3 +1,4 @@
+# include "iostream"
 # include "scoped_map.hh"
 
 namespace binder
@@ -13,6 +14,28 @@ namespace binder
         age_--;
         while (history_.top() != "__context")
         {
+            auto d = map_.find(history_.top())->second.top().first;
+
+            {
+                std::shared_ptr<ast::TypePrototype> def =
+                    std::dynamic_pointer_cast<ast::TypePrototype>(d);
+                if (def && def->type_dec_get() == nullptr)
+                {
+                    e_ << misc::error::error_type::bind ;
+                    e_ << def->name_get()->s_get().name_get() << " has no definition" << std::endl;
+                }
+            }
+
+            {
+                std::shared_ptr<ast::FunctionPrototype> def =
+                    std::dynamic_pointer_cast<ast::FunctionPrototype>(d);
+                if (def && def->type_dec_get() == nullptr)
+                {
+                    e_ << misc::error::error_type::bind ;
+                    e_ << def->name_get()->s_get().name_get() << " has no definition" << std::endl;
+                }
+            }
+
             map_.find(history_.top())->second.pop();
             history_.pop();
         }
@@ -33,7 +56,8 @@ namespace binder
             unsigned old_ = map_[s].top().second;
             if (old_ == age_)
             {
-                //FIXME ERROR: var already def;
+                e_ << misc::error::error_type::bind;
+                e_ << s << " is already defined in this scop" << std::endl;
                 return;
             }
             map_[s].push(std::pair<std::shared_ptr<ast::Declaration>, unsigned>(d, age_));
@@ -78,7 +102,8 @@ namespace binder
                     std::dynamic_pointer_cast<T>(map_[s].top().first);
                 if (p == nullptr || p->type_dec_get() != nullptr)
                 {
-                    //FIXME ERROR: var already def;
+                    e_ << misc::error::error_type::bind;
+                    e_ << s << " is already defined in this scop" << std::endl;
                     return;
                 }
                 p->type_dec_set(d);
@@ -88,12 +113,14 @@ namespace binder
         }
     }
 
-
-
     std::shared_ptr<ast::Declaration> ScopedMap::get_s_declaration(misc::symbol s)
     {
         if (map_[s].size() == 0)
+        {
+            e_ << misc::error::error_type::bind;
+            e_ << s << " never defined in this scop" << std::endl;
             return nullptr;
+        }
         return map_[s].top().first;
     }
 

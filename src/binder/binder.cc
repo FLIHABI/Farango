@@ -4,13 +4,8 @@
 namespace binder
 {
     Binder::Binder(misc::error& e)
-        : e_(e)
-    {
-        s_map_.start_scop();
-        s_map_.push_dec(*ast::IntDec::get_def());
-    }
-
-    Binder::Binder()
+        : s_map_(e)
+        , e_(e)
     {
         s_map_.start_scop();
         s_map_.push_dec(*ast::IntDec::get_def());
@@ -19,7 +14,6 @@ namespace binder
 
     Binder::~Binder()
     {
-        s_map_.end_scop();
     }
 
     void Binder::operator()(ast::Ast& e)
@@ -185,6 +179,13 @@ namespace binder
         s_map_.start_scop();
         super::operator()(*e.condition_get());
         super::operator()(*e.body_get());
+        s_map_.end_scop();
+    }
+
+    void Binder::operator()(ast::ExpList& e)
+    {
+        s_map_.start_scop();
+        super::operator()(e);
         s_map_.end_scop();
     }
 

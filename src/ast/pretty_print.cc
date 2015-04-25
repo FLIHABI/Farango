@@ -310,6 +310,6 @@ namespace ast
 
     void PrettyPrinter::operator()(Id& e)
     {
-        out_ << e.s_get() << " /* " << e.dec_get().lock() << " */ ";
+        out_ << e.s_get() << " /* " << e.dec_get() << " */ ";
     }
 }

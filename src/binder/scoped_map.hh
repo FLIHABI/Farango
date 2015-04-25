@@ -4,6 +4,7 @@
 # include <map>
 # include <memory>
 # include <stack>
+# include <lib/error.hh>
 
 # include <ast/all.hh>
 # include "lib/symbol.hh"
@@ -13,7 +14,8 @@ namespace binder
     class ScopedMap
     {
         public:
-            ScopedMap()
+            ScopedMap(misc::error& e)
+                : e_(e)
             {};
 
             ~ScopedMap()
@@ -40,7 +42,9 @@ namespace binder
 
             std::map<misc::symbol, std::stack<std::pair<std::shared_ptr<ast::Declaration>, unsigned>>> map_;
             std::stack<misc::symbol> history_;
+
             unsigned age_ = 0;
+            misc::error& e_;
     };
 }
 

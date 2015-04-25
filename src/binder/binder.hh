@@ -13,7 +13,6 @@ namespace binder
 
         public:
             Binder(misc::error& e);
-            Binder();
             ~Binder();
 
             virtual void operator()(ast::Ast& a) override;
@@ -37,11 +36,12 @@ namespace binder
             virtual void operator()(ast::WhileExp& e) override;
 
             virtual void operator()(ast::ExpListInner& e) override;
+            virtual void operator()(ast::ExpList& e) override;
             virtual void operator()(ast::Id& e) override;
 
         private:
             ScopedMap s_map_;
-            misc::error e_;
+            misc::error& e_;
     };
 }
 #endif /* BINDER_HH */

@@ -31,7 +31,7 @@ namespace ast
                 return s_;
             };
 
-            std::weak_ptr<Declaration> dec_get()
+            std::shared_ptr<Declaration> dec_get()
             {
                 return dec_;
             };
@@ -43,7 +43,7 @@ namespace ast
 
         private:
             misc::symbol s_;
-            std::weak_ptr<Declaration> dec_;
+            std::shared_ptr<Declaration> dec_;
     };
 }
 

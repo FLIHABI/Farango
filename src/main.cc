@@ -15,8 +15,12 @@ int main (int argc, char **argv) {
         in = fopen(argv[1], "r");
     fp.parse(in);
 
-    binder::Binder b;
+    misc::error e;
+    binder::Binder b(e);
+
     b(*fp.ast_);
+
+    std::cout << e;
 
     std::cout << *fp.ast_;
 
