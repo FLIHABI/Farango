@@ -132,6 +132,7 @@ namespace ast
         if (e.return_t_get())
             out_ << " : " << *e.return_t_get();
         out_ << " = " << *e.body_get();
+        out_ << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(FunctionPrototype& e)
@@ -161,8 +162,8 @@ namespace ast
         }
         out_ << ")";
         if (e.return_t_get())
-            out_ << " : " << *e.return_t_get()
-                 << " /* " << e.type_dec_get() << " */ ";
+            out_ << " : " << *e.return_t_get();
+        out_ << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(IfExp& e)
@@ -235,7 +236,7 @@ namespace ast
     void PrettyPrinter::operator()(TypePrototype& e)
     {
         out_ << "type " << *e.type_get()
-             << " /* " << e.type_dec_get() << " */ ";
+             << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(TypeStruct& e)
@@ -245,7 +246,8 @@ namespace ast
         {
             out_ << v << ";" << misc::iendl;
         }
-        out_ << misc::decendl<< "}";
+        out_ << misc::decendl<< "}"
+             << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(TypeUnion& e)
@@ -259,6 +261,7 @@ namespace ast
             out_ << misc::iendl << (++b == end ? "" : "| ");
         }
         out_ << misc::decendl;
+        out_ << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
     void PrettyPrinter::operator()(VarDec& e)
