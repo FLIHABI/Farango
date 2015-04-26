@@ -8,6 +8,7 @@ namespace binder
     {
         s_map_.start_scop();
         s_map_.push_dec(*ast::IntDec::get_def());
+        s_map_.push_dec(*ast::StringDec::get_def());
     }
 
 

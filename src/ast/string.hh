@@ -3,6 +3,7 @@
 
 #include "visitor.hh"
 #include "literal.hh"
+#include "primitive_dec.hh"
 
 namespace ast
 {
@@ -11,7 +12,9 @@ namespace ast
         public:
             String(std::string value)
                 : value_(value)
-            {};
+            {
+               type_value_set(StringDec::get_def());
+            };
 
             virtual ~String()
             {};
