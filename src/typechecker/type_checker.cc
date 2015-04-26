@@ -123,14 +123,15 @@ namespace typechecker
         for (unsigned i = 0; i < def->params_get().size(); i++)
         {
             auto a = e.list_get()->list_get()[i]->type_value_get().lock();
-            auto b = def->params_get()[i].type_get();
-            if (!is_equal(a, b->type_value_get().lock())) // TypeChecker should have a pointer to they definition
+            auto b = def->params_get()[i].type_get()->type_name_get()->dec_get();
+            if (!is_equal(a, b)) // TypeChecker should have a pointer to they definition
             {
                 //FIXME error
                 // bad parameter
             }
         }
 
+        e.type_value_set(def->return_t_get()->type_name_get()->dec_get());
         //FIXME check return value
     }
 }
