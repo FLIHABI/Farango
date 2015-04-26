@@ -4,6 +4,7 @@
 # include <vector>
 # include <memory>
 
+# include "primitive_dec.hh"
 # include "ast_all.hh"
 # include "declaration.hh"
 # include "vardec.hh"
@@ -20,7 +21,8 @@ namespace ast
                 , generics_(generic)
                 , params_(params)
                 , return_t_(return_t)
-            {};
+            {
+            };
 
             virtual ~FunctionPrototype()
             {};
