@@ -3,6 +3,15 @@
 
 namespace typechecker
 {
+    //FIXME expression printing
+
+    //Hack, FIXME later
+    void sanitize(ast::Exp& e)
+    {
+        if (!e.type_value_get().lock())
+            e.type_value_set(ast::NullDec::get_def());
+    }
+
     bool TypeChecker::is_equal(std::shared_ptr<ast::Declaration> a,
                                std::shared_ptr<ast::Declaration> b)
     {
@@ -40,7 +49,12 @@ namespace typechecker
         if (!is_equal(e.lvalue_get()->type_value_get().lock(),
                     e.exp_get()->type_value_get().lock()))
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << e.lvalue_get()
+                << " is of type " << e.lvalue_get()->type_value_get().lock()
+                << " but is assigned with a "
+                << e.exp_get()->type_value_get().lock()
+                << std::endl;
         }
     }
 
@@ -48,9 +62,12 @@ namespace typechecker
     {
         super::operator()(e);
         if (!is_int(e.valuel_get()->type_value_get().lock())
-            || !is_int(e.valuel_get()->type_value_get().lock()))
+            || !is_int(e.expr_get()->type_value_get().lock()))
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << "one of the component of " << &e
+               << " is not an int"
+                << std::endl;
         }
         e.type_value_set(ast::IntDec::get_def());
     }
@@ -60,7 +77,10 @@ namespace typechecker
         super::operator()(e);
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << "the condition " << e.condition_get()
+               << " is not an int "
+               << std::endl;
         }
         e.type_value_set(e.body_get()->type_value_get());
     }
@@ -68,22 +88,28 @@ namespace typechecker
     void TypeChecker::operator()(ast::ExpList& e)
     {
         super::operator()(e);
-        //FIXME on empy list
-        e.type_value_set(e.list_get()[0]->type_value_get());
+        if (e.list_get().size() == 0)
+            e.type_value_set(ast::VoidDec::get_def());
+        else
+            e.type_value_set(e.list_get()[e.list_get().size() - 1]->type_value_get());
     }
 
     void TypeChecker::operator()(ast::ExpListInner& e)
     {
         super::operator()(e);
-        //FIXME on empy list
-        e.type_value_set(e.list_get()[0]->type_value_get());
+        if (e.list_get().size() == 0)
+            e.type_value_set(ast::VoidDec::get_def());
+        else
+            e.type_value_set(e.list_get()[e.list_get().size() - 1]->type_value_get());
     }
 
     void TypeChecker::operator()(ast::ExpListFunction& e)
     {
         super::operator()(e);
-        //FIXME on empy list
-        e.type_value_set(e.list_get()[0]->type_value_get());
+        if (e.list_get().size() == 0)
+            e.type_value_set(ast::VoidDec::get_def());
+        else
+            e.type_value_set(e.list_get()[e.list_get().size() - 1]->type_value_get());
     }
 
     void TypeChecker::operator()(ast::ForExp& e)
@@ -91,7 +117,10 @@ namespace typechecker
         super::operator()(e);
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << "the condition " << e.condition_get()
+               << " is not an int "
+               << std::endl;
         }
         e.type_value_set(e.body_get()->type_value_get());
     }
@@ -99,25 +128,34 @@ namespace typechecker
     void TypeChecker::operator()(ast::FunCall& e)
     {
         super::operator()(e);
-        std::shared_ptr<ast::Id> id =
-            std::dynamic_pointer_cast<ast::Id>(e.value_get());
+        std::shared_ptr<ast::Lvalue> id =
+            std::dynamic_pointer_cast<ast::Lvalue>(e.value_get());
         if (!id)
         {
-            //FIXME error
-            //Something happen, we only support name () function call
+            e_ << misc::error::error_type::type;
+            e_ << e.value_get()
+               << " is not callable"
+               << std::endl;
+            return;
         }
         std::shared_ptr<ast::FunctionDec> def =
-            std::dynamic_pointer_cast<ast::FunctionDec>(id->dec_get());
+            std::dynamic_pointer_cast<ast::FunctionDec>(id->s_get()->dec_get());
         if (!def)
         {
-            //FIXME error
-            //id is not a function
+            e_ << misc::error::error_type::type;
+            e_ << e.value_get()
+               << " is not callable"
+               << std::endl;
+            return;
         }
 
         if (e.list_get()->list_get().size() != def->params_get().size())
         {
-            //FIXME error
-            //
+            e_ << misc::error::error_type::type;
+            e_ << def << " has " << def->params_get().size()
+               << " only " << e.list_get()->list_get().size()
+               << " were provided" << std::endl;
+            return;
         }
 
         for (unsigned i = 0; i < def->params_get().size(); i++)
@@ -126,8 +164,8 @@ namespace typechecker
             auto b = def->params_get()[i].type_get()->type_name_get()->dec_get();
             if (!is_equal(a, b)) // TypeChecker should have a pointer to they definition
             {
-                //FIXME error
-                // bad parameter
+                e_ << misc::error::error_type::type;
+                e_ << a << " does not match with " << b;
             }
         }
 
@@ -142,8 +180,10 @@ namespace typechecker
         super::operator()(e);
         if (!is_int(e.if_get()->type_value_get().lock()))
         {
-            //FIXME error
-            //bad condition
+            e_ << misc::error::error_type::type;
+            e_ << "the condition " << e.if_get()
+               << " is not an int "
+               << std::endl;
         }
         if (!e.else_get()) //void
         {
@@ -153,8 +193,12 @@ namespace typechecker
         if (!is_equal(e.then_get()->type_value_get().lock(),
                       e.else_get()->type_value_get().lock()))
         {
-            //FIXME error
-            //Not the same return value
+            e_ << misc::error::error_type::type;
+            e_ << e.then_get()
+               << " and "
+               << e.else_get()
+               << " has not the same type"
+               << std::endl;
         }
         e.type_value_set(e.then_get()->type_value_get());
     }
@@ -162,7 +206,11 @@ namespace typechecker
     void TypeChecker::operator()(ast::Lvalue& e)
     {
         super::operator()(e);
-        e.type_value_set(e.s_get()->dec_get());
+        auto var = std::dynamic_pointer_cast<ast::VarDec>(e.s_get()->dec_get());
+        if (var)
+            e.type_value_set(var->type_get()->type_name_get()->dec_get());
+        else
+            e.type_value_set(e.s_get()->dec_get());
     }
 
     void TypeChecker::operator()(ast::FunctionPrototype& e)
@@ -175,7 +223,11 @@ namespace typechecker
         }
         if (def->params_get().size() != e.params_get().size())
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << " prototype " << &e
+               << " does not match with it definition "
+               << def;
+            return;
         }
 
         for (unsigned i = 0; i < def->params_get().size(); i++)
@@ -184,15 +236,22 @@ namespace typechecker
             auto b = def->params_get()[i].type_get()->type_name_get()->dec_get();
             if (!is_equal(a, b)) // TypeChecker should have a pointer to they definition
             {
-                //FIXME error
-                // bad parameter
+                e_ << misc::error::error_type::type;
+                e_ << " prototype " << &e
+                    << " does not match with it definition "
+                    << def;
+                return;
             }
         }
 
         if (e.return_t_get() && !is_equal(e.return_t_get()->type_name_get()->dec_get(),
                                           def->return_t_get()->type_name_get()->dec_get()))
         {
-                //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << " prototype " << &e
+                << " does not match with it definition "
+                << def;
+            return;
         }
     }
 
@@ -203,8 +262,9 @@ namespace typechecker
                 && !is_equal(e.return_t_get()->type_name_get()->dec_get(),
                              e.body_get()->type_value_get().lock()))
         {
-            //FIXME error
-            //Not the same return value
+            e_ << misc::error::error_type::type;
+            e_ << " return type of " << e.return_t_get()
+                << " does not match with " << &e << std::endl;
         }
     }
 
@@ -216,8 +276,9 @@ namespace typechecker
             = std::dynamic_pointer_cast<ast::TypeStruct>(l);
         if (!t)
         {
-            //FIXME error
-            //not a struct
+            e_ << misc::error::error_type::type;
+            e_ << e.lval_get()
+                << " is not a TypeStruct" << std::endl;
         }
         for (auto v : t->members_get())
         {
@@ -227,8 +288,9 @@ namespace typechecker
                 return;
             }
         }
-        //FIXME error
-        //No field
+        e_ << misc::error::error_type::type;
+        e_ << e.lval_get()->type_value_get().lock()
+            << " has no field " << e.s_get() << std::endl;
     }
 
     void TypeChecker::operator()(ast::UnaryExp& e)
@@ -237,8 +299,8 @@ namespace typechecker
         e.type_value_set(ast::IntDec::get_def());
         if (!is_int(e.exp_get()->type_value_get().lock()))
         {
-            //FIXME
-            //error
+            e_ << misc::error::error_type::type;
+            e_ << e.exp_get() << " is not an int" << std::endl;
         }
     }
 
@@ -247,7 +309,10 @@ namespace typechecker
         super::operator()(e);
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << "the condition " << e.condition_get()
+               << " is not an int "
+               << std::endl;
         }
         e.type_value_set(e.body_get()->type_value_get());
     }
@@ -264,7 +329,12 @@ namespace typechecker
         if (!is_equal(e.value_get()->type_value_get().lock(),
                       e.type_get()->type_name_get()->dec_get()))
         {
-            //FIXME error
+            e_ << misc::error::error_type::type;
+            e_ << e.value_get()
+                << " is of type " << e.value_get()->type_value_get().lock()
+                << " but is assigned with a "
+                << e.type_get()->type_name_get()->dec_get()
+                << std::endl;
         }
         e.type_value_set(e.value_get()->type_value_get());
     }

@@ -87,6 +87,32 @@ namespace ast
             }
 
     };
+
+    class NullDec : public Declaration
+    {
+        public:
+            ~NullDec()
+            {};
+
+            static std::shared_ptr<NullDec> get_def()
+            {
+                static std::shared_ptr<NullDec> def = nullptr;
+                if (!def)
+                {
+                    NullDec* d = new NullDec();
+                    def = std::shared_ptr<NullDec>(d);
+                }
+                return def;
+            }
+
+        private:
+            NullDec()
+            {
+                misc::symbol s("null");
+                name_ = std::make_shared<Id>(s);
+            }
+
+    };
 }
 
 #endif /* PRIMITIVE_DEC_HH */

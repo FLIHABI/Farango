@@ -1,6 +1,7 @@
 #include "parse/parse.hh"
-#include "binder/binder.hh"
 #include "ast/pretty_print.hh"
+#include "binder/binder.hh"
+#include "typechecker/type_checker.hh"
 #include "compile/compiler.hh"
 
 void yy::parser::error(const std::string& msg) {
@@ -19,6 +20,10 @@ int main (int argc, char **argv) {
     binder::Binder b(e);
 
     b(*fp.ast_);
+
+
+    typechecker::TypeChecker t(e);
+    t(*fp.ast_);
 
     std::cout << e;
 
