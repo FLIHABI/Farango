@@ -219,7 +219,7 @@ namespace typechecker
         auto var = std::dynamic_pointer_cast<ast::VarDec>(e.s_get()->dec_get());
         if (var)
             e.type_value_set(var->type_get()->type_name_get()->dec_get());
-        else
+        else if (std::dynamic_pointer_cast<ast::FunctionPrototype>(e.s_get()->dec_get()))
             e.type_value_set(e.s_get()->dec_get());
     }
 
