@@ -107,7 +107,7 @@ namespace binder
     void Binder::operator()(ast::MemberAccess& e)
     {
         //FIXME Check the field later (TypeChecker)
-        Binder::operator()(*e.s_get());
+        Binder::operator()(*e.lval_get());
     }
 
     void Binder::operator()(ast::TypePrototype& e)

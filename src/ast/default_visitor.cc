@@ -120,6 +120,7 @@ namespace ast
     void DefaultVisitor::operator()(MemberAccess& e)
     {
         e.lval_get()->accept(*this);
+        e.s_get()->accept(*this);
     }
 
     void DefaultVisitor::operator()(Number& e)

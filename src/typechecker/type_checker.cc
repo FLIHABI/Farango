@@ -44,6 +44,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::AssignExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         e.type_value_set(e.lvalue_get()->type_value_get());
         if (!is_equal(e.lvalue_get()->type_value_get().lock(),
@@ -60,6 +61,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::BinaryExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (!is_int(e.valuel_get()->type_value_get().lock())
             || !is_int(e.expr_get()->type_value_get().lock()))
@@ -74,6 +76,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::DoExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
@@ -87,6 +90,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::ExpList& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (e.list_get().size() == 0)
             e.type_value_set(ast::VoidDec::get_def());
@@ -96,6 +100,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::ExpListInner& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (e.list_get().size() == 0)
             e.type_value_set(ast::VoidDec::get_def());
@@ -105,6 +110,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::ExpListFunction& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (e.list_get().size() == 0)
             e.type_value_set(ast::VoidDec::get_def());
@@ -114,6 +120,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::ForExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
@@ -127,6 +134,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::FunCall& e)
     {
+        sanitize(e);
         super::operator()(e);
         std::shared_ptr<ast::Lvalue> id =
             std::dynamic_pointer_cast<ast::Lvalue>(e.value_get());
@@ -177,6 +185,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::IfExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (!is_int(e.if_get()->type_value_get().lock()))
         {
@@ -205,6 +214,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::Lvalue& e)
     {
+        sanitize(e);
         super::operator()(e);
         auto var = std::dynamic_pointer_cast<ast::VarDec>(e.s_get()->dec_get());
         if (var)
@@ -215,6 +225,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::FunctionPrototype& e)
     {
+        sanitize(e);
         auto def = e.type_dec_get();
         if (!def)
         {
@@ -257,6 +268,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::FunctionDec& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (e.return_t_get()
                 && !is_equal(e.return_t_get()->type_name_get()->dec_get(),
@@ -270,6 +282,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::MemberAccess& e)
     {
+        sanitize(e);
         super::operator()(e);
         auto l = e.lval_get()->type_value_get().lock();
         std::shared_ptr<ast::TypeStruct> t
@@ -279,6 +292,7 @@ namespace typechecker
             e_ << misc::error::error_type::type;
             e_ << e.lval_get()
                 << " is not a TypeStruct" << std::endl;
+            return;
         }
         for (auto v : t->members_get())
         {
@@ -295,6 +309,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::UnaryExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         e.type_value_set(ast::IntDec::get_def());
         if (!is_int(e.exp_get()->type_value_get().lock()))
@@ -306,6 +321,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::WhileExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
@@ -319,12 +335,14 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::InnerExp& e)
     {
+        sanitize(e);
         super::operator()(e);
         e.type_value_set(e.exp_get()->type_value_get());
     }
 
     void TypeChecker::operator()(ast::VarAssign& e)
     {
+        sanitize(e);
         super::operator()(e);
         if (!is_equal(e.value_get()->type_value_get().lock(),
                       e.type_get()->type_name_get()->dec_get()))
