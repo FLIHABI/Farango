@@ -27,7 +27,6 @@ int main (int argc, char **argv) {
     if (e.status_get())
     {
         std::cerr << e;
-        return e.status_get();
     }
 
 

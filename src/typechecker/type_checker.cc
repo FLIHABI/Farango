@@ -294,19 +294,25 @@ namespace typechecker
         sanitize(e);
         super::operator()(e);
         auto l = e.lval_get()->type_value_get().lock();
-        std::shared_ptr<ast::TypeStruct> t
-            = std::dynamic_pointer_cast<ast::TypeStruct>(l);
-        if (!t)
+        std::shared_ptr<ast::TypePrototype> t_
+            = std::dynamic_pointer_cast<ast::TypePrototype>(l);
+        if (!t_)
         {
             e_ << misc::error::error_type::type;
             e_ << e.lval_get()
                 << " is not a TypeStruct" << std::endl;
             return;
         }
-        for (auto v : t->members_get())
+
+        std::shared_ptr<ast::TypeStruct> t
+            = std::dynamic_pointer_cast<ast::TypeStruct>(t_->type_dec_get());
+
+        for (auto& v : t->members_get())
         {
             if (v.name_get()->s_get() == e.s_get()->s_get())
             {
+                //FIXME, not sexy
+                e.s_get()->dec_set(std::shared_ptr<ast::VarDec>(&v, [](void *){}));
                 e.type_value_set(v.type_get()->type_name_get()->dec_get());
                 return;
             }

@@ -456,6 +456,7 @@ FIXMME
 %%
 
 void yy::parser::error(const location_type& l, const std::string& msg) {
+    std::cerr << l << std::endl;
     std::cerr << msg << std::endl;
     exit(3);
 }

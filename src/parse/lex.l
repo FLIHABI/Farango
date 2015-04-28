@@ -67,6 +67,10 @@ USER_OP     [!#$%&*+\-\/:<=>?@^|~]+
 NEWLINE     \n\r|\r\n|\r|\n
 
 %%
+%{
+    fp.l_.step();
+    fp.l_.columns(yyleng);
+%}
 
 
 "\"" {
@@ -149,9 +153,9 @@ NEWLINE     \n\r|\r\n|\r|\n
 ">>"         { return TOKEN(RSHIFT); }
 {USER_OP}    { return TOKEN(USER_OP); }
 {SPACE}      { }
-{NEWLINE}    { }
+{NEWLINE}    { fp.l_.lines();}
 {INTEGER}    { return TOKEN_VAL(INTEGER, std::stoi(yytext)); }
 {DOUBLE}     { return TOKEN(DOUBLE); }
 {IDENTIFIER} { return TOKEN_VAL(IDENTIFIER, misc::symbol(yytext));  }
-.            { ABORT("Syntax error, unexpected token '" << yytext << "'"); }
+.            { ABORT("Syntax error, unexpected token '" << fp.l_ << yytext << "'"); }
 %%
