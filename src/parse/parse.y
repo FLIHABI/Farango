@@ -30,6 +30,7 @@
 %expect 0
 %error-verbose
 %defines
+//%locations
 
 %define api.token.prefix {TOK_}
 %define api.token.constructor
@@ -453,3 +454,8 @@ FIXMME
 */
 
 %%
+
+void yy::parser::error(const std::string& msg) {
+    std::cerr << msg << std::endl;
+    exit(3);
+}

@@ -4,11 +4,6 @@
 #include "typechecker/type_checker.hh"
 #include "compile/compiler.hh"
 
-void yy::parser::error(const std::string& msg) {
-    std::cerr << msg << std::endl;
-    exit(3);
-}
-
 int main (int argc, char **argv) {
     parse::FgcParser fp;
     FILE* in = stdin;
