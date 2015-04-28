@@ -146,8 +146,17 @@ namespace typechecker
                << std::endl;
             return;
         }
-        std::shared_ptr<ast::FunctionDec> def =
-            std::dynamic_pointer_cast<ast::FunctionDec>(id->s_get()->dec_get());
+        std::shared_ptr<ast::FunctionPrototype> def_ =
+            std::dynamic_pointer_cast<ast::FunctionPrototype>(id->s_get()->dec_get());
+        if (!def_)
+        {
+            e_ << misc::error::error_type::type;
+            e_ << e.value_get()
+               << " is not callable"
+               << std::endl;
+            return;
+        }
+        std::shared_ptr<ast::FunctionDec> def = std::dynamic_pointer_cast<ast::FunctionDec>(def_->type_dec_get());
         if (!def)
         {
             e_ << misc::error::error_type::type;
