@@ -255,6 +255,7 @@ generics_list_inner_use /* ast exist */
 
 type_decl
     : TYPE type_identifier_dec ASSIGN LBRACE member_list RBRACE {$$ = std::make_shared<ast::TypeStruct>($2, $5); }
+    | TYPE type_identifier_dec ASSIGN LBRACE RBRACE {$$ = std::make_shared<ast::TypeStruct>($2, std::vector<ast::VarDec>()); }
     | TYPE type_identifier_dec ASSIGN type_union {$$ = std::make_shared<ast::TypeUnion>($2, $4); }
     | TYPE type_identifier_dec {$$ = std::make_shared<ast::TypePrototype>($2); }
     ;

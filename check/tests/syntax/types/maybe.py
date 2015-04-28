@@ -1,7 +1,7 @@
 input = b"""
 module test.maybe;
 
-type Nothing;
+type Nothing = {};
 type Just A = {
     value : A;
 };

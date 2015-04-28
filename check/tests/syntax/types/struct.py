@@ -3,7 +3,7 @@ module test.struct;
 
 type Struct = {
     a : int;
-    b : double;
+    b : string;
 };
 """;
 

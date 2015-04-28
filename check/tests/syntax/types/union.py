@@ -1,8 +1,8 @@
 input = b"""
 module test.union;
 
-type A;
-type B;
+type A = {};
+type B = {};
 
 type Union = A | B;
 """;

@@ -1,7 +1,7 @@
 input = b"""
 module test.control;
 
-if (true) {} else {};
+if (1) {} else {};
 """
 
 rules = [ 'compare_exit_status' ]

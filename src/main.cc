@@ -20,12 +20,21 @@ int main (int argc, char **argv) {
     binder::Binder b(e);
 
     b(*fp.ast_);
-
+    if (e.status_get())
+    {
+        std::cerr << e;
+        return e.status_get();
+    }
 
     typechecker::TypeChecker t(e);
     t(*fp.ast_);
 
-    std::cout << e;
+    if (e.status_get())
+    {
+        std::cerr << e;
+        return e.status_get();
+    }
+
 
     std::cout << *fp.ast_;
 
