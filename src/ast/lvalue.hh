@@ -4,6 +4,7 @@
 # include <memory>
 # include "ast_all.hh"
 # include "value.hh"
+# include "id.hh"
 # include "visitor.hh"
 
 namespace ast
@@ -13,6 +14,10 @@ namespace ast
         public:
             Lvalue(std::shared_ptr<Id> s)
                 : s_(s)
+            {}
+
+            Lvalue(misc::symbol s)
+                : s_(std::make_shared<Id>(s))
             {}
             virtual ~Lvalue()
             {};

@@ -171,7 +171,7 @@ namespace ast
         out_ << "if (" << *e.if_get() << ") "
              <<  *e.then_get();
         if (e.else_get())
-            out_ << " else" << *e.else_get();
+            out_ << " else " << *e.else_get();
     }
 
     void PrettyPrinter::operator()(Int& e)

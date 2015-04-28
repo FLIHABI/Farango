@@ -338,8 +338,30 @@ binop
     | value AND expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::AND, $3); }
     | value OR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::OR, $3); }
     | value XOR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::XOR, $3); }
-    | value LAND expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LAND, $3); }
-    | value LOR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LOR, $3); }
+    | value LAND expression
+    {
+        std::shared_ptr<ast::ExpListInner> el = std::make_shared<ast::ExpListInner>();
+        std::shared_ptr<ast::VarAssign> v =
+            std::make_shared<ast::VarAssign>(misc::symbol("_aux"), misc::symbol("int"), $1);
+        el->push(v);
+        std::shared_ptr<ast::Exp> cond = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
+        std::shared_ptr<ast::Exp> body = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
+        std::shared_ptr<ast::IfExp> if_ = std::make_shared<ast::IfExp>(cond, $3, body);
+        el->push(if_);
+        $$ = el;
+    }
+    | value LOR expression
+    {
+        std::shared_ptr<ast::ExpListInner> el = std::make_shared<ast::ExpListInner>();
+        std::shared_ptr<ast::VarAssign> v =
+            std::make_shared<ast::VarAssign>(misc::symbol("_aux"), misc::symbol("int"), $1);
+        el->push(v);
+        std::shared_ptr<ast::Exp> cond = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
+        std::shared_ptr<ast::Exp> body = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
+        std::shared_ptr<ast::IfExp> if_ = std::make_shared<ast::IfExp>(cond, body, $3);
+        el->push(if_);
+        $$ = el;
+    }
     | value GREATER expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER, $3); }
     | value GREATER_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER_EQ, $3); }
     | value LESS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS, $3); }

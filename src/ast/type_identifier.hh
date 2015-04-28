@@ -20,6 +20,10 @@ namespace ast
                 , specs_(specs)
             {};
 
+            TypeIdentifier(std::shared_ptr<Id> type_name)
+                : type_name_(type_name)
+            {};
+
             virtual ~TypeIdentifier()
             {};
 
