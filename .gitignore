@@ -18,6 +18,9 @@ src/parse/parse.cc
 src/parse/parse.output
 src/parse/stack.hh
 src/parse/lex.cc
+src/parse/location.hh
+src/parse/position.hh
+
 
 !LICENSE
 !HEADER

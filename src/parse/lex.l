@@ -41,8 +41,8 @@ int comment_nest_level = 0;
 
 typedef yy::parser::token token;
 
-#define TOKEN(type) yy::parser::make_ ## type()
-#define TOKEN_VAL(type, value) yy::parser::make_ ## type(value)
+#define TOKEN(type) yy::parser::make_ ## type(fp.l_)
+#define TOKEN_VAL(type, value) yy::parser::make_ ## type(value, fp.l_)
 #define ABORT(msg)                      \
     do {                                \
         std::cerr << msg << std::endl;  \

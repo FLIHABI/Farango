@@ -2,6 +2,7 @@
 # define FGC_PARSER_HH
 
 # include <memory>
+# include "location.hh"
 # include "ast/ast_all.hh"
 
 namespace parse
@@ -11,6 +12,7 @@ namespace parse
         public:
             void parse(FILE* in);
             std::shared_ptr<ast::Ast> ast_;
+            yy::location l_;
 
     };
 }
