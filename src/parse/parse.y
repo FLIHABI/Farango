@@ -68,62 +68,54 @@
  ************************************************/
 
 %token NEWLINE      "\n"
-
-%token IF           "if"
-%token ELSE         "else"
-%token WHILE        "while"
-%token FOR          "for"
-%token DO           "do"
-%token IN           "in"
-%token BREAK        "break"
-%token CONTINUE     "continue"
-%token FUNCTION     "fun"
-%token VAR          "var"
-%token TYPE         "type"
-%token IMPORT       "import"
-%token MODULE       "module"
-
-%token COMMA        ","
-%token COLON        ":"
-%token DCOLON       "::<"
-%token SEMICOLON    ";"
-%token LPAREN       "("
-%token RPAREN       ")"
-%token LSQUARE      "["
-%token RSQUARE      "]"
-%token LBRACE       "{"
-%token RBRACE       "}"
-%token DOT          "."
-
-%token PLUS         "+"
-%token MINUS        "-"
-%token MUL          "*"
-%token DIV          "/"
-%token MODULO       "%"
-%token EQUAL        "=="
-%token NEQUAL       "!="
-%token LESS         "<"
-%token LESS_EQ      "<="
-%token GREATER      ">"
-%token GREATER_EQ   ">="
-%token AND          "&"
-%token OR           "|"
-%token XOR          "^"
-%token LOR          "&&"
-%token LAND         "||"
-
-%token BANG         "!"
-%token TILDE        "~"
-
-%token LSHIFT       "<<"
-%token RSHIFT       ">>"
-
-%token ASSIGN       "="
-
-%token USER_OP      "USER_OP"
-%token DOUBLE       "DOUBLE"
-
-%token END_OF_FILE 0 "<EOF>"
+ IF           "if"
+ ELSE         "else"
+ WHILE        "while"
+ FOR          "for"
+ DO           "do"
+ IN           "in"
+ BREAK        "break"
+ CONTINUE     "continue"
+ FUNCTION     "fun"
+ VAR          "var"
+ TYPE         "type"
+ IMPORT       "import"
+ MODULE       "module"
+ COMMA        ","
+ COLON        ":"
+ DCOLON       "::<"
+ SEMICOLON    ";"
+ LPAREN       "("
+ RPAREN       ")"
+ LSQUARE      "["
+ RSQUARE      "]"
+ LBRACE       "{"
+ RBRACE       "}"
+ DOT          "."
+ PLUS         "+"
+ MINUS        "-"
+ MUL          "*"
+ DIV          "/"
+ MODULO       "%"
+ EQUAL        "=="
+ NEQUAL       "!="
+ LESS         "<"
+ LESS_EQ      "<="
+ GREATER      ">"
+ GREATER_EQ   ">="
+ AND          "&"
+ OR           "|"
+ XOR          "^"
+ LOR          "||"
+ LAND         "&&"
+ BANG         "!"
+ TILDE        "~"
+ LSHIFT       "<<"
+ RSHIFT       ">>"
+ ASSIGN       "="
+ USER_OP      "USER_OP"
+ DOUBLE       "DOUBLE"
+ END_OF_FILE 0 "<EOF>"
 
 %type <std::shared_ptr<ast::Exp>> expression
 %type <std::shared_ptr<ast::Literal>> literal
@@ -152,19 +144,22 @@
  *                  PRECEDENCE                  *
  ************************************************/
 
+%left ASSIGN
+
 %left LOR
 %left LAND
-%nonassoc GREATER_EQ LESS_EQ EQUAL NEQUAL XOR GREATER LESS ASSIGN
-%nonassoc THEN
-%nonassoc ELSE
-%left USER_OP
+%nonassoc GREATER_EQ LESS_EQ EQUAL NEQUAL XOR GREATER LESS
+
 %left PLUS MINUS
 %left OR
 %left AND
-%left MULT DIV
+%left MUL DIV
+%left LSHIFT RSHIFT
 %left UMINUS UPLUS ULNOT UNOT
 
-%left GLESS
+%nonassoc THEN
+%nonassoc ELSE
+%precedence WHILER FORR
 
 %start program
 
@@ -329,16 +324,16 @@ operator
 */
 
 binop
-    : value PLUS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::PLUS, $3); }
-    | value MINUS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::MINUS, $3); }
-    | value MUL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::MUL, $3); }
-    | value DIV expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::DIV, $3); }
-    | value EQUAL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::EQUAL, $3); }
-    | value NEQUAL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::NEQUAL, $3); }
-    | value AND expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::AND, $3); }
-    | value OR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::OR, $3); }
-    | value XOR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::XOR, $3); }
-    | value LAND expression
+    : expression PLUS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::PLUS, $3); }
+    | expression MINUS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::MINUS, $3); }
+    | expression MUL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::MUL, $3); }
+    | expression DIV expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::DIV, $3); }
+    | expression EQUAL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::EQUAL, $3); }
+    | expression NEQUAL expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::NEQUAL, $3); }
+    | expression AND expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::AND, $3); }
+    | expression OR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::OR, $3); }
+    | expression XOR expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::XOR, $3); }
+    | expression LAND expression
     {
         std::shared_ptr<ast::ExpListInner> el = std::make_shared<ast::ExpListInner>();
         std::shared_ptr<ast::VarAssign> v =
@@ -350,7 +345,7 @@ binop
         el->push(if_);
         $$ = el;
     }
-    | value LOR expression
+    | expression LOR expression
     {
         std::shared_ptr<ast::ExpListInner> el = std::make_shared<ast::ExpListInner>();
         std::shared_ptr<ast::VarAssign> v =
@@ -362,12 +357,12 @@ binop
         el->push(if_);
         $$ = el;
     }
-    | value GREATER expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER, $3); }
-    | value GREATER_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER_EQ, $3); }
-    | value LESS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS, $3); }
-    | value LESS_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS_EQ, $3); }
-    | value LSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LSHIFT, $3); }
-    | value RSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::RSHIFT, $3); }
+    | expression GREATER expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER, $3); }
+    | expression GREATER_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::GREATER_EQ, $3); }
+    | expression LESS expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS, $3); }
+    | expression LESS_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS_EQ, $3); }
+    | expression LSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LSHIFT, $3); }
+    | expression RSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::RSHIFT, $3); }
     ;
 
 //| USER_OP /* FIXME */
@@ -380,10 +375,9 @@ lvalue /* ast exist */
 
 expression
     : value { $$ = $1; }
-    | binop { $$ = $1; }
-    //| lvalue operator expression { $$ = std::make_shared<ast::BinaryExp>($1, $2, $3); }
     | lvalue ASSIGN expression { $$ = std::make_shared<ast::AssignExp>($1, $3); }
     | declaration { $$ = $1; }
+    | binop { $$ = $1; }
     | BANG expression %prec ULNOT { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::BANG, $2); }
     | TILDE expression %prec UNOT { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::TILDE, $2); }
     | MINUS expression %prec UMINUS { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::MINUS, $2); }
@@ -457,7 +451,7 @@ if_expr/* ast exist */
     ;
 
 while_expr /* ast exist */
-    : WHILE LPAREN expression RPAREN expression { $$ = std::make_shared<ast::WhileExp>($3, $5); }
+    : WHILE LPAREN expression RPAREN expression %prec WHILER { $$ = std::make_shared<ast::WhileExp>($3, $5); }
     ;
 
 do_expr /* ast exist */
@@ -465,7 +459,7 @@ do_expr /* ast exist */
     ;
 
 for_expr
-    : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression
+    : FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN expression %prec FORR
         {
             $$ = std::make_shared<ast::ForExp>($3, $5, $7, $9);
         }

@@ -13,7 +13,7 @@ namespace ast
     class BinaryExp : public Value
     {
         public:
-            BinaryExp(std::shared_ptr<Value> valuel, Operator op, std::shared_ptr<Exp> expr)
+            BinaryExp(std::shared_ptr<Exp> valuel, Operator op, std::shared_ptr<Exp> expr)
                 : valuel_(valuel)
                 , op_(op)
                 , expr_(expr)
@@ -27,7 +27,7 @@ namespace ast
                 v(*this);
             }
 
-            std::shared_ptr<Value> valuel_get()
+            std::shared_ptr<Exp> valuel_get()
             {
                 return valuel_;
             }
@@ -43,7 +43,7 @@ namespace ast
             }
 
         private:
-            std::shared_ptr<Value> valuel_;
+            std::shared_ptr<Exp> valuel_;
             Operator op_;
             std::shared_ptr<Exp> expr_;
     };
