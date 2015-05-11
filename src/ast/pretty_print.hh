@@ -8,13 +8,15 @@
 # include <iostream>
 
 # include "default_visitor.hh"
+# include "lib/error.hh"
 
 namespace ast
 {
+    template<typename T>
     class PrettyPrinter : public DefaultVisitor
     {
         public:
-            PrettyPrinter(std::ostream& o)
+            PrettyPrinter(T& o)
                 : out_(o)
             {};
 
@@ -53,11 +55,12 @@ namespace ast
             virtual void operator()(Id& e) override;
 
         private:
-            std::ostream& out_;
+            T& out_;
 
     };
 
     std::ostream& operator<<(std::ostream& out, Ast& ast);
+    misc::error& operator<<(misc::error& out, Ast& ast);
 }
 
 #endif /* PRETTY_PRINT_HH */
