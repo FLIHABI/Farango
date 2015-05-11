@@ -32,13 +32,6 @@ namespace ast
         return out;
     }
 
-    misc::error& operator<<(misc::error& err, Ast& ast)
-    {
-        PrettyPrinter<misc::error> p(err);
-        p(ast);
-        return err;
-    }
-
     template<typename T>
     void PrettyPrinter<T>::operator()(Ast& e)
     {
