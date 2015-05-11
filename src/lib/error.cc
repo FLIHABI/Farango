@@ -122,6 +122,12 @@ namespace misc
     return stream_;
   }
 
+  std::ostringstream&
+  error::stream_get_nonconst()
+  {
+    return stream_;
+  }
+
 
 
   std::ostream&

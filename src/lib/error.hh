@@ -117,6 +117,8 @@ namespace misc
 
     /// Get the stream associated with the class.
     const std::ostringstream& stream_get() const;
+    std::ostringstream& stream_get_nonconst();
+
 
     /// \}
 

@@ -32,6 +32,13 @@ namespace ast
         return out;
     }
 
+    misc::error& operator<<(misc::error& out, Ast& ast)
+    {
+        PrettyPrinter<std::ostringstream> p(out.stream_get_nonconst());
+        p(ast);
+        return out;
+    }
+
     template<typename T>
     void PrettyPrinter<T>::operator()(Ast& e)
     {
