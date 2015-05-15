@@ -46,6 +46,13 @@ namespace ast
             virtual void operator()(Id& e) = 0;
             virtual void operator()(VarAssign& e) = 0;
 
+            virtual void operator()(LoopExp& e) = 0;
+            virtual void operator()(BreakExp& e) = 0;
+            virtual void operator()(ContinueExp& e) = 0;
+            virtual void operator()(ArrayAccess& e) = 0;
+            virtual void operator()(TypeArrayIdentifier& e) = 0;
+            virtual void operator()(NewExp& e) = 0;
+
             template <class E> void operator()(E* e);
             template <typename E> void accept(E* e);
     };

@@ -69,7 +69,12 @@ namespace ast
     using TypeIdentifierUse = TypeIdentifier<Id>;
 
     class Visitor;
-
+    class LoopExp;
+    class BreakExp;
+    class ContinueExp;
+    class ArrayAccess;
+    class TypeArrayIdentifier;
+    class NewExp;
 }
 
 #endif /* AST_ALL_HH */

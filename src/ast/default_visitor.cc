@@ -199,4 +199,37 @@ namespace ast
     void DefaultVisitor::operator()(Id& e)
     {
     }
+
+    void DefaultVisitor::operator()(LoopExp& e)
+    {
+        e.accept(*this);
+    }
+
+    void DefaultVisitor::operator()(BreakExp& e)
+    {
+    }
+
+    void DefaultVisitor::operator()(ContinueExp& e)
+    {
+    }
+
+    void DefaultVisitor::operator()(ArrayAccess& e)
+    {
+        e.val_get()->accept(*this);
+        e.offset_get()->accept(*this);
+    }
+
+    void DefaultVisitor::operator()(TypeArrayIdentifier& e)
+    {
+        e.type_name_get()->accept(*this);
+        for (auto& aux : e.specs_get())
+            aux->accept(*this);
+        if (e.size_get())
+            e.size_get()->accept(*this);
+    }
+
+    void DefaultVisitor::operator()(NewExp& e)
+    {
+        e.alloc_get()->accept(*this);
+    }
 }

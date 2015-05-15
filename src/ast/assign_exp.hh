@@ -11,7 +11,7 @@ namespace ast
     class AssignExp : public Exp
     {
         public:
-            AssignExp(std::shared_ptr<Lvalue> lvalue, std::shared_ptr<Exp> exp)
+            AssignExp(std::shared_ptr<Value> lvalue, std::shared_ptr<Exp> exp)
                 : lvalue_(lvalue)
                 , exp_(exp)
             {}
@@ -24,7 +24,7 @@ namespace ast
                 v(*this);
             }
 
-            std::shared_ptr<Lvalue> lvalue_get()
+            std::shared_ptr<Value> lvalue_get()
             {
                 return lvalue_;
             }
@@ -34,7 +34,7 @@ namespace ast
             }
 
         private:
-            std::shared_ptr<Lvalue> lvalue_;
+            std::shared_ptr<Value> lvalue_;
             std::shared_ptr<Exp> exp_;
 
     };

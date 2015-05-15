@@ -34,7 +34,6 @@ namespace ast
 
         protected:
             std::shared_ptr<Id> s_;
-
     };
 }
 

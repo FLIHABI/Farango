@@ -76,6 +76,8 @@
  IN           "in"
  BREAK        "break"
  CONTINUE     "continue"
+ NEW          "new"
+ ARRAY        "array"
  FUNCTION     "fun"
  VAR          "var"
  TYPE         "type"
@@ -121,7 +123,7 @@
 %type <std::shared_ptr<ast::Literal>> literal
 %type <std::shared_ptr<ast::Number>> number
 %type <std::shared_ptr<ast::Value>> value binop
-%type <std::shared_ptr<ast::Lvalue>> lvalue member_access
+%type <std::shared_ptr<ast::Value>> lvalue member_access array_access
 //%type <ast::Operator> operator
 %type <std::shared_ptr<ast::Id>> identifier
 %type <std::shared_ptr<ast::ExpList>> expression_list expression_list_rec parameter_list parameter_list_rec
@@ -134,7 +136,8 @@
 %type <std::shared_ptr<ast::TypePrototype>> type_decl
 %type <std::shared_ptr<ast::VarDec>> var_decl typed_var
 %type <std::shared_ptr<ast::FunctionPrototype>> func_decl func_prototype
-%type <std::shared_ptr<ast::TypeIdentifierUse>> type_identifier_use
+%type <std::shared_ptr<ast::TypeIdentifierUse>> type_identifier_use type_allocation aux_use
+%type <std::shared_ptr<ast::TypeArrayIdentifier>> array_identifier array_identifier_allocation
 %type <std::shared_ptr<ast::TypeIdentifierDec>> type_identifier_dec
 %type <std::vector<std::shared_ptr<ast::Id>>> generics_list_use generics_list_inner_use function_use_generics_list
 %type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec function_def_generics_list
@@ -232,9 +235,19 @@ generics_list_inner_dec /* ast exist */
     ;
 /* */
 
+aux_use
+    : identifier generics_list_use { $$ = std::make_shared<ast::TypeIdentifierUse>($1, $2); }
+    ;
+
+array_identifier
+    : identifier generics_list_use LSQUARE RSQUARE {$$ = std::make_shared<ast::TypeArrayIdentifier>(*std::make_shared<ast::TypeIdentifierUse>($1, $2)); }
+    | array_identifier LSQUARE RSQUARE {$$ = $1; $$->depth_set($$->depth_get() + 1); }
+    ;
+
 /* */
 type_identifier_use /* ast exist */
-    : identifier generics_list_use { $$ = std::make_shared<ast::TypeIdentifierUse>($1, $2);}
+    : aux_use { $$ = $1;}
+    | array_identifier { $$ = $1; }
     ;
 
 generics_list_use /* ast exist */
@@ -277,6 +290,7 @@ member_list /* ast exist */
 
 value /* ast exist */
     : lvalue { $$ = $1;}
+    | type_allocation { $$ = std::make_shared<ast::NewExp>($1); }
     | literal { $$ = $1;}
     | function_call { $$ = $1; }
     | LPAREN expression RPAREN { $$ = std::make_shared<ast::InnerExp>($2); }
@@ -285,9 +299,22 @@ value /* ast exist */
 /*
    | LPAREN operator RPAREN //FIXME: Not in ast
 */
+array_identifier_allocation
+    : identifier generics_list_use LSQUARE expression RSQUARE {$$ = std::make_shared<ast::TypeArrayIdentifier>(*std::make_shared<ast::TypeIdentifierUse>($1, $2)); $$->size_set($4); }
+    | array_identifier_allocation LSQUARE RSQUARE {$$ = $1; $$->depth_set($$->depth_get() + 1); }
+    ;
+
+type_allocation
+    : NEW LPAREN aux_use RPAREN { $$ = $3;}
+    | NEW LPAREN array_identifier_allocation RPAREN{ $$ = $3; }
+    ;
 
 member_access /* ast exist */
     : value DOT identifier  {$$ = std::make_shared<ast::MemberAccess>($1, $3); }
+    ;
+
+array_access
+    : value LSQUARE expression RSQUARE { $$ = std::make_shared<ast::ArrayAccess>($1, $3);}
     ;
 
 function_use_generics_list
@@ -371,12 +398,15 @@ binop
 lvalue /* ast exist */
     : member_access { $$ = $1; }
     | identifier { $$ = std::make_shared<ast::Lvalue>($1); }
+    | array_access { $$ = $1; }
     ;
 
 expression
     : value { $$ = $1; }
     | lvalue ASSIGN expression { $$ = std::make_shared<ast::AssignExp>($1, $3); }
     | declaration { $$ = $1; }
+    | BREAK { $$ = std::make_shared<ast::BreakExp>(); }
+    | CONTINUE { $$ = std::make_shared<ast::ContinueExp>(); }
     | binop { $$ = $1; }
     | BANG expression %prec ULNOT { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::BANG, $2); }
     | TILDE expression %prec UNOT { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::TILDE, $2); }

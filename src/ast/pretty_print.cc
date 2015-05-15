@@ -347,4 +347,58 @@ namespace ast
     {
         out_ << e.s_get() << " /* " << e.dec_get() << " */ ";
     }
+
+    template<typename T>
+    void PrettyPrinter<T>::operator()(BreakExp& e)
+    {
+        out_ << "break";
+    }
+
+    template<typename T>
+    void PrettyPrinter<T>::operator()(ContinueExp& e)
+    {
+        out_ << "continue";
+    }
+
+    template<typename T>
+    void PrettyPrinter<T>::operator()(ArrayAccess& e)
+    {
+        out_ << *e.val_get()
+             << "[" << *e.offset_get() << "]";
+    }
+
+    template<typename T>
+    void PrettyPrinter<T>::operator()(TypeArrayIdentifier& e)
+    {
+        out_ << *e.type_name_get();
+        if (e.specs_get().size() == 1)
+            out_ << " " << *e.specs_get()[0];
+        else if (!e.specs_get().size() == 0)
+        {
+            auto b = e.specs_get().begin();
+            auto end = e.specs_get().end();
+            out_ << " (";
+            while (b != end)
+            {
+                out_ << *b;
+                out_ << (++b == end ? "" : ", ");
+            }
+            out_ << ")";
+        }
+
+        if (e.size_get())
+            out_ << "[" << *e.size_get() << "]";
+        else
+            out_ << "[]";
+
+        for (unsigned i = 1; i < e.depth_get(); i++)
+            out_ << "[]";
+    }
+
+    template<typename T>
+    void PrettyPrinter<T>::operator()(NewExp& e)
+    {
+        out_ << "new (" << *e.alloc_get() << ")";
+    }
+
 }

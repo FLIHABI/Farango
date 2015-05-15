@@ -5,10 +5,11 @@
 
 # include "visitor.hh"
 # include "exp.hh"
+# include "loop_exp.hh"
 
 namespace ast
 {
-    class ForExp : public Exp
+    class ForExp : public LoopExp
     {
         public:
             ForExp(std::shared_ptr<Exp> init, std::shared_ptr<Exp> condition,

@@ -1,0 +1,4 @@
+namespace misc
+{
+    class error;
+}

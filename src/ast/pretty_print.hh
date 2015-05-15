@@ -54,6 +54,12 @@ namespace ast
             virtual void operator()(InnerExp& e) override;
             virtual void operator()(Id& e) override;
 
+            virtual void operator()(BreakExp& e) override;
+            virtual void operator()(ContinueExp& e) override;
+            virtual void operator()(ArrayAccess& e) override;
+            virtual void operator()(TypeArrayIdentifier& e) override;
+            virtual void operator()(NewExp& e) override;
+
         private:
             T& out_;
 

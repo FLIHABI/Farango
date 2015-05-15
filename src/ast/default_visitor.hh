@@ -47,6 +47,14 @@ namespace ast
             virtual void operator()(ExpListFunction& e) override;
             virtual void operator()(Id& e) override;
             virtual void operator()(VarAssign& e) override;
+
+            virtual void operator()(LoopExp& e) override;
+            virtual void operator()(BreakExp& e) override;
+            virtual void operator()(ContinueExp& e) override;
+            virtual void operator()(ArrayAccess& e) override;
+            virtual void operator()(TypeArrayIdentifier& e) override;
+            virtual void operator()(NewExp& e) override;
+
     };
 }
 #endif /* DEFAULT_VISITOR_HH */

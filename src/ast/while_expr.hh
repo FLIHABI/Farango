@@ -4,11 +4,12 @@
 # include <memory>
 
 # include "visitor.hh"
+# include "loop_exp.hh"
 # include "exp.hh"
 
 namespace ast
 {
-    class WhileExp : public Exp
+    class WhileExp : public LoopExp
     {
         public:
             WhileExp(std::shared_ptr<Exp> condition, std::shared_ptr<Exp> body)

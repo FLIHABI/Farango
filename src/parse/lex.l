@@ -116,6 +116,8 @@ NEWLINE     \n\r|\r\n|\r|\n
 "in"         { return TOKEN(IN); }
 "break"      { return TOKEN(BREAK); }
 "continue"   { return TOKEN(CONTINUE); }
+"new"        { return TOKEN(NEW); }
+"array"      { return TOKEN(ARRAY); }
 "fun"        { return TOKEN(FUNCTION); }
 "var"        { return TOKEN(VAR); }
 "type"       { return TOKEN(TYPE); }

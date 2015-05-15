@@ -1,4 +1,3 @@
-
 #ifndef DO_EXPR_HH
 # define DO_EXPR_HH
 
@@ -6,10 +5,11 @@
 
 # include "visitor.hh"
 # include "exp.hh"
+# include "loop_exp.hh"
 
 namespace ast
 {
-    class DoExp : public Exp
+    class DoExp : public LoopExp
     {
         public:
             DoExp(std::shared_ptr<Exp> condition, std::shared_ptr<Exp> body)

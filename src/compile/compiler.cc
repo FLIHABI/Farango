@@ -2,6 +2,7 @@
 #include <iostream>
 #include "ast/all.hh"
 #include "compiler.hh"
+#include <cassert>
 
 namespace compile {
 
@@ -47,11 +48,14 @@ namespace compile {
         binder_(e);
         super::operator()(*e.exp_get());
 
+        assert(0 == 1);
+        /*
         std::shared_ptr<ast::Declaration> decl = e.lvalue_get()->s_get()->dec_get();
 
         if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
             emitter_.emit<OP_POPR>(vardec->register_number_get());
         }
+        */
 
     }
 
