@@ -55,6 +55,7 @@ namespace ast
     void PrettyPrinter<T>::operator()(DoExp& e)
     {
         out_ << "do "
+             << "/* current loop at " << &e << "*/"
              << *e.body_get()
              << " while (" << *e.condition_get() << ")";
     }
@@ -99,7 +100,9 @@ namespace ast
              << *e.init_get() << "; "
              << *e.condition_get() << "; "
              << *e.end_get()
-             << ")" << *e.body_get();
+             << ")"
+             << "/* current loop at " << &e << "*/"
+             << *e.body_get();
     }
 
     template<typename T>
@@ -311,6 +314,7 @@ namespace ast
     void PrettyPrinter<T>::operator()(WhileExp& e)
     {
         out_ << "while (" << *e.condition_get() << ") "
+             << "/* current loop at " << &e << "*/"
              << *e.body_get();
     }
 
@@ -351,13 +355,13 @@ namespace ast
     template<typename T>
     void PrettyPrinter<T>::operator()(BreakExp& e)
     {
-        out_ << "break";
+        out_ << "break" << "/* loop at " << e.loop_get() << "*/";
     }
 
     template<typename T>
     void PrettyPrinter<T>::operator()(ContinueExp& e)
     {
-        out_ << "continue";
+        out_ << "continue" << "/* loop at " << e.loop_get() << "*/";
     }
 
     template<typename T>

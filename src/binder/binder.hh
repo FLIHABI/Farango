@@ -39,9 +39,12 @@ namespace binder
             virtual void operator()(ast::ExpList& e) override;
             virtual void operator()(ast::Id& e) override;
 
+            virtual void operator()(ast::BreakExp& e) override;
+            virtual void operator()(ast::ContinueExp& e) override;
         private:
             ScopedMap s_map_;
             misc::error& e_;
+            std::shared_ptr<ast::LoopExp> current_loop = nullptr;
     };
 }
 #endif /* BINDER_HH */

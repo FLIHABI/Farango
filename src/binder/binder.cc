@@ -23,6 +23,9 @@ namespace binder
 
     void Binder::operator()(ast::DoExp& e)
     {
+        std::shared_ptr<ast::LoopExp> aux = current_loop;
+        current_loop = std::shared_ptr<ast::LoopExp>{&e, [](void *){}};
+
         s_map_.start_scop();
         super::operator()(*e.body_get());
         s_map_.end_scop();
@@ -30,10 +33,15 @@ namespace binder
         s_map_.start_scop();
         super::operator()(*e.condition_get());
         s_map_.end_scop();
+
+        current_loop = aux;
     }
 
     void Binder::operator()(ast::ForExp& e)
     {
+        std::shared_ptr<ast::LoopExp> aux = current_loop;
+        current_loop = std::shared_ptr<ast::LoopExp>{&e, [](void *){}};
+
         s_map_.start_scop();
         super::operator()(*e.init_get());
         super::operator()(*e.condition_get());
@@ -42,11 +50,16 @@ namespace binder
         super::operator()(*e.body_get());
         s_map_.end_scop();
         s_map_.end_scop();
+
+        current_loop = aux;
     }
 
     //CHECK FUNCTION PROTO111
     void Binder::operator()(ast::FunctionDec& e)
     {
+        std::shared_ptr<ast::LoopExp> aux = current_loop;
+        current_loop = nullptr;
+
         s_map_.push_dec(e);
         e.name_get()->accept(*this);
         s_map_.start_scop();
@@ -60,6 +73,8 @@ namespace binder
         s_map_.end_scop();
         if (e.return_t_get())
             e.return_t_get()->accept(*this);
+
+        current_loop = aux;
     }
 
     void Binder::operator()(ast::FunctionPrototype& e)
@@ -176,10 +191,15 @@ namespace binder
 
     void Binder::operator()(ast::WhileExp& e)
     {
+        std::shared_ptr<ast::LoopExp> aux = current_loop;
+        current_loop = std::shared_ptr<ast::LoopExp>{&e, [](void *){}};
+
         s_map_.start_scop();
         super::operator()(*e.condition_get());
         super::operator()(*e.body_get());
         s_map_.end_scop();
+
+        current_loop = aux;
     }
 
     void Binder::operator()(ast::ExpList& e)
@@ -199,5 +219,25 @@ namespace binder
     void Binder::operator()(ast::Id& e)
     {
         e.dec_set(s_map_.get_s_declaration(e.s_get()));
+    }
+
+    void Binder::operator()(ast::BreakExp& e)
+    {
+        if (!current_loop)
+        {
+            e_ << misc::error::error_type::bind ;
+            e_ << "break outside loop" << std::endl;
+        }
+        e.loop_set(current_loop);
+    }
+
+    void Binder::operator()(ast::ContinueExp& e)
+    {
+        if (!current_loop)
+        {
+            e_ << misc::error::error_type::bind ;
+            e_ << "continue outside loop" << std::endl;
+        }
+        e.loop_set(current_loop);
     }
 }
