@@ -14,6 +14,8 @@ namespace compile {
     }
 
     void Compile::operator()(ast::BinaryExp& e) {
+        e.valuel_get()->set_used(true);
+        e.expr_get()->set_used(true);
         super::operator()(e);
         if (!e.is_used()) { //Assert that binaryop does not have sid effet
             emitter_.emit<OP_POP>();
