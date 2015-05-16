@@ -143,7 +143,6 @@ namespace compile {
         if (e.end_get())
             e.end_get()->accept(*this);
 
-        
         long cond_instruction = emitter_.get_current_length();
         emitter_.buf_get()[jmp_address].args_[0] = cond_instruction - jmp_instruction;
 
@@ -157,6 +156,29 @@ namespace compile {
         cond_instruction = emitter_.get_current_length();
 
         emitter_.buf_get()[emitter_.buf_get().size() - 1].args_[0] = - (cond_instruction - body_instruction);
+
+    }
+
+    void Compile::operator()(ast::IfExp& e) {
+        e.if_get()->set_used(true);
+        e.if_get()->accept(*this);
+
+        emitter_.emit<OP_PUSH>(0);
+        emitter_.emit<OP_CMP>();
+
+        long jmp_address = emitter_.emit<OP_JE>(0);
+        long jmp_instruction = emitter_.get_current_length();
+
+        e.then_get()->set_used(e.is_used());
+        e.then_get()->accept(*this);
+
+        long then_adress = emitter_.emit<OP_JMP>(0);
+        long then_instruction = emitter_.get_current_length();
+        emitter_.buf_get()[jmp_address].args_[0] = then_instruction - jmp_instruction;
+
+        e.else_get()->set_used(e.is_used());
+        e.else_get()->accept(*this);
+        emitter_.buf_get()[then_adress].args_[0] = emitter_.get_current_length() - then_instruction;
 
     }
 
