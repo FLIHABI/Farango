@@ -18,18 +18,29 @@ namespace ast
 
             void virtual accept(Visitor& v) = 0;
 
-            std::weak_ptr<Declaration> type_value_get()
+            inline std::weak_ptr<Declaration> type_value_get()
             {
                 return type_value_;
             }
 
-            void type_value_set(std::weak_ptr<Declaration> t)
+            inline void type_value_set(std::weak_ptr<Declaration> t)
             {
                 type_value_ = t;
             }
 
+            inline bool is_used()
+            {
+                return used_;
+            }
+
+            inline void set_used(bool used)
+            {
+                used_ = used;
+            }
+
         protected:
             std::weak_ptr<Declaration> type_value_;
+            bool used_ = false;
 
     };
 } // ast

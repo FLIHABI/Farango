@@ -20,6 +20,7 @@ namespace compile {
         virtual void operator()(ast::Lvalue &e) override;
         virtual void operator()(ast::DoExp &e) override;
         virtual void operator()(ast::ExpList& e) override;
+        virtual void operator()(ast::ExpListInner& e) override;
 
     private:
         Emitter emitter_;
