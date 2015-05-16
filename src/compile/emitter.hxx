@@ -6,22 +6,23 @@
 
 namespace compile {
     template<Bytecode b>
-    void Emitter::emit() {
+    unsigned Emitter::emit() {
         static_assert(!bytecode::has_parameter(b),
                 "Bytecode has a parameter.");
 
-        const char bytecode = b;
-        buf_.push_back(bytecode);
+        buf_.push_back(UnfinishedBytecode(b));
+        current_length += 1;
+        return buf_.size() - 1;
     }
 
-    template<Bytecode b, typename T>
-    void Emitter::emit(T arg) {
+    template<Bytecode b>
+    unsigned Emitter::emit(int64_t arg) {
         static_assert(bytecode::has_parameter(b),
                 "Bytecode has no parameter.");
 
-        const char bytecode = b;
-        buf_.push_back(bytecode);
-        vector_stream::write(buf_, arg);
+        buf_.push_back(UnfinishedBytecode(b, arg));
+        current_length += 1 + sizeof(arg);
+        return buf_.size() - 1;
     }
 }
 

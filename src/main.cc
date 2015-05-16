@@ -38,16 +38,15 @@ int main (int argc, char **argv) {
     if (e.status_get())
     {
         std::cerr << e;
+        return e.status_get();
     }
 
 
     std::cout << *fp.ast_;
 
-    /*
     compile::Compile c;
 
     c(*fp.ast_);
 
     c.write("out.fge");
-    */
 }

@@ -18,10 +18,11 @@ namespace compile {
         virtual void operator()(ast::BinaryExp& e) override;
         virtual void operator()(ast::Int& e) override;
         virtual void operator()(ast::Lvalue &e) override;
+        virtual void operator()(ast::DoExp &e) override;
 
     private:
         Emitter emitter_;
-        binder::Binder binder_;
+        unsigned current_flag = 1;
     };
 }
 
