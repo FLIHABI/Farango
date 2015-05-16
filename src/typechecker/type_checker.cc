@@ -8,6 +8,13 @@ namespace typechecker
 {
     //TODO expression printing
 
+    bool operator==(ast::TypeArray& a, ast::TypeArray& b)
+    {
+        if (a.type_get() != b.type_get())
+            return false;
+        return a.depth_get() == b.depth_get();
+    }
+
     //Hack, FIXME later
     void sanitize(ast::Exp& e)
     {

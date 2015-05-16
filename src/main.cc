@@ -1,6 +1,7 @@
 #include "parse/parse.hh"
 #include "ast/pretty_print.hh"
 #include "binder/binder.hh"
+#include "typebuilder/type_builder.hh"
 #include "typechecker/type_checker.hh"
 #include "compile/compiler.hh"
 
@@ -15,6 +16,16 @@ int main (int argc, char **argv) {
     binder::Binder b(e);
 
     b(*fp.ast_);
+    if (e.status_get())
+    {
+        std::cerr << e;
+        return e.status_get();
+    }
+
+
+    typebuilder::TypeBuilder tb(e);
+    tb(*fp.ast_);
+
     if (e.status_get())
     {
         std::cerr << e;

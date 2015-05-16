@@ -36,3 +36,4 @@
 #include "array_access.hh"
 #include "type_array_identifier.hh"
 #include "new_exp.hh"
+#include "type_array.hh"

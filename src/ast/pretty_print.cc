@@ -397,6 +397,8 @@ namespace ast
 
         for (unsigned i = 1; i < e.depth_get(); i++)
             out_ << "[]";
+
+        out_ << " /* array at " << e.dec_get() << " */ ";
     }
 
     template<typename T>

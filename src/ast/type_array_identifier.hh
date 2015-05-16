@@ -3,6 +3,7 @@
 
 # include "ast_all.hh"
 # include "type_identifier.hh"
+# include "type_array.hh"
 
 namespace ast
 {
@@ -41,9 +42,20 @@ namespace ast
                 return size_;
             }
 
+            virtual std::shared_ptr<Declaration> dec_get()
+            {
+                return dec_;
+            }
+
+            void set_dec(std::shared_ptr<TypeArray> dec)
+            {
+                dec_ = dec;
+            }
+
         private:
             unsigned depth_ = 1;
             std::shared_ptr<Exp> size_ = nullptr;
+            std::shared_ptr<TypeArray> dec_ = nullptr;
     };
 }
 
