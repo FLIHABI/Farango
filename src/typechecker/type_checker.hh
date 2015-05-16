@@ -35,6 +35,9 @@ namespace typechecker
             virtual void operator()(ast::InnerExp& e) override;
             virtual void operator()(ast::VarAssign& e) override;
             virtual void operator()(ast::VarDec& e) override;
+            virtual void operator()(ast::NewExp& e) override;
+            virtual void operator()(ast::TypeArrayIdentifier& e) override;
+            virtual void operator()(ast::ArrayAccess& e) override;
 
             /* FIXME check me for generic purpose
             virtual void operator()(ast::TypeIdentifierUse& e) override;

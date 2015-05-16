@@ -2,6 +2,7 @@
 # define TYPE_ARRAY_HH
 
 # include <memory>
+# include <iostream>
 
 # include "type_identifier.hh"
 # include "declaration.hh"
@@ -16,7 +17,10 @@ namespace ast
             TypeArray(std::shared_ptr<TypeValue> type, unsigned depth)
                 : type_(type)
                 , depth_(depth)
-            {}
+            {
+                if (depth_ > 1)
+                    sub_type_ = std::make_shared<TypeArray>(type, depth_ - 1);
+            }
 
             virtual ~TypeArray()
             {};
@@ -40,11 +44,12 @@ namespace ast
             {
                 if (depth_ == 1)
                     return type_;
-                return std::make_shared<TypeArray>(type_, depth_ - 1);
+                return sub_type_;
             }
 
         private:
             std::shared_ptr<TypeValue> type_;
+            std::shared_ptr<TypeArray> sub_type_ = nullptr;
             unsigned depth_;
     };
 }

@@ -25,12 +25,18 @@ namespace typechecker
     bool TypeChecker::is_equal(std::shared_ptr<ast::Declaration> a,
                                std::shared_ptr<ast::Declaration> b)
     {
-        std::shared_ptr<ast::TypePrototype> a_ =
-            std::dynamic_pointer_cast<ast::TypePrototype>(a);
-        std::shared_ptr<ast::TypePrototype> b_ =
-            std::dynamic_pointer_cast<ast::TypePrototype>(b);
-        if (a_ && b_)
-            return (a_->type_dec_get() && a_->type_dec_get() == b_->type_dec_get());
+        {
+            auto a_ = std::dynamic_pointer_cast<ast::TypePrototype>(a);
+            auto b_ = std::dynamic_pointer_cast<ast::TypePrototype>(b);
+            if (a_ && b_)
+                return (a_->type_dec_get() && a_->type_dec_get() == b_->type_dec_get());
+        }
+        {
+            auto a_ = std::dynamic_pointer_cast<ast::TypeArray>(a);
+            auto b_ = std::dynamic_pointer_cast<ast::TypeArray>(b);
+            if (a_ && b_)
+                return (*a_ == *b_);
+        }
         return (a && a == b);
     }
 
@@ -410,5 +416,52 @@ namespace typechecker
             e_ << "bad var type" << std::endl;
             return;
         }
+    }
+
+    void TypeChecker::operator()(ast::NewExp& e)
+    {
+        sanitize(e);
+        super::operator()(e);
+        auto a = std::dynamic_pointer_cast<ast::TypeArray>(e.alloc_get()->dec_get());
+        auto b = std::dynamic_pointer_cast<ast::TypePrototype>(e.alloc_get()->dec_get());
+        if (!a && !b)
+        {
+            e_ << misc::error::error_type::type;
+            e_ << "new does not support this type" << std::endl;
+            return;
+        }
+        e.type_value_set(e.alloc_get()->dec_get());
+    }
+
+    void TypeChecker::operator()(ast::TypeArrayIdentifier& e)
+    {
+        sanitize(e);
+        super::operator()(e);
+        if (!e.size_get())
+            return;
+        if (!is_int(e.size_get()->type_value_get().lock()))
+        {
+            e_ << misc::error::error_type::type;
+            e_ << "Could not create an array with" << e.size_get() << std::endl;
+        }
+    }
+
+    void TypeChecker::operator()(ast::ArrayAccess& e)
+    {
+        sanitize(e);
+        super::operator()(e);
+        auto l = std::dynamic_pointer_cast<ast::TypeArray>(e.val_get()->type_value_get().lock());
+        if (!is_int(e.offset_get()->type_value_get().lock()))
+        {
+            e_ << misc::error::error_type::type;
+            e_ << e.offset_get() << " is not an int" << std::endl;
+        }
+        if (!l)
+        {
+            e_ << misc::error::error_type::type;
+            e_ << e.val_get() << " is not an array" << std::endl;
+            return;
+        }
+        e.type_value_set(l->access_type());
     }
 }
