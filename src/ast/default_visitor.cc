@@ -232,4 +232,9 @@ namespace ast
     {
         e.alloc_get()->accept(*this);
     }
+
+    void DefaultVisitor::operator()(TypeValue& e)
+    {
+        e.accept(*this);
+    }
 }

@@ -3,6 +3,7 @@
 
 # include "declaration.hh"
 # include "lib/symbol.hh"
+# include "type_value.hh"
 
 /* FIXME
  * Reffactor with template
@@ -10,7 +11,7 @@
 
 namespace ast
 {
-    class IntDec : public Declaration
+    class IntDec : public TypeValue
     {
         public:
             ~IntDec()
@@ -36,7 +37,7 @@ namespace ast
 
     };
 
-    class VoidDec : public Declaration
+    class VoidDec : public TypeValue
     {
         public:
             ~VoidDec()
@@ -62,7 +63,7 @@ namespace ast
 
     };
 
-    class StringDec : public Declaration
+    class StringDec : public TypeValue
     {
         public:
             ~StringDec()
@@ -88,7 +89,7 @@ namespace ast
 
     };
 
-    class NullDec : public Declaration
+    class NullDec : public TypeValue
     {
         public:
             ~NullDec()

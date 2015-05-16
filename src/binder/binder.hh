@@ -41,6 +41,7 @@ namespace binder
 
             virtual void operator()(ast::BreakExp& e) override;
             virtual void operator()(ast::ContinueExp& e) override;
+
         private:
             ScopedMap s_map_;
             misc::error& e_;

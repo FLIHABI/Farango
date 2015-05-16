@@ -54,6 +54,7 @@ namespace ast
             virtual void operator()(ArrayAccess& e) override;
             virtual void operator()(TypeArrayIdentifier& e) override;
             virtual void operator()(NewExp& e) override;
+            virtual void operator()(TypeValue& e) override;
 
     };
 }

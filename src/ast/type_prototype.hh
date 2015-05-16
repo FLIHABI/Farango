@@ -4,12 +4,13 @@
 # include <memory>
 
 # include "type_identifier.hh"
+# include "type_value.hh"
 # include "declaration.hh"
 # include "visitor.hh"
 
 namespace ast
 {
-    class TypePrototype : public Declaration
+    class TypePrototype : public TypeValue
     {
         public:
             TypePrototype(std::shared_ptr<TypeIdentifierDec> type)

@@ -52,6 +52,7 @@ namespace ast
             virtual void operator()(ArrayAccess& e) = 0;
             virtual void operator()(TypeArrayIdentifier& e) = 0;
             virtual void operator()(NewExp& e) = 0;
+            virtual void operator()(TypeValue& e) = 0;
 
             template <class E> void operator()(E* e);
             template <typename E> void accept(E* e);

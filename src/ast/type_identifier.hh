@@ -42,6 +42,11 @@ namespace ast
                 return specs_;
             }
 
+            virtual std::shared_ptr<Declaration> dec_get()
+            {
+                return type_name_->dec_get();
+            }
+
         private:
             std::shared_ptr<Id> type_name_;
             std::vector<std::shared_ptr<T>> specs_;

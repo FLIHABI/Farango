@@ -1,9 +1,12 @@
+# include <iostream>
+
+# include "ast/pretty_print.hh"
 # include "ast/all.hh"
 # include "type_checker.hh"
 
 namespace typechecker
 {
-    //FIXME expression printing
+    //TODO expression printing
 
     //Hack, FIXME later
     void sanitize(ast::Exp& e)
@@ -47,6 +50,7 @@ namespace typechecker
         sanitize(e);
         super::operator()(e);
         e.type_value_set(e.lvalue_get()->type_value_get());
+
         if (!is_equal(e.lvalue_get()->type_value_get().lock(),
                     e.exp_get()->type_value_get().lock()))
         {
@@ -178,7 +182,7 @@ namespace typechecker
         for (unsigned i = 0; i < def->params_get().size(); i++)
         {
             auto a = e.list_get()->list_get()[i]->type_value_get().lock();
-            auto b = def->params_get()[i].type_get()->type_name_get()->dec_get();
+            auto b = def->params_get()[i].type_get()->dec_get();
             if (!is_equal(a, b)) // TypeChecker should have a pointer to they definition
             {
                 e_ << misc::error::error_type::type;
@@ -187,7 +191,7 @@ namespace typechecker
         }
 
         if (def->return_t_get())
-            e.type_value_set(def->return_t_get()->type_name_get()->dec_get());
+            e.type_value_set(def->return_t_get()->dec_get());
         else
             e.type_value_set(ast::VoidDec::get_def());
     }
@@ -227,7 +231,7 @@ namespace typechecker
         super::operator()(e);
         auto var = std::dynamic_pointer_cast<ast::VarDec>(e.s_get()->dec_get());
         if (var)
-            e.type_value_set(var->type_get()->type_name_get()->dec_get());
+            e.type_value_set(var->type_get()->dec_get());
         else if (std::dynamic_pointer_cast<ast::FunctionPrototype>(e.s_get()->dec_get()))
             e.type_value_set(e.s_get()->dec_get());
     }
@@ -252,8 +256,8 @@ namespace typechecker
 
         for (unsigned i = 0; i < def->params_get().size(); i++)
         {
-            auto a = e.params_get()[i].type_get()->type_name_get()->dec_get();
-            auto b = def->params_get()[i].type_get()->type_name_get()->dec_get();
+            auto a = e.params_get()[i].type_get()->dec_get();
+            auto b = def->params_get()[i].type_get()->dec_get();
             if (!is_equal(a, b)) // TypeChecker should have a pointer to they definition
             {
                 e_ << misc::error::error_type::type;
@@ -264,8 +268,8 @@ namespace typechecker
             }
         }
 
-        if (e.return_t_get() && !is_equal(e.return_t_get()->type_name_get()->dec_get(),
-                                          def->return_t_get()->type_name_get()->dec_get()))
+        if (e.return_t_get() && !is_equal(e.return_t_get()->dec_get(),
+                                          def->return_t_get()->dec_get()))
         {
             e_ << misc::error::error_type::type;
             e_ << " prototype " << &e
@@ -280,7 +284,7 @@ namespace typechecker
         sanitize(e);
         super::operator()(e);
         if (e.return_t_get()
-                && !is_equal(e.return_t_get()->type_name_get()->dec_get(),
+                && !is_equal(e.return_t_get()->dec_get(),
                              e.body_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
@@ -300,12 +304,20 @@ namespace typechecker
         {
             e_ << misc::error::error_type::type;
             e_ << e.lval_get()
-                << " is not a TypeStruct" << std::endl;
+                << " is not a TypePrototype" << std::endl;
             return;
         }
 
         std::shared_ptr<ast::TypeStruct> t
             = std::dynamic_pointer_cast<ast::TypeStruct>(t_->type_dec_get());
+
+        if (!t)
+        {
+            e_ << misc::error::error_type::type;
+            e_ << e.lval_get()
+                << " is not a TypeStruct" << std::endl;
+            return;
+        }
 
         for (auto& v : t->members_get())
         {
@@ -313,7 +325,7 @@ namespace typechecker
             {
                 //FIXME, not sexy
                 e.s_get()->dec_set(std::shared_ptr<ast::VarDec>(&v, [](void *){}));
-                e.type_value_set(v.type_get()->type_name_get()->dec_get());
+                e.type_value_set(v.type_get()->dec_get());
                 return;
             }
         }
@@ -359,16 +371,37 @@ namespace typechecker
     {
         sanitize(e);
         super::operator()(e);
+
+        auto t = e.type_get()->dec_get();
+        if (!std::dynamic_pointer_cast<ast::TypeValue>(t))
+        {
+            e_ << misc::error::error_type::type;
+            e_ << "bad var type" << std::endl;
+            return;
+        }
+
         if (!is_equal(e.value_get()->type_value_get().lock(),
-                      e.type_get()->type_name_get()->dec_get()))
+                      e.type_get()->dec_get()))
         {
             e_ << misc::error::error_type::type;
             e_ << e.value_get()
                 << " is of type " << e.value_get()->type_value_get().lock()
                 << " but is assigned with a "
-                << e.type_get()->type_name_get()->dec_get()
+                << e.type_get()->dec_get()
                 << std::endl;
         }
         e.type_value_set(e.value_get()->type_value_get());
+    }
+    void TypeChecker::operator()(ast::VarDec& e)
+    {
+        sanitize(e);
+        super::operator()(e);
+        auto t = e.type_get()->dec_get();
+        if (!std::dynamic_pointer_cast<ast::TypeValue>(t))
+        {
+            e_ << misc::error::error_type::type;
+            e_ << "bad var type" << std::endl;
+            return;
+        }
     }
 }

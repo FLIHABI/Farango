@@ -75,6 +75,7 @@ namespace ast
     class ArrayAccess;
     class TypeArrayIdentifier;
     class NewExp;
+    class TypeValue;
 }
 
 #endif /* AST_ALL_HH */
