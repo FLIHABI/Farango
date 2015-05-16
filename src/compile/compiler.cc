@@ -79,7 +79,18 @@ namespace compile {
         long jmp_instruction = emitter_.get_current_length();
 
         //Set jump to the start of the do
-        emitter_.buf_get()[emitter_.buf_get().size() - 1].args_[0] = - (jmp_instruction - do_instruction);
+        emitter_.buf_get()[emitter_.buf_get().size() - 1].args_[0] = do_instruction - jmp_instruction;
+    }
+
+    void Compile::operator()(ast::ExpList& e) {
+        auto b = e.list_get().begin();
+        auto end = e.list_get().end();
+        while (b != end)
+        {
+            (*b)->accept(*this);
+            if (++b != end)
+                emitter_.emit<OP_POP>();
+        }
     }
 
     void Compile::write(const char* filename) {
