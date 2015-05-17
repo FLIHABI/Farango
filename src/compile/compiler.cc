@@ -39,10 +39,10 @@ namespace compile {
 
         if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
             if (e.is_used())
-                emitter_.emit<OP_PUSHR>(vardec->register_number_get());
+                emitter_.emit<OP_PUSHR, uint16_t>(vardec->register_number_get());
             else
                 return;
-        } else {
+        } else { //Should not happend
             std::cerr << "Could not resolve symbol";
             // TODO: proper error handling, should not happend
         }
@@ -52,8 +52,9 @@ namespace compile {
         super ::operator()(e);
         e.register_number_set(reg_counter++);
 
-        if (e.is_used()) //should never happend
-            emitter_.emit<OP_PUSH>(0);
+        if (e.is_used()) {//should never happend
+            emitter_.emit<OP_PUSH, uint64_t>(0);
+        }
     }
 
     void Compile::operator()(ast::AssignExp &e) {
@@ -71,21 +72,21 @@ namespace compile {
         std::shared_ptr<ast::Declaration> decl = lval->s_get()->dec_get();
 
         if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
-            emitter_.emit<OP_POPR>(vardec->register_number_get());
+            emitter_.emit<OP_POPR, uint16_t>(vardec->register_number_get());
             if (e.is_used()) //should never happend
-                emitter_.emit<OP_PUSHR>(vardec->register_number_get());
+                emitter_.emit<OP_PUSHR, uint16_t>(vardec->register_number_get());
         }
 
     }
 
     void Compile::operator()(ast::Int& e) {
         if (e.is_used())
-            emitter_.emit<OP_PUSH>(e.value_get());
+            emitter_.emit<OP_PUSH, uint64_t>(e.value_get());
     }
 
     void Compile::operator()(ast::DoExp& e) {
         if (e.is_used())
-            emitter_.emit<OP_PUSH>(0);
+            emitter_.emit<OP_PUSH, uint64_t>(0);
         long do_instruction = emitter_.get_current_length();
         if (e.is_used())
             emitter_.emit<OP_POP>();
@@ -96,14 +97,14 @@ namespace compile {
         e.condition_get()->set_used(true);
         e.condition_get()->accept(*this);
 
-        emitter_.emit<OP_PUSH>(0);
+        emitter_.emit<OP_PUSH, uint64_t>(0);
         emitter_.emit<OP_CMP>();
-        emitter_.emit<OP_JNE>(0);
+        emitter_.emit<OP_JNE, int16_t>();
 
         long jmp_instruction = emitter_.get_current_length();
 
         //Set jump to the start of the do
-        emitter_.buf_get()[emitter_.buf_get().size() - 1].args_[0] = do_instruction - jmp_instruction;
+        emitter_.buf_get()[emitter_.buf_get().size() - 1].add_operand<int16_t>(do_instruction - jmp_instruction);
     }
 
     void Compile::operator()(ast::ExpList& e) {
@@ -134,7 +135,7 @@ namespace compile {
         if (e.init_get())
             e.init_get()->accept(*this);
 
-        long jmp_address = emitter_.emit<OP_JMP>(0);
+        long jmp_address = emitter_.emit<OP_JMP, int16_t>();
         long jmp_instruction = emitter_.get_current_length();
         long body_instruction = emitter_.get_current_length();
 
@@ -145,18 +146,18 @@ namespace compile {
             e.end_get()->accept(*this);
 
         long cond_instruction = emitter_.get_current_length();
-        emitter_.buf_get()[jmp_address].args_[0] = cond_instruction - jmp_instruction;
+        emitter_.buf_get()[jmp_address].add_operand<int16_t>(cond_instruction - jmp_instruction);
 
         e.condition_get()->set_used(true);
         e.condition_get()->accept(*this);
 
-        emitter_.emit<OP_PUSH>(0);
+        emitter_.emit<OP_PUSH, uint64_t>(0);
         emitter_.emit<OP_CMP>();
-        emitter_.emit<OP_JNE>(0);
+        emitter_.emit<OP_JNE, int16_t>();
 
         cond_instruction = emitter_.get_current_length();
 
-        emitter_.buf_get()[emitter_.buf_get().size() - 1].args_[0] = - (cond_instruction - body_instruction);
+        emitter_.buf_get()[emitter_.buf_get().size() - 1].add_operand<int16_t>( - (cond_instruction - body_instruction));
 
     }
 
@@ -164,22 +165,22 @@ namespace compile {
         e.if_get()->set_used(true);
         e.if_get()->accept(*this);
 
-        emitter_.emit<OP_PUSH>(0);
+        emitter_.emit<OP_PUSH, uint64_t>(0);
         emitter_.emit<OP_CMP>();
 
-        long jmp_address = emitter_.emit<OP_JE>(0);
+        long jmp_address = emitter_.emit<OP_JE, int16_t>();
         long jmp_instruction = emitter_.get_current_length();
 
         e.then_get()->set_used(e.is_used());
         e.then_get()->accept(*this);
 
-        long then_adress = emitter_.emit<OP_JMP>(0);
+        long then_adress = emitter_.emit<OP_JMP, int16_t>();
         long then_instruction = emitter_.get_current_length();
-        emitter_.buf_get()[jmp_address].args_[0] = then_instruction - jmp_instruction;
+        emitter_.buf_get()[jmp_address].add_operand<int16_t>(then_instruction - jmp_instruction);
 
         e.else_get()->set_used(e.is_used());
         e.else_get()->accept(*this);
-        emitter_.buf_get()[then_adress].args_[0] = emitter_.get_current_length() - then_instruction;
+        emitter_.buf_get()[then_adress].add_operand<int16_t>(emitter_.get_current_length() - then_instruction);
     }
 
     void Compile::operator()(ast::UnaryExp& e) {
@@ -193,28 +194,28 @@ namespace compile {
             //TODO: more ops
             case ast::PLUS:  break; // WHAT ?
             case ast::TILDE:  break; // WHAT ?
-            case ast::MINUS: emitter_.emit<OP_PUSH>(0);  emitter_.emit<OP_SUB>(); break;
+            case ast::MINUS: emitter_.emit<OP_PUSH, int64_t>(0);  emitter_.emit<OP_SUB>(); break;
             case ast::BANG:  emitter_.emit<OP_NOT>(); break;
             default: break;
         };
     }
 
     void Compile::operator()(ast::WhileExp& e) {
-        long jmp_address = emitter_.emit<OP_JMP>(0);
+        long jmp_address = emitter_.emit<OP_JMP, int16_t>();
         long body_instruction = emitter_.get_current_length();
         e.body_get()->set_used(e.is_used());
         e.body_get()->accept(*this);
         long cond_instruction = emitter_.get_current_length();
-        emitter_.buf_get()[jmp_address].args_[0] = cond_instruction - body_instruction;
+        emitter_.buf_get()[jmp_address].add_operand<int16_t>(cond_instruction - body_instruction);
         e.condition_get()->set_used(true);
         e.condition_get()->accept(*this);
 
-        emitter_.emit<OP_PUSH>(0);
+        emitter_.emit<OP_PUSH, int64_t>(0);
         emitter_.emit<OP_CMP>();
-        jmp_address = emitter_.emit<OP_JNE>(0);
+        jmp_address = emitter_.emit<OP_JNE, int16_t>();
 
         cond_instruction = emitter_.get_current_length();
-        emitter_.buf_get()[jmp_address].args_[0] = - (cond_instruction - body_instruction);
+        emitter_.buf_get()[jmp_address].add_operand<int16_t>( - (cond_instruction - body_instruction));
     }
 
     void Compile::operator()(ast::ExpListFunction& e) {
@@ -231,20 +232,18 @@ namespace compile {
         e.register_number_set(reg_counter++);
 
         if (e.is_used()) //should never happend
-            emitter_.emit<OP_PUSH>(0);
+            emitter_.emit<OP_PUSH, int64_t>(0);
 
         e.value_get()->set_used(true);
         e.value_get()->accept(*this);
 
-        emitter_.emit<OP_POPR>(e.register_number_get());
+        emitter_.emit<OP_POPR, int16_t>(e.register_number_get());
         if (e.is_used()) //should never happend
-            emitter_.emit<OP_PUSHR>(e.register_number_get());
+            emitter_.emit<OP_PUSHR, int16_t>(e.register_number_get());
     }
 
     void Compile::write(const char* filename) {
         std::ofstream file(filename);
         file << emitter_;
     }
-
-
 }

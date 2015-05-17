@@ -5,6 +5,7 @@
 # include "emitter.hh"
 
 namespace compile {
+
     template<Bytecode b>
     unsigned Emitter::emit() {
         static_assert(!bytecode::has_parameter(b),
@@ -15,14 +16,41 @@ namespace compile {
         return buf_.size() - 1;
     }
 
-    template<Bytecode b>
-    unsigned Emitter::emit(int64_t arg) {
+    template<Bytecode b, typename T>
+    unsigned Emitter::emit() {
         static_assert(bytecode::has_parameter(b),
-                "Bytecode has no parameter.");
+                "Bytecode has a parameter.");
+        buf_.push_back(UnfinishedBytecode(b));
 
-        buf_.push_back(UnfinishedBytecode(b, arg));
-        current_length += 1 + sizeof(arg);
+        current_length += 1 + sizeof(T);
         return buf_.size() - 1;
+    }
+
+    template<Bytecode b, unsigned size>
+    unsigned Emitter::emit() {
+        static_assert(bytecode::has_parameter(b),
+                "Bytecode has a parameter.");
+        buf_.push_back(UnfinishedBytecode(b));
+
+        current_length += 1 + size;
+        return buf_.size() - 1;
+    }
+
+    template<Bytecode b, typename T>
+    unsigned Emitter::emit(T element) {
+        static_assert(bytecode::has_parameter(b),
+                "Bytecode has a parameter.");
+        buf_.push_back(UnfinishedBytecode(b));
+        buf_[buf_.size() - 1].add_operand<T>(element);
+
+        current_length += 1 + sizeof(T);
+        return buf_.size() - 1;
+    }
+
+    template<typename T>
+    void UnfinishedBytecode::add_operand(T value)
+    {
+        vector_stream::write<T>(args_, value);
     }
 }
 

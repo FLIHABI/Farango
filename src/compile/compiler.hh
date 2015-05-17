@@ -32,6 +32,9 @@ namespace compile {
         //TODO virtual void operator()(ast::String& e) override;
         virtual void operator()(ast::ExpListFunction& e) override;
         virtual void operator()(ast::VarAssign& e) override;
+        //TODO virtual void operator()(ast::BreakExp& e) override;
+        //TODO virtual void operator()(ast::ContinueExp& e) override;
+        //TODO virtual void operator()(ast::NewExp& e) override;
     private:
         Emitter emitter_;
         unsigned current_flag = 1;

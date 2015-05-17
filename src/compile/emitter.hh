@@ -7,22 +7,32 @@
 
 namespace compile {
 
+    class Emitter;
+
     class UnfinishedBytecode
     {
         public:
             UnfinishedBytecode(Bytecode b);
-            UnfinishedBytecode(Bytecode b, int64_t arg);
 
+            template<typename T>
+            void add_operand(T value);
+        private:
             Bytecode b_;
-            std::vector<int64_t> args_;
-            unsigned jump_flag; //Where it should jump
-            unsigned flag; //Instruction flag
+            std::vector<char> args_;
+
+        friend std::ostream& operator<<(std::ostream& os, const Emitter& e);
     };
 
     class Emitter final {
     public:
-        template<Bytecode b>
-        unsigned emit(int64_t arg);
+        template<Bytecode b, typename T>
+        unsigned emit(T arg);
+
+        template<Bytecode b, unsigned size>
+        unsigned emit();
+
+        template<Bytecode b, typename T>
+        unsigned emit();
 
         template<Bytecode b>
         unsigned emit();
