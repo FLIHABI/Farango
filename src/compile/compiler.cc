@@ -217,9 +217,34 @@ namespace compile {
         emitter_.buf_get()[jmp_address].args_[0] = - (cond_instruction - body_instruction);
     }
 
+    void Compile::operator()(ast::ExpListFunction& e) {
+        auto b = e.list_get().begin();
+        auto end = e.list_get().end();
+        while (b != end) {
+            (*b)->set_used(e.is_used());
+            (*b)->accept(*this);
+            ++b;
+        }
+    }
+
+    void Compile::operator()(ast::VarAssign& e) {
+        e.register_number_set(reg_counter++);
+
+        if (e.is_used()) //should never happend
+            emitter_.emit<OP_PUSH>(0);
+
+        e.value_get()->set_used(true);
+        e.value_get()->accept(*this);
+
+        emitter_.emit<OP_POPR>(e.register_number_get());
+        if (e.is_used()) //should never happend
+            emitter_.emit<OP_PUSHR>(e.register_number_get());
+    }
+
     void Compile::write(const char* filename) {
         std::ofstream file(filename);
         file << emitter_;
     }
+
 
 }
