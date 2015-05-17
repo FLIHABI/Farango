@@ -199,6 +199,23 @@ namespace compile {
         };
     }
 
+    void Compile::operator()(ast::WhileExp& e) {
+        long jmp_address = emitter_.emit<OP_JMP>(0);
+        long body_instruction = emitter_.get_current_length();
+        e.body_get()->set_used(e.is_used());
+        e.body_get()->accept(*this);
+        long cond_instruction = emitter_.get_current_length();
+        emitter_.buf_get()[jmp_address].args_[0] = cond_instruction - body_instruction;
+        e.condition_get()->set_used(true);
+        e.condition_get()->accept(*this);
+
+        emitter_.emit<OP_PUSH>(0);
+        emitter_.emit<OP_CMP>();
+        jmp_address = emitter_.emit<OP_JNE>(0);
+
+        cond_instruction = emitter_.get_current_length();
+        emitter_.buf_get()[jmp_address].args_[0] = - (cond_instruction - body_instruction);
+    }
 
     void Compile::write(const char* filename) {
         std::ofstream file(filename);
