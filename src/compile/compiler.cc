@@ -23,6 +23,7 @@ namespace compile {
             return;
         }
         switch (e.op_get()) {
+            //TODO: more ops
             case ast::PLUS:  emitter_.emit<OP_ADD>(); break;
             case ast::MINUS: emitter_.emit<OP_SUB>(); break;
             case ast::MUL:   emitter_.emit<OP_MUL>(); break;
@@ -179,8 +180,25 @@ namespace compile {
         e.else_get()->set_used(e.is_used());
         e.else_get()->accept(*this);
         emitter_.buf_get()[then_adress].args_[0] = emitter_.get_current_length() - then_instruction;
-
     }
+
+    void Compile::operator()(ast::UnaryExp& e) {
+        e.exp_get()->set_used(true);
+        e.exp_get()->accept(*this);
+        if (!e.is_used()) { //Assert that op does not have sid effet
+            emitter_.emit<OP_POP>();
+            return;
+        }
+        switch (e.op_get()) {
+            //TODO: more ops
+            case ast::PLUS:  break; // WHAT ?
+            case ast::TILDE:  break; // WHAT ?
+            case ast::MINUS: emitter_.emit<OP_PUSH>(0);  emitter_.emit<OP_SUB>(); break;
+            case ast::BANG:  emitter_.emit<OP_NOT>(); break;
+            default: break;
+        };
+    }
+
 
     void Compile::write(const char* filename) {
         std::ofstream file(filename);

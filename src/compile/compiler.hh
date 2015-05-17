@@ -26,6 +26,8 @@ namespace compile {
         //TODO virtual void operator()(ast::FunCall& e) override;
         //TODO virtual void operator()(ast::FunctionDec& e) override;
         virtual void operator()(ast::IfExp& e) override;
+        //TODO virtual void operator()(MemberAccess& e) override;
+        virtual void operator()(ast::UnaryExp& e) override;
     private:
         Emitter emitter_;
         unsigned current_flag = 1;
