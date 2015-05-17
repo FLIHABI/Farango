@@ -6,8 +6,9 @@
 namespace compile {
 
     UnfinishedBytecode::UnfinishedBytecode(Bytecode b)
-        : b_(b)
-    {}
+    {
+        vector_stream::write<char>(args_, b);
+    }
 
     std::ostream& operator<<(std::ostream& os, const Emitter& e) {
         for (auto& Ub : e.buf_) {

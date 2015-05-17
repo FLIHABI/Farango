@@ -17,7 +17,6 @@ namespace compile {
             template<typename T>
             void add_operand(T value);
         private:
-            Bytecode b_;
             std::vector<char> args_;
 
         friend std::ostream& operator<<(std::ostream& os, const Emitter& e);
