@@ -23,7 +23,6 @@ model {
         cpp {
           source {
             srcDir 'src/'
-            srcDir 'dependencies/commons/src/commons/'
             include '**/*.cc'
           }
           exportedHeaders {
