@@ -9,6 +9,9 @@ namespace compile {
     static uint16_t reg_counter = 0;
 
     void Compile::operator()(ast::Ast& a) {
+        ast::Exp* e = dynamic_cast<ast::Exp*>(&a);
+        if (e != nullptr)
+            e->set_used(true);
         super::operator()(a);
         emitter_.emit<OP_HALT>();
     }
