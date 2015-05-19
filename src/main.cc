@@ -4,12 +4,18 @@
 #include "typebuilder/type_builder.hh"
 #include "typechecker/type_checker.hh"
 #include "compile/compiler.hh"
+#include "commons/utils/vector_stream.hxx"
+#include "commons/tolkfile/tolk-file.hh"
 
 int main (int argc, char **argv) {
     parse::FgcParser fp;
     FILE* in = stdin;
     if (argc > 1)
         in = fopen(argv[1], "r");
+
+    tolk::TolkFile tolk;
+    tolk.save("test");
+
     fp.parse(in);
 
     misc::error e;
