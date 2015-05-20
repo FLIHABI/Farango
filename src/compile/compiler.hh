@@ -3,7 +3,6 @@
 
 # include "ast/default_visitor.hh"
 # include "emitter.hh"
-# include "binder/binder.hh"
 
 namespace compile {
     class Compile : public virtual ast::DefaultVisitor {
@@ -35,9 +34,16 @@ namespace compile {
         //TODO virtual void operator()(ast::BreakExp& e) override;
         //TODO virtual void operator()(ast::ContinueExp& e) override;
         //TODO virtual void operator()(ast::NewExp& e) override;
+
+        std::vector<ast::FunctionDec*>& dec_get()
+        {
+            return dec_;
+        }
+
+
     private:
         Emitter emitter_;
-        unsigned current_flag = 1;
+        std::vector<ast::FunctionDec*> dec_;
     };
 }
 

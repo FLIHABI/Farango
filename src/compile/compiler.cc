@@ -42,7 +42,7 @@ namespace compile {
 
         if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
             if (e.is_used())
-                emitter_.emit<OP_PUSHR, uint16_t>(vardec->register_number_get());
+                emitter_.emit<OP_PUSHR, uint16_t>(vardec->number_get());
             else
                 return;
         } else { //Should not happend
@@ -53,7 +53,6 @@ namespace compile {
 
     void Compile::operator()(ast::VarDec &e) {
         super ::operator()(e);
-        e.register_number_set(reg_counter++);
 
         if (e.is_used()) {//should never happend
             emitter_.emit<OP_PUSH, uint64_t>(0);
@@ -75,9 +74,9 @@ namespace compile {
         std::shared_ptr<ast::Declaration> decl = lval->s_get()->dec_get();
 
         if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
-            emitter_.emit<OP_POPR, uint16_t>(vardec->register_number_get());
+            emitter_.emit<OP_POPR, uint16_t>(vardec->number_get());
             if (e.is_used()) //should never happend
-                emitter_.emit<OP_PUSHR, uint16_t>(vardec->register_number_get());
+                emitter_.emit<OP_PUSHR, uint16_t>(vardec->number_get());
         }
 
     }
@@ -232,7 +231,6 @@ namespace compile {
     }
 
     void Compile::operator()(ast::VarAssign& e) {
-        e.register_number_set(reg_counter++);
 
         if (e.is_used()) //should never happend
             emitter_.emit<OP_PUSH, int64_t>(0);
@@ -240,9 +238,9 @@ namespace compile {
         e.value_get()->set_used(true);
         e.value_get()->accept(*this);
 
-        emitter_.emit<OP_POPR, int16_t>(e.register_number_get());
+        emitter_.emit<OP_POPR, int16_t>(e.number_get());
         if (e.is_used()) //should never happend
-            emitter_.emit<OP_PUSHR, int16_t>(e.register_number_get());
+            emitter_.emit<OP_PUSHR, int16_t>(e.number_get());
     }
 
     void Compile::write(const char* filename) {

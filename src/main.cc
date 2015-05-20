@@ -4,6 +4,7 @@
 #include "typebuilder/type_builder.hh"
 #include "typechecker/type_checker.hh"
 #include "compile/compiler.hh"
+#include "compile/register.hh"
 #include "commons/utils/vector_stream.hxx"
 #include "commons/tolkfile/tolk-file.hh"
 
@@ -51,6 +52,8 @@ int main (int argc, char **argv) {
     std::cout << *fp.ast_;
 
     compile::Compile c;
+    compile::Register r(c.dec_get());
+    r.process(*fp.ast_);
 
     c(*fp.ast_);
 

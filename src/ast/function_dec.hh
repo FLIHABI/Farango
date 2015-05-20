@@ -32,8 +32,30 @@ namespace ast
                 return body_;
             }
 
+            uint16_t reg_size_get()
+            {
+                return reg_size_;
+            }
+
+            void reg_size_set(uint16_t reg_)
+            {
+                reg_size_ = reg_;
+            }
+
+            uint16_t reg_offset_get()
+            {
+                return reg_offset_;
+            }
+
+            void reg_offset_set(uint16_t reg_)
+            {
+                reg_offset_ = reg_;
+            }
+
         private:
             std::shared_ptr<Exp> body_;
+            uint16_t reg_size_;
+            uint16_t reg_offset_;
 
     };
 }

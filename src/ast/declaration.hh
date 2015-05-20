@@ -26,10 +26,19 @@ namespace ast
                 return name_;
             }
 
+            inline uint16_t number_get() {
+                return number_;
+            }
+
+            inline void number_set(const uint16_t num) {
+                number_ = num;
+            }
+
         protected:
             Declaration()
             {};
             std::shared_ptr<Id> name_;
+            uint16_t number_;
     };
 }
 #endif /* DECLARATION_HH */
