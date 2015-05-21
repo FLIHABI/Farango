@@ -21,7 +21,8 @@ Language goals
   and as such, the language should abstract away the inner work.
 
  .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
+    lexical_structure/index
     expressions
     callables
