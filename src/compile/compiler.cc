@@ -347,6 +347,11 @@ namespace compile {
             emitter_.emit<OP_POP>();
     }
 
+    void Compile::operator()(ast::InnerExp& e) {
+        e.exp_get()->set_used(true);
+        e.exp_get()->accept(*this);
+    }
+
     void Compile::operator()(ast::NewExp& e) {
         auto array = std::dynamic_pointer_cast<ast::TypeArrayIdentifier>(e.alloc_get());
         if (array) {
