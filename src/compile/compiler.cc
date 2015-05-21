@@ -9,6 +9,7 @@ namespace compile {
     void Compile::process(ast::Ast& a)
     {
         operator()(a);
+        super::operator()(a); emitter_.emit<OP_HALT>();
         for (auto e : dec_)
         {
             e->function_offset_set(emitter_.get_current_length());
@@ -21,7 +22,6 @@ namespace compile {
                 emitter_.emit<OP_POPR, int16_t>(0);
             emitter_.emit<OP_RET>();
         }
-        super::operator()(a); emitter_.emit<OP_HALT>();
     }
 
     void Compile::operator()(ast::Ast& a) {
