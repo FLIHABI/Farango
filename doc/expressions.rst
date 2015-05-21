@@ -53,10 +53,6 @@ Operator   Description
 ``~``      Bitwise not
 ``-``      Minus
 ``+``      Plus
-``++expr`` Pre-increment
-``--expr`` Pre-decrement
-``expr++`` Post-increment
-``expr--`` Post-decrement
 ========== ===========
 
 Operator precedence
@@ -74,8 +70,7 @@ precedence (bottom):
 ==================== ====================================
 Operator             Precedence
 ==================== ====================================
-Postfix              ``expr++`` ``expr--``
-Unary                ``++expr`` ``--expr`` ``+expr`` ``-expr`` ``~`` ``!``
+Unary                ``+expr`` ``-expr`` ``~`` ``!``
 User-defined
 Multiplicative       ``*`` ``/`` ``%``
 Additive             ``+`` ``-``
@@ -107,7 +102,7 @@ Alternatively, one could implement the operator as:
 
 .. code-block:: farango
 
-    (<>) = (!=)
+    var (<>) = (!=)
 
 There are no requirements on the purity of user-defined operators, but
 programmers should aspire to make their operators pure.
