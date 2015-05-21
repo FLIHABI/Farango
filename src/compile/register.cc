@@ -70,7 +70,7 @@ namespace compile {
                 v.accept(*this);
             f->body_get()->accept(*this);
             uint16_t end = register_id_;
-            f->reg_size_set(start);
+            f->reg_offset_set(start);
             f->reg_size_set(end - start);
         }
     }

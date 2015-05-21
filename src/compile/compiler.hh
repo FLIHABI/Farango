@@ -3,6 +3,7 @@
 
 # include "ast/default_visitor.hh"
 # include "emitter.hh"
+# include "commons/tolkfile/tolk-file.hh"
 
 namespace compile {
     class Compile : public virtual ast::DefaultVisitor {
@@ -10,6 +11,7 @@ namespace compile {
 
     public:
         void write(const char* filename);
+        void save(tolk::TolkFile&);
 
         void process(ast::Ast&);
         virtual void operator()(ast::AssignExp &e) override;

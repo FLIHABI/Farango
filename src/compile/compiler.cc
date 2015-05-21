@@ -21,14 +21,13 @@ namespace compile {
                 emitter_.emit<OP_POPR, int16_t>(0);
             emitter_.emit<OP_RET>();
         }
+        super::operator()(a); emitter_.emit<OP_HALT>();
     }
 
     void Compile::operator()(ast::Ast& a) {
         ast::Exp* e = dynamic_cast<ast::Exp*>(&a);
         if (e != nullptr)
             e->set_used(true);
-        super::operator()(a);
-        emitter_.emit<OP_HALT>();
     }
 
     void Compile::operator()(ast::BinaryExp& e) {
@@ -372,5 +371,20 @@ namespace compile {
     void Compile::write(const char* filename) {
         std::ofstream file(filename);
         file << emitter_;
+    }
+
+    void Compile::save(tolk::TolkFile& t) {
+        std::vector<char> end;
+        for (auto& Ub : emitter_.buf_get()) {
+            end.insert(end.end(), Ub.args_.begin(), Ub.args_.end());
+        }
+        t.set_bytecode(end);
+        tolk::FuncTable f;
+        for (auto e : dec_) {
+            f.insert(e->number_get(),
+                     tolk::Function(e->function_offset_get(), e->reg_size_get(), e->reg_offset_get())
+                    );
+        }
+        t.set_functable(f);
     }
 }

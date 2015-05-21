@@ -8,6 +8,7 @@
 namespace compile {
 
     class Emitter;
+    class Compile;
 
     class UnfinishedBytecode
     {
@@ -20,6 +21,8 @@ namespace compile {
             std::vector<char> args_;
 
         friend std::ostream& operator<<(std::ostream& os, const Emitter& e);
+        friend Emitter;
+        friend Compile;
     };
 
     class Emitter final {

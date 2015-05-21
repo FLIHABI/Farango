@@ -14,8 +14,6 @@ int main (int argc, char **argv) {
     if (argc > 1)
         in = fopen(argv[1], "r");
 
-    tolk::TolkFile tolk;
-    tolk.save("test");
 
     fp.parse(in);
 
@@ -57,5 +55,8 @@ int main (int argc, char **argv) {
 
     c.process(*fp.ast_);
 
-    c.write("out.fge");
+    tolk::TolkFile tolk;
+    c.save(tolk);
+    tolk.save("test.fge");
+    std::cout << tolk << std::endl;
 }

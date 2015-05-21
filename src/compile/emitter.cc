@@ -5,8 +5,7 @@
 
 namespace compile {
 
-    UnfinishedBytecode::UnfinishedBytecode(Bytecode b)
-    {
+    UnfinishedBytecode::UnfinishedBytecode(Bytecode b) {
         vector_stream::write<char>(args_, b);
     }
 
@@ -15,8 +14,6 @@ namespace compile {
             auto dst = std::ostream_iterator<char>(os, "");
             std::copy(Ub.args_.begin(), Ub.args_.end(), dst);
         }
-
-
         return os;
     }
 
