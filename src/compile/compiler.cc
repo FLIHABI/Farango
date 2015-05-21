@@ -104,7 +104,6 @@ namespace compile {
         a.exp_get()->set_used(true);
         a.exp_get()->accept(*this);
 
-        super::operator()(*a.exp_get());
         emitter_.emit<OP_WRITE>();
 
         assert(!e.is_used());
@@ -121,7 +120,6 @@ namespace compile {
         a.exp_get()->set_used(true);
         a.exp_get()->accept(*this);
 
-        super::operator()(*a.exp_get());
         emitter_.emit<OP_WRITE>();
 
         assert(!e.is_used());
