@@ -21,7 +21,6 @@ namespace compile {
                 emitter_.emit<OP_POPR, int16_t>(0);
             emitter_.emit<OP_RET>();
         }
-
     }
 
     void Compile::operator()(ast::Ast& a) {
@@ -352,6 +351,22 @@ namespace compile {
         emitter_.emit<OP_READ>();
         if (!e.is_used())
             emitter_.emit<OP_POP>();
+    }
+
+    void Compile::operator()(ast::NewExp& e) {
+        auto array = std::dynamic_pointer_cast<ast::TypeArrayIdentifier>(e.alloc_get());
+        if (array) {
+            array->size_get()->set_used(e.is_used());
+            array->size_get()->accept(*this);
+        } else {
+            auto dec = e.alloc_get()->type_name_get()->dec_get();
+            auto type = std::dynamic_pointer_cast<ast::TypeStruct>(dec);
+            assert(type);
+            if (e.is_used())
+                emitter_.emit<OP_PUSH, int64_t>(type->members_get().size());
+        }
+        if (e.is_used())
+            emitter_.emit<OP_CREATE>();
     }
 
     void Compile::write(const char* filename) {
