@@ -20,7 +20,7 @@ Language goals
 * Be safe and high-level. The programmer should work on a *theoric machine*,
   and as such, the language should abstract away the inner work.
 
- .. toctree::
+.. toctree::
     :maxdepth: 3
 
     lexical_structure/index
