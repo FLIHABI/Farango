@@ -24,5 +24,6 @@ Language goals
     :maxdepth: 3
 
     lexical_structure/index
+    types
     expressions
     callables

@@ -10,6 +10,17 @@ Declaration
 
 A callable can be declared with the following syntax:
 
+.. code-block:: ebnf
+
+  function = "fun" identifier "(" parameter-list ")" "=" expression ;
+
+  parameter-list = parameter
+                 | parameter "," parameter-list ;
+
+  parameter = identifier | identifier ":" type-identifier ;
+
+which yields:
+
 .. code-block:: farango
 
     fun <identifier>(<param0>, <param1>, [...], <paramN>) = <expression>
