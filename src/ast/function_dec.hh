@@ -52,10 +52,21 @@ namespace ast
                 reg_offset_ = reg_;
             }
 
+            uint16_t function_offset_get()
+            {
+                return function_offset_;
+            }
+
+            void function_offset_set(uint16_t function_)
+            {
+                function_offset_ = function_;
+            }
+
         private:
             std::shared_ptr<Exp> body_;
             uint16_t reg_size_;
             uint16_t reg_offset_;
+            uint16_t function_offset_;
 
     };
 }

@@ -11,6 +11,7 @@ namespace compile {
         operator()(a);
         for (auto e : dec_)
         {
+            e->function_offset_set(emitter_.get_current_length());
             for (long i = e->params_get().size() - 1; i >= 0; i--)
                 emitter_.emit<OP_POPR, int16_t>(e->params_get()[i].number_get());
             e->body_get()->set_used(e->return_t_get() != nullptr);
@@ -18,6 +19,7 @@ namespace compile {
 
             if (e->body_get()->is_used())
                 emitter_.emit<OP_POPR, int16_t>(0);
+            emitter_.emit<OP_RET>();
         }
 
     }
