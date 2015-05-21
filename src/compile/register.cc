@@ -46,7 +46,7 @@ namespace compile {
 
     void Register::operator()(ast::VarDec& e)
     {
-        e.number_set(type_id_++);
+        e.number_set(register_id_++);
     }
 
     void Register::operator()(ast::VarAssign& e)
@@ -62,15 +62,16 @@ namespace compile {
 
         operator()(a);
 
-        for (auto f : dec_)
+        for (auto& f : dec_)
         {
             uint16_t start = register_id_;
-            f->number_set(register_id_++);
+            f->number_set(function_id_++);
             for (auto& v : f->params_get())
                 v.accept(*this);
             f->body_get()->accept(*this);
             uint16_t end = register_id_;
             f->reg_offset_set(start);
+            std::cout << end - start  << std::endl;
             f->reg_size_set(end - start);
         }
     }

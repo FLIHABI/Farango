@@ -9,7 +9,7 @@ namespace compile {
     void Compile::process(ast::Ast& a)
     {
         operator()(a);
-        super::operator()(a); emitter_.emit<OP_HALT>();
+        emitter_.emit<OP_HALT>();
         for (auto e : dec_)
         {
             e->function_offset_set(emitter_.get_current_length());
@@ -28,6 +28,7 @@ namespace compile {
         ast::Exp* e = dynamic_cast<ast::Exp*>(&a);
         if (e != nullptr)
             e->set_used(true);
+        super::operator()(a);
     }
 
     void Compile::operator()(ast::BinaryExp& e) {
@@ -290,7 +291,7 @@ namespace compile {
         auto b = e.list_get().begin();
         auto end = e.list_get().end();
         while (b != end) {
-            (*b)->set_used(e.is_used());
+            (*b)->set_used(true);
             (*b)->accept(*this);
             ++b;
         }
