@@ -6,8 +6,6 @@
 
 namespace compile {
 
-    static uint16_t reg_counter = 0;
-
     void Compile::operator()(ast::Ast& a) {
         ast::Exp* e = dynamic_cast<ast::Exp*>(&a);
         if (e != nullptr)
@@ -45,7 +43,7 @@ namespace compile {
                 emitter_.emit<OP_PUSHR, uint16_t>(vardec->number_get());
             else
                 return;
-        } else { //Should not happend
+        } else {
             std::cerr << "Could not resolve symbol";
             // TODO: proper error handling, should not happend
         }
@@ -59,24 +57,80 @@ namespace compile {
         }
     }
 
-    void Compile::operator()(ast::AssignExp &e) {
-        e.exp_get()->set_used(true);
-        super::operator()(*e.exp_get());
+    void Compile::assign_register(ast::Lvalue& e, ast::AssignExp& a)
+    {
+        a.exp_get()->set_used(true);
+        super::operator()(*a.exp_get());
 
-        std::shared_ptr<ast::Lvalue> lval = std::dynamic_pointer_cast<ast::Lvalue>(e.lvalue_get());
-        if (!lval)
-        {
-            std::cerr << "Only support var assignement";
-            // TODO: manage struct and array assignement
-            return;
-        }
-
-        std::shared_ptr<ast::Declaration> decl = lval->s_get()->dec_get();
+        std::shared_ptr<ast::Declaration> decl = e.s_get()->dec_get();
 
         if (std::shared_ptr<ast::VarDec> vardec = std::dynamic_pointer_cast<ast::VarDec>(decl)) {
             emitter_.emit<OP_POPR, uint16_t>(vardec->number_get());
-            if (e.is_used()) //should never happend
+            if (a.is_used()) //should never happend
                 emitter_.emit<OP_PUSHR, uint16_t>(vardec->number_get());
+        }
+    }
+
+    void Compile::assign_struct(ast::MemberAccess& e, ast::AssignExp& a)
+    {
+        e.lval_get()->set_used(true);
+        e.lval_get()->accept(*this);
+        //FIXME actually O(n), need to fix it
+        for (unsigned i = 0; i < e.def_get()->members_get().size(); i++) {
+            auto& v = e.def_get()->members_get()[i];
+            if (v.name_get()->s_get() == e.s_get()->s_get()) {
+                emitter_.emit<OP_PUSH, int64_t>(i);
+                break;
+            }
+        }
+
+        a.exp_get()->set_used(true);
+        a.exp_get()->accept(*this);
+
+        super::operator()(*a.exp_get());
+        emitter_.emit<OP_WRITE>();
+
+        assert(!e.is_used());
+    }
+
+    void Compile::assign_array(ast::ArrayAccess& e, ast::AssignExp& a)
+    {
+        e.val_get()->set_used(true);
+        e.val_get()->accept(*this);
+
+        e.offset_get()->set_used(true);
+        e.offset_get()->accept(*this);
+
+        a.exp_get()->set_used(true);
+        a.exp_get()->accept(*this);
+
+        super::operator()(*a.exp_get());
+        emitter_.emit<OP_WRITE>();
+
+        assert(!e.is_used());
+    }
+
+    void Compile::operator()(ast::AssignExp &e) {
+
+        std::shared_ptr<ast::ArrayAccess> arr = std::dynamic_pointer_cast<ast::ArrayAccess>(e.lvalue_get());
+        if (arr)
+        {
+            assign_array(*arr, e);
+            return;
+        }
+
+        std::shared_ptr<ast::MemberAccess> memb = std::dynamic_pointer_cast<ast::MemberAccess>(e.lvalue_get());
+        if (memb)
+        {
+            assign_struct(*memb, e);
+            return;
+        }
+
+        std::shared_ptr<ast::Lvalue> lval = std::dynamic_pointer_cast<ast::Lvalue>(e.lvalue_get());
+        if (lval)
+        {
+            assign_register(*lval, e);
+            return;
         }
 
     }
@@ -232,8 +286,6 @@ namespace compile {
 
     void Compile::operator()(ast::VarAssign& e) {
 
-        if (e.is_used()) //should never happend
-            emitter_.emit<OP_PUSH, int64_t>(0);
 
         e.value_get()->set_used(true);
         e.value_get()->accept(*this);
@@ -241,6 +293,54 @@ namespace compile {
         emitter_.emit<OP_POPR, int16_t>(e.number_get());
         if (e.is_used()) //should never happend
             emitter_.emit<OP_PUSHR, int16_t>(e.number_get());
+    }
+
+    void Compile::operator()(ast::FunCall& e) {
+        emitter_.emit<OP_SAVE,uint16_t>(e.func_get()->number_get());
+        e.list_get()->accept(*this);
+        emitter_.emit<OP_CALL,uint16_t>(e.func_get()->number_get());
+        emitter_.emit<OP_RESTORE,uint16_t>(e.func_get()->number_get());
+        if (e.is_used())
+        {
+            emitter_.emit<OP_PUSHR, int16_t>(0);
+        }
+    }
+
+    void Compile::operator()(ast::FunctionDec& e) {
+        for (long i = e.params_get().size(); i >= 0; i--)
+            emitter_.emit<OP_POPR, int16_t>(e.params_get()[i].number_get());
+        e.body_get()->set_used(e.return_t_get() != nullptr);
+        e.body_get()->accept(*this);
+
+        if (e.body_get()->is_used())
+            emitter_.emit<OP_POPR, int16_t>(0);
+
+    }
+
+    void Compile::operator()(ast::MemberAccess& e) {
+        e.lval_get()->set_used(true);
+        e.lval_get()->accept(*this);
+        //FIXME actually O(n), need to fix it
+        for (unsigned i = 0; i < e.def_get()->members_get().size(); i++) {
+            auto& v = e.def_get()->members_get()[i];
+            if (v.name_get()->s_get() == e.s_get()->s_get()) {
+                emitter_.emit<OP_PUSH, int64_t>(i);
+                break;
+            }
+        }
+        emitter_.emit<OP_READ>();
+        if (!e.is_used())
+            emitter_.emit<OP_POP>();
+    }
+
+    void Compile::operator()(ast::ArrayAccess& e) {
+        e.val_get()->set_used(true);
+        e.val_get()->accept(*this);
+        e.offset_get()->set_used(true);
+        e.offset_get()->accept(*this);
+        emitter_.emit<OP_READ>();
+        if (!e.is_used())
+            emitter_.emit<OP_POP>();
     }
 
     void Compile::write(const char* filename) {

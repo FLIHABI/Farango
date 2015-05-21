@@ -183,6 +183,8 @@ namespace typechecker
             return;
         }
 
+        e.func_set(def);
+
         if (e.list_get()->list_get().size() != def->params_get().size())
         {
             e_ << misc::error::error_type::type;
@@ -331,6 +333,8 @@ namespace typechecker
                 << " is not a TypeStruct" << std::endl;
             return;
         }
+
+        e.def_set(t);
 
         for (auto& v : t->members_get())
         {

@@ -29,8 +29,19 @@ namespace ast
                 return lval_;
             }
 
+            std::shared_ptr<TypeStruct> def_get()
+            {
+                return def_;
+            }
+
+            void def_set(std::shared_ptr<TypeStruct> def)
+            {
+                def_ = def;
+            }
+
         private:
             std::shared_ptr<Value> lval_;
+            std::shared_ptr<TypeStruct> def_;
 
     };
 }

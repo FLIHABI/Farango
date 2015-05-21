@@ -22,10 +22,11 @@ namespace compile {
         virtual void operator()(ast::ExpListInner& e) override;
         virtual void operator()(ast::ForExp& e) override;
 
-        //TODO virtual void operator()(ast::FunCall& e) override;
-        //TODO virtual void operator()(ast::FunctionDec& e) override;
+        virtual void operator()(ast::FunCall& e) override;
+        virtual void operator()(ast::FunctionDec& e) override;
         virtual void operator()(ast::IfExp& e) override;
-        //TODO virtual void operator()(MemberAccess& e) override;
+        virtual void operator()(ast::MemberAccess& e) override;
+        virtual void operator()(ast::ArrayAccess& e) override;
         virtual void operator()(ast::UnaryExp& e) override;
         virtual void operator()(ast::WhileExp& e) override;
         //TODO virtual void operator()(ast::String& e) override;
@@ -42,6 +43,9 @@ namespace compile {
 
 
     private:
+        void assign_array(ast::ArrayAccess&, ast::AssignExp&);
+        void assign_struct(ast::MemberAccess&, ast::AssignExp&);
+        void assign_register(ast::Lvalue&, ast::AssignExp&);
         Emitter emitter_;
         std::vector<ast::FunctionDec*> dec_;
     };

@@ -40,10 +40,22 @@ namespace ast
                 return list_;
             }
 
+            std::shared_ptr<FunctionDec> func_get()
+            {
+                return func_;
+            }
+
+
+            void func_set(std::shared_ptr<FunctionDec> func)
+            {
+                func_ = func;
+            }
+
         private:
             std::shared_ptr<Value> value_;
             std::vector<std::shared_ptr<Id>> generics_instance_;
             std::shared_ptr<ExpListFunction> list_; //Using explist in function, FIXME later ?
+            std::shared_ptr<FunctionDec> func_;
     };
 }
 
