@@ -11,6 +11,7 @@ namespace compile {
     public:
         void write(const char* filename);
 
+        void process(ast::Ast&);
         virtual void operator()(ast::AssignExp &e) override;
         virtual void operator()(ast::VarDec &e) override;
         virtual void operator()(ast::Ast& a) override;

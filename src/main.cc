@@ -55,7 +55,7 @@ int main (int argc, char **argv) {
     compile::Register r(c.dec_get());
     r.process(*fp.ast_);
 
-    c(*fp.ast_);
+    c.process(*fp.ast_);
 
     c.write("out.fge");
 }
