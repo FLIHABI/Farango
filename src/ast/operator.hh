@@ -26,7 +26,8 @@ namespace ast
         BANG,
         TILDE,
         LSHIFT,
-        RSHIFT
+        RSHIFT,
+        USER_OP,
     };
 
 }

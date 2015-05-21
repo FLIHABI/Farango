@@ -153,7 +153,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "="          { return TOKEN(ASSIGN); }
 "<<"         { return TOKEN(LSHIFT); }
 ">>"         { return TOKEN(RSHIFT); }
-{USER_OP}    { return TOKEN(USER_OP); }
+{USER_OP}    { return TOKEN_VAL(USER_OP, misc::symbol(yytext)); }
 {SPACE}      { }
 {NEWLINE}    { fp.l_.lines();}
 {INTEGER}    { return TOKEN_VAL(INTEGER, std::stoi(yytext)); }

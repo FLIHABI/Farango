@@ -60,6 +60,7 @@
 }
 
 %token <std::string>    STRING       "string"
+%token <misc::symbol>   USER_OP      "user_op"
 %token <int>            INTEGER      "integer"
 %token <misc::symbol>   IDENTIFIER   "ID"
 
@@ -115,7 +116,6 @@
  LSHIFT       "<<"
  RSHIFT       ">>"
  ASSIGN       "="
- USER_OP      "USER_OP"
  DOUBLE       "DOUBLE"
  END_OF_FILE 0 "<EOF>"
 
@@ -125,7 +125,7 @@
 %type <std::shared_ptr<ast::Value>> value binop
 %type <std::shared_ptr<ast::Value>> lvalue member_access array_access
 //%type <ast::Operator> operator
-%type <std::shared_ptr<ast::Id>> identifier
+%type <std::shared_ptr<ast::Id>> identifier func_identifier
 %type <std::shared_ptr<ast::ExpList>> expression_list expression_list_rec parameter_list parameter_list_rec
 %type <std::shared_ptr<ast::FunCall>> function_call
 %type <std::shared_ptr<ast::IfExp>> if_expr
@@ -158,7 +158,8 @@
 %left AND
 %left MUL DIV
 %left LSHIFT RSHIFT
-%left UMINUS UPLUS ULNOT UNOT
+%left USER_OP
+%left UMINUS UPLUS ULNOT UNOT UUSER_OP
 
 %nonassoc THEN
 %nonassoc ELSE
@@ -390,14 +391,20 @@ binop
     | expression LESS_EQ expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LESS_EQ, $3); }
     | expression LSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::LSHIFT, $3); }
     | expression RSHIFT expression { $$ = std::make_shared<ast::BinaryExp>($1, ast::Operator::RSHIFT, $3); }
+    | expression USER_OP expression
+    {
+        std::shared_ptr<ast::Value> op = std::make_shared<ast::Lvalue>($2);
+        std::vector<std::shared_ptr<ast::Id>> empty;
+        std::shared_ptr<ast::ExpListFunction> params = std::make_shared<ast::ExpListFunction>();
+        params->push($1);
+        params->push($3);
+        $$ = std::make_shared<ast::FunCall>(op, empty, params);
+    }
     ;
-
-//| USER_OP /* FIXME */
-
 
 lvalue /* ast exist */
     : member_access { $$ = $1; }
-    | identifier { $$ = std::make_shared<ast::Lvalue>($1); }
+    | func_identifier { $$ = std::make_shared<ast::Lvalue>($1); }
     | array_access { $$ = $1; }
     ;
 
@@ -412,8 +419,15 @@ expression
     | TILDE expression %prec UNOT { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::TILDE, $2); }
     | MINUS expression %prec UMINUS { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::MINUS, $2); }
     | PLUS expression %prec UPLUS { $$ = std::make_shared<ast::UnaryExp>(ast::Operator::PLUS, $2); }
+    | USER_OP expression %prec UUSER_OP
+    {
+        std::shared_ptr<ast::Value> op = std::make_shared<ast::Lvalue>($1);
+        std::vector<std::shared_ptr<ast::Id>> empty;
+        std::shared_ptr<ast::ExpListFunction> params = std::make_shared<ast::ExpListFunction>();
+        params->push($2);
+        $$ = std::make_shared<ast::FunCall>(op, empty, params);
+    }
 /*  FIXME
-    | USER_OP expression
     | IMPORT import_identifier
 */
     | if_expr { $$ = $1; }
@@ -453,12 +467,17 @@ function_def_generics_list
     | LESS generics_list_inner_dec GREATER { $$ = $2; }
     ;
 
+func_identifier
+    : identifier { $$ = $1; }
+    | LPAREN USER_OP RPAREN { $$ = std::make_shared<ast::Id>($2); }
+    ;
+
 func_prototype /* ast exist */
-    : FUNCTION identifier function_def_generics_list LPAREN proto_parameter_list RPAREN COLON type_identifier_use
+    : FUNCTION func_identifier function_def_generics_list LPAREN proto_parameter_list RPAREN COLON type_identifier_use
         {
             $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, $8);
         }
-    | FUNCTION identifier function_def_generics_list LPAREN proto_parameter_list RPAREN
+    | FUNCTION func_identifier function_def_generics_list LPAREN proto_parameter_list RPAREN
         {
             $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, nullptr);
         }

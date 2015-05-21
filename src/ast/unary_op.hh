@@ -12,9 +12,10 @@ namespace ast
     class UnaryExp : public Exp
     {
         public:
-            UnaryExp(Operator op, std::shared_ptr<Exp> exp)
+            UnaryExp(Operator op, std::shared_ptr<Exp> exp, misc::symbol opsym = "")
                 : op_(op)
                 , exp_(exp)
+                , opsym_(opsym)
             {};
 
             virtual ~UnaryExp()
@@ -35,9 +36,15 @@ namespace ast
                 return exp_;
             }
 
+            misc::symbol& opsym_get()
+            {
+                return opsym_;
+            }
+
         private:
             Operator op_;
             std::shared_ptr<Exp> exp_;
+            misc::symbol opsym_;
     };
 }
 

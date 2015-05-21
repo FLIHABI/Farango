@@ -13,10 +13,11 @@ namespace ast
     class BinaryExp : public Value
     {
         public:
-            BinaryExp(std::shared_ptr<Exp> valuel, Operator op, std::shared_ptr<Exp> expr)
+            BinaryExp(std::shared_ptr<Exp> valuel, Operator op, std::shared_ptr<Exp> expr, misc::symbol opsym = "")
                 : valuel_(valuel)
                 , op_(op)
                 , expr_(expr)
+                , opsym_(opsym)
             {}
 
             virtual ~BinaryExp()
@@ -42,10 +43,16 @@ namespace ast
                 return expr_;
             }
 
+            misc::symbol& opsym_get()
+            {
+                return opsym_;
+            }
+
         private:
             std::shared_ptr<Exp> valuel_;
             Operator op_;
             std::shared_ptr<Exp> expr_;
+            misc::symbol opsym_;
     };
 }
 
