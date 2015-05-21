@@ -170,7 +170,6 @@ namespace compile {
         e.condition_get()->accept(*this);
 
         emitter_.emit<OP_PUSH, uint64_t>(0);
-        emitter_.emit<OP_CMP>();
         emitter_.emit<OP_JNE, int16_t>();
 
         long jmp_instruction = emitter_.get_current_length();
@@ -224,7 +223,6 @@ namespace compile {
         e.condition_get()->accept(*this);
 
         emitter_.emit<OP_PUSH, uint64_t>(0);
-        emitter_.emit<OP_CMP>();
         emitter_.emit<OP_JNE, int16_t>();
 
         cond_instruction = emitter_.get_current_length();
@@ -238,7 +236,6 @@ namespace compile {
         e.if_get()->accept(*this);
 
         emitter_.emit<OP_PUSH, uint64_t>(0);
-        emitter_.emit<OP_CMP>();
 
         long jmp_address = emitter_.emit<OP_JE, int16_t>();
         long jmp_instruction = emitter_.get_current_length();
@@ -283,7 +280,6 @@ namespace compile {
         e.condition_get()->accept(*this);
 
         emitter_.emit<OP_PUSH, int64_t>(0);
-        emitter_.emit<OP_CMP>();
         jmp_address = emitter_.emit<OP_JNE, int16_t>();
 
         cond_instruction = emitter_.get_current_length();
