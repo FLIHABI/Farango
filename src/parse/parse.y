@@ -364,24 +364,16 @@ binop
     | expression LAND expression
     {
         std::shared_ptr<ast::ExpListInner> el = std::make_shared<ast::ExpListInner>();
-        std::shared_ptr<ast::VarAssign> v =
-            std::make_shared<ast::VarAssign>(misc::symbol("_aux"), misc::symbol("int"), $1);
-        el->push(v);
-        std::shared_ptr<ast::Exp> cond = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
-        std::shared_ptr<ast::Exp> body = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
-        std::shared_ptr<ast::IfExp> if_ = std::make_shared<ast::IfExp>(cond, $3, body);
+        std::shared_ptr<ast::Exp> body = std::make_shared<ast::Int>(0);
+        std::shared_ptr<ast::IfExp> if_ = std::make_shared<ast::IfExp>($1, $3, body);
         el->push(if_);
         $$ = el;
     }
     | expression LOR expression
     {
         std::shared_ptr<ast::ExpListInner> el = std::make_shared<ast::ExpListInner>();
-        std::shared_ptr<ast::VarAssign> v =
-            std::make_shared<ast::VarAssign>(misc::symbol("_aux"), misc::symbol("int"), $1);
-        el->push(v);
-        std::shared_ptr<ast::Exp> cond = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
-        std::shared_ptr<ast::Exp> body = std::make_shared<ast::Lvalue>((misc::symbol("_aux")));
-        std::shared_ptr<ast::IfExp> if_ = std::make_shared<ast::IfExp>(cond, body, $3);
+        std::shared_ptr<ast::Exp> body = std::make_shared<ast::Int>(1);
+        std::shared_ptr<ast::IfExp> if_ = std::make_shared<ast::IfExp>($1, body, $3);
         el->push(if_);
         $$ = el;
     }
