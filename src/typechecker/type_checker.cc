@@ -80,7 +80,15 @@ namespace typechecker
     {
         sanitize(e);
         super::operator()(e);
-        if (!is_int(e.valuel_get()->type_value_get().lock())
+        if (e.op_get() >= ast::Operator::GREATER && e.op_get() <= ast::Operator::LESS_EQ) {
+            if (!is_equal(e.valuel_get()->type_value_get().lock(),
+                          e.expr_get()->type_value_get().lock()))
+            {
+                e_ << misc::error::error_type::type;
+                e_ << "component of " << &e << " are not of the same type" << std::endl;
+            }
+        }
+        else if (!is_int(e.valuel_get()->type_value_get().lock())
             || !is_int(e.expr_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;

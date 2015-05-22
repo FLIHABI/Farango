@@ -31,6 +31,22 @@ namespace compile {
         super::operator()(a);
     }
 
+    template <Bytecode T>
+    void Compile::emit_cmp() {
+        long first_address = emitter_.emit<T, int16_t>();
+        long first_size = emitter_.get_current_length();
+
+        emitter_.emit<OP_PUSH, int64_t>(0);
+
+        long jmp_address = emitter_.emit<OP_JMP, int16_t>();
+        long jmp_size = emitter_.get_current_length();
+        emitter_.buf_get()[first_address].add_operand<int16_t>(jmp_size - first_size);
+
+        emitter_.emit<OP_PUSH, int64_t>(1);
+        emitter_.buf_get()[jmp_address].add_operand<int16_t>(emitter_.get_current_length() - jmp_size);
+
+    }
+
     void Compile::operator()(ast::BinaryExp& e) {
         e.valuel_get()->set_used(true);
         e.expr_get()->set_used(true);
@@ -47,6 +63,15 @@ namespace compile {
             case ast::MUL:   emitter_.emit<OP_MUL>(); break;
             case ast::DIV:   emitter_.emit<OP_DIV>(); break;
             case ast::MOD:   emitter_.emit<OP_MOD>(); break;
+            case ast::AND:   emitter_.emit<OP_AND>(); break;
+            case ast::OR:   emitter_.emit<OP_OR>(); break;
+            case ast::XOR:   emitter_.emit<OP_XOR>(); break;
+            case ast::EQUAL:  emit_cmp<OP_JE>(); break;
+            case ast::NEQUAL:  emit_cmp<OP_JNE>(); break;
+            case ast::GREATER:  emit_cmp<OP_JG>(); break;
+            case ast::GREATER_EQ:  emit_cmp<OP_JGE>(); break;
+            case ast::LESS:  emit_cmp<OP_JL>(); break;
+            case ast::LESS_EQ:  emit_cmp<OP_JLE>(); break;
             default: break;
         };
     }
@@ -253,19 +278,23 @@ namespace compile {
 
     void Compile::operator()(ast::UnaryExp& e) {
         e.exp_get()->set_used(true);
-        e.exp_get()->accept(*this);
-        if (!e.is_used()) { //Assert that op does not have sid effet
-            emitter_.emit<OP_POP>();
-            return;
-        }
         switch (e.op_get()) {
             //TODO: more ops
             case ast::PLUS:  break; // WHAT ?
             case ast::TILDE:  break; // WHAT ?
-            case ast::MINUS: emitter_.emit<OP_PUSH, int64_t>(0);  emitter_.emit<OP_SUB>(); break;
-            case ast::BANG:  emitter_.emit<OP_NOT>(); break;
+            case ast::MINUS:
+                              emitter_.emit<OP_PUSH, int64_t>(0);
+                              e.exp_get()->accept(*this);
+                              emitter_.emit<OP_SUB>(); break;
+            case ast::BANG:
+                              e.exp_get()->accept(*this);
+                              emitter_.emit<OP_NOT>(); break;
             default: break;
         };
+        if (!e.is_used()) { //Assert that op does not have sid effet
+            emitter_.emit<OP_POP>();
+            return;
+        }
     }
 
     void Compile::operator()(ast::WhileExp& e) {

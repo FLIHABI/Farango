@@ -50,6 +50,9 @@ namespace compile {
         void assign_array(ast::ArrayAccess&, ast::AssignExp&);
         void assign_struct(ast::MemberAccess&, ast::AssignExp&);
         void assign_register(ast::Lvalue&, ast::AssignExp&);
+        template <Bytecode T>
+        void emit_cmp();
+
         Emitter emitter_;
         std::vector<ast::FunctionDec*> dec_;
     };
