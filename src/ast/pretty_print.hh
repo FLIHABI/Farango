@@ -15,6 +15,8 @@ namespace ast
 {
     class PrettyPrinter : public DefaultVisitor
     {
+        using super = DefaultVisitor;
+
         public:
             PrettyPrinter(std::ostream& o)
                 : out_(o)
@@ -60,6 +62,7 @@ namespace ast
             virtual void operator()(TypeArrayIdentifier& e) override;
             virtual void operator()(NewExp& e) override;
             virtual void operator()(OfferExp& e) override;
+            virtual void operator()(TypeValue& e) override;
 
         private:
             std::ostream& out_;

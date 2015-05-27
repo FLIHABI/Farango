@@ -16,10 +16,6 @@ namespace ast
             {
             };
 
-            void virtual accept(Visitor& v)
-            {
-                v(*this);
-            }
    };
 }
 #endif /* TYPE_VALUE_HH */

@@ -386,4 +386,9 @@ namespace ast
     {
         out_ << "offer (" << *e.f_get() << ")" ;
     }
+
+    void PrettyPrinter::operator()(TypeValue& e)
+    {
+        e.accept(*this);
+    }
 }

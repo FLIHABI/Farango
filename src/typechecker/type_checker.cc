@@ -6,6 +6,7 @@
 
 namespace typechecker
 {
+    using namespace ast;
     //TODO expression printing
 
     bool operator==(ast::TypeArray& a, ast::TypeArray& b)
@@ -68,10 +69,10 @@ namespace typechecker
                     e.exp_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << e.lvalue_get()
-                << " is of type " << e.lvalue_get()->type_value_get().lock()
+            e_ << *e.lvalue_get()
+                << " is of type " << *e.lvalue_get()->type_value_get().lock()
                 << " but is assigned with a "
-                << e.exp_get()->type_value_get().lock()
+                << *e.exp_get()->type_value_get().lock()
                 << std::endl;
         }
     }
@@ -85,14 +86,14 @@ namespace typechecker
                           e.expr_get()->type_value_get().lock()))
             {
                 e_ << misc::error::error_type::type;
-                e_ << "component of " << &e << " are not of the same type" << std::endl;
+                e_ << "component of " << e << " are not of the same type" << std::endl;
             }
         }
         else if (!is_int(e.valuel_get()->type_value_get().lock())
             || !is_int(e.expr_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << "one of the component of " << &e
+            e_ << "one of the component of " << e
                << " is not an int"
                 << std::endl;
         }
@@ -106,7 +107,7 @@ namespace typechecker
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << "the condition " << e.condition_get()
+            e_ << "the condition " << *e.condition_get()
                << " is not an int "
                << std::endl;
         }
@@ -150,7 +151,7 @@ namespace typechecker
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << "the condition " << e.condition_get()
+            e_ << "the condition " << *e.condition_get()
                << " is not an int "
                << std::endl;
         }
@@ -166,7 +167,7 @@ namespace typechecker
         if (!id)
         {
             e_ << misc::error::error_type::type;
-            e_ << e.value_get()
+            e_ << *e.value_get()
                << " is not callable"
                << std::endl;
             return;
@@ -176,7 +177,7 @@ namespace typechecker
         if (!def_)
         {
             e_ << misc::error::error_type::type;
-            e_ << e.value_get()
+            e_ << *e.value_get()
                << " is not callable"
                << std::endl;
             return;
@@ -185,7 +186,7 @@ namespace typechecker
         if (!def)
         {
             e_ << misc::error::error_type::type;
-            e_ << e.value_get()
+            e_ << *e.value_get()
                << " is not callable"
                << std::endl;
             return;
@@ -226,7 +227,7 @@ namespace typechecker
         if (!is_int(e.if_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << "the condition " << e.if_get()
+            e_ << "the condition " << *e.if_get()
                << " is not an int "
                << std::endl;
         }
@@ -239,9 +240,9 @@ namespace typechecker
                       e.else_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << e.then_get()
+            e_ << *e.then_get()
                << " and "
-               << e.else_get()
+               << *e.else_get()
                << " has not the same type"
                << std::endl;
         }
@@ -271,7 +272,7 @@ namespace typechecker
         if (def->params_get().size() != e.params_get().size())
         {
             e_ << misc::error::error_type::type;
-            e_ << " prototype " << &e
+            e_ << " prototype " << e
                << " does not match with it definition "
                << def;
             return;
@@ -284,7 +285,7 @@ namespace typechecker
             if (!is_equal(a, b)) // TypeChecker should have a pointer to they definition
             {
                 e_ << misc::error::error_type::type;
-                e_ << " prototype " << &e
+                e_ << " prototype " << e
                     << " does not match with it definition "
                     << def;
                 return;
@@ -295,7 +296,7 @@ namespace typechecker
                                           def->return_t_get()->dec_get()))
         {
             e_ << misc::error::error_type::type;
-            e_ << " prototype " << &e
+            e_ << " prototype " << e
                 << " does not match with it definition "
                 << def;
             return;
@@ -311,8 +312,8 @@ namespace typechecker
                              e.body_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << " return type of " << e.return_t_get()
-                << " does not match with " << &e << std::endl;
+            e_ << " return type of " << *e.return_t_get()
+                << " does not match with " << e << std::endl;
         }
     }
 
@@ -326,7 +327,7 @@ namespace typechecker
         if (!t_)
         {
             e_ << misc::error::error_type::type;
-            e_ << e.lval_get()
+            e_ << *e.lval_get()
                 << " is not a TypePrototype" << std::endl;
             return;
         }
@@ -337,7 +338,7 @@ namespace typechecker
         if (!t)
         {
             e_ << misc::error::error_type::type;
-            e_ << e.lval_get()
+            e_ << *e.lval_get()
                 << " is not a TypeStruct" << std::endl;
             return;
         }
@@ -355,8 +356,8 @@ namespace typechecker
             }
         }
         e_ << misc::error::error_type::type;
-        e_ << e.lval_get()->type_value_get().lock()
-            << " has no field " << e.s_get() << std::endl;
+        e_ << *e.lval_get()->type_value_get().lock()
+            << " has no field " << *e.s_get() << std::endl;
     }
 
     void TypeChecker::operator()(ast::UnaryExp& e)
@@ -367,7 +368,7 @@ namespace typechecker
         if (!is_int(e.exp_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << e.exp_get() << " is not an int" << std::endl;
+            e_ << *e.exp_get() << " is not an int" << std::endl;
         }
     }
 
@@ -378,7 +379,7 @@ namespace typechecker
         if (!is_int(e.condition_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << "the condition " << e.condition_get()
+            e_ << "the condition " << *e.condition_get()
                << " is not an int "
                << std::endl;
         }
@@ -409,10 +410,10 @@ namespace typechecker
                       e.type_get()->dec_get()))
         {
             e_ << misc::error::error_type::type;
-            e_ << e.value_get()
-                << " is of type " << e.value_get()->type_value_get().lock()
+            e_ << *e.value_get()
+                << " is of type " << *e.value_get()->type_value_get().lock()
                 << " but is assigned with a "
-                << e.type_get()->dec_get()
+                << *e.type_get()->dec_get()
                 << std::endl;
         }
         e.type_value_set(e.value_get()->type_value_get());
@@ -454,7 +455,7 @@ namespace typechecker
         if (!is_int(e.size_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << "Could not create an array with" << e.size_get() << std::endl;
+            e_ << "Could not create an array with" << *e.size_get() << std::endl;
         }
     }
 
@@ -466,12 +467,12 @@ namespace typechecker
         if (!is_int(e.offset_get()->type_value_get().lock()))
         {
             e_ << misc::error::error_type::type;
-            e_ << e.offset_get() << " is not an int" << std::endl;
+            e_ << *e.offset_get() << " is not an int" << std::endl;
         }
         if (!l)
         {
             e_ << misc::error::error_type::type;
-            e_ << e.val_get() << " is not an array" << std::endl;
+            e_ << *e.val_get() << " is not an array" << std::endl;
             return;
         }
         e.type_value_set(l->access_type());
