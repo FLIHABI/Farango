@@ -94,7 +94,9 @@ namespace compile {
     void Compile::operator()(ast::VarDec &e) {
         super ::operator()(e);
 
-        if (e.is_used()) {//should never happend
+        emitter_.emit<OP_PUSH, int64_t>(0);
+        emitter_.emit<OP_POPR, int16_t>(e.number_get());
+        if (e.is_used()) {
             emitter_.emit<OP_PUSH, uint64_t>(0);
         }
     }
