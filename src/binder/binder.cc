@@ -185,6 +185,9 @@ namespace binder
 
         s_map_.push_dec(e);
 
+        if (auto ati = std::dynamic_pointer_cast<ast::AutoTypeIdentifier>(e.vardec_get()->type_get()))
+            ati->type_set(e.value_get()->type_value_get());
+
         e.name_get()->accept(*this);
         e.type_get()->accept(*this);
     }
