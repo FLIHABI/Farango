@@ -277,6 +277,11 @@ type_union
 
 typed_var /* ast exist */
     : identifier COLON type_identifier_use { $$ = std::make_shared<ast::VarDec>($1, $3); }
+    | identifier
+    {
+        std::shared_ptr<ast::TypeIdentifierUse> tiu = std::make_shared<ast::AutoTypeIdentifier>();
+        $$ = std::make_shared<ast::VarDec>($1, tiu);
+    }
     ;
 
 var_decl /* ast exist */
