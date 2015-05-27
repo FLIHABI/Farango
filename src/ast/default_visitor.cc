@@ -237,4 +237,9 @@ namespace ast
     {
         e.accept(*this);
     }
+
+    void DefaultVisitor::operator()(OfferExp& e)
+    {
+        e.f_get()->accept(*this);
+    }
 }

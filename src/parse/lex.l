@@ -123,6 +123,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "type"       { return TOKEN(TYPE); }
 "import"     { return TOKEN(IMPORT); }
 "module"     { return TOKEN(MODULE); }
+"offer"      { return TOKEN(OFFER); }
 ","          { return TOKEN(COMMA); }
 ":"          { return TOKEN(COLON); }
 "::<"        { return TOKEN(DCOLON); }

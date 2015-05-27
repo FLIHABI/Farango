@@ -12,11 +12,10 @@
 
 namespace ast
 {
-    template<typename T>
     class PrettyPrinter : public DefaultVisitor
     {
         public:
-            PrettyPrinter(T& o)
+            PrettyPrinter(std::ostream& o)
                 : out_(o)
             {};
 
@@ -59,9 +58,10 @@ namespace ast
             virtual void operator()(ArrayAccess& e) override;
             virtual void operator()(TypeArrayIdentifier& e) override;
             virtual void operator()(NewExp& e) override;
+            virtual void operator()(OfferExp& e) override;
 
         private:
-            T& out_;
+            std::ostream& out_;
 
     };
 

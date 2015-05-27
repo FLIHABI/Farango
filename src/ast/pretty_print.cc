@@ -27,32 +27,29 @@ namespace ast
 
     std::ostream& operator<<(std::ostream& out, Ast& ast)
     {
-        PrettyPrinter<std::ostream> p(out);
+        PrettyPrinter p(out);
         p(ast);
         return out;
     }
 
     misc::error& operator<<(misc::error& out, Ast& ast)
     {
-        PrettyPrinter<std::ostringstream> p(out.stream_get_nonconst());
+        PrettyPrinter p(out.stream_get_nonconst());
         p(ast);
         return out;
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(Ast& e)
+    void PrettyPrinter::operator()(Ast& e)
     {
         DefaultVisitor::operator()(e);
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(AssignExp& e)
+    void PrettyPrinter::operator()(AssignExp& e)
     {
         out_ << *e.lvalue_get() << " = " << *e.exp_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(DoExp& e)
+    void PrettyPrinter::operator()(DoExp& e)
     {
         out_ << "do "
              << "/* current loop at " << &e << "*/"
@@ -60,8 +57,7 @@ namespace ast
              << " while (" << *e.condition_get() << ")";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(ExpList& e)
+    void PrettyPrinter::operator()(ExpList& e)
     {
         for (auto exp : e.list_get())
         {
@@ -69,8 +65,7 @@ namespace ast
         }
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(ExpListFunction& e)
+    void PrettyPrinter::operator()(ExpListFunction& e)
     {
         auto b = e.list_get().begin();
         auto end = e.list_get().end();
@@ -82,8 +77,7 @@ namespace ast
 
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(ExpListInner& e)
+    void PrettyPrinter::operator()(ExpListInner& e)
     {
         out_ << misc::iendl << "{" << misc::incendl;
         for (auto exp : e.list_get())
@@ -93,8 +87,7 @@ namespace ast
         out_ << misc::decendl << "}";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(ForExp& e)
+    void PrettyPrinter::operator()(ForExp& e)
     {
         out_ << "for ("
              << *e.init_get() << "; "
@@ -105,8 +98,7 @@ namespace ast
              << *e.body_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(FunCall& e)
+    void PrettyPrinter::operator()(FunCall& e)
     {
         out_ << *e.value_get();
         if (e.generics_instance_get().size() > 0)
@@ -123,8 +115,7 @@ namespace ast
         out_ << "(" << *e.list_get() << ")";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(FunctionDec& e)
+    void PrettyPrinter::operator()(FunctionDec& e)
     {
         out_ << "fun " << *e.name_get();
 
@@ -155,8 +146,7 @@ namespace ast
         out_ << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(FunctionPrototype& e)
+    void PrettyPrinter::operator()(FunctionPrototype& e)
     {
         out_ << "fun " << *e.name_get();
 
@@ -187,8 +177,7 @@ namespace ast
         out_ << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(IfExp& e)
+    void PrettyPrinter::operator()(IfExp& e)
     {
         out_ << "if (" << *e.if_get() << ") "
              <<  *e.then_get();
@@ -196,26 +185,22 @@ namespace ast
             out_ << " else " << *e.else_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(Int& e)
+    void PrettyPrinter::operator()(Int& e)
     {
         out_ << e.value_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(Lvalue& e)
+    void PrettyPrinter::operator()(Lvalue& e)
     {
         out_ << *e.s_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(MemberAccess& e)
+    void PrettyPrinter::operator()(MemberAccess& e)
     {
         out_ << *e.lval_get() << "." << *e.s_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(TypeIdentifierUse& e)
+    void PrettyPrinter::operator()(TypeIdentifierUse& e)
     {
         out_ << *e.type_name_get();
         if (e.specs_get().size() == 0)
@@ -237,8 +222,7 @@ namespace ast
         }
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(TypeIdentifierDec& e)
+    void PrettyPrinter::operator()(TypeIdentifierDec& e)
     {
         out_ << *e.type_name_get();
         if (e.specs_get().size() == 0)
@@ -260,15 +244,13 @@ namespace ast
         }
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(TypePrototype& e)
+    void PrettyPrinter::operator()(TypePrototype& e)
     {
         out_ << "type " << *e.type_get()
              << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(TypeStruct& e)
+    void PrettyPrinter::operator()(TypeStruct& e)
     {
         out_ << "type " << *e.type_get() << " = {" << misc::incendl;
         for (auto& v : e.members_get())
@@ -279,8 +261,7 @@ namespace ast
              << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(TypeUnion& e)
+    void PrettyPrinter::operator()(TypeUnion& e)
     {
         out_ << "type " << *e.type_get() << " =" << misc::incendl;
         auto b = e.unions_get().begin();
@@ -294,44 +275,38 @@ namespace ast
         out_ << " /* declared at " << e.type_dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(VarDec& e)
+    void PrettyPrinter::operator()(VarDec& e)
     {
         if (e.decl_get())
             out_ << "var ";
         out_ << *e.name_get() << " : " << *e.type_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(VarAssign& e)
+    void PrettyPrinter::operator()(VarAssign& e)
     {
         out_ << "var ";
         out_ << *e.name_get() << " : " << *e.type_get();
         out_ << " = " << *e.value_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(WhileExp& e)
+    void PrettyPrinter::operator()(WhileExp& e)
     {
         out_ << "while (" << *e.condition_get() << ") "
              << "/* current loop at " << &e << "*/"
              << *e.body_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(String& e)
+    void PrettyPrinter::operator()(String& e)
     {
         out_ << "\"" << e.value_get() << "\"";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(InnerExp& e)
+    void PrettyPrinter::operator()(InnerExp& e)
     {
         out_ << "(" << *e.exp_get() << ")";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(BinaryExp& e)
+    void PrettyPrinter::operator()(BinaryExp& e)
     {
         //FIXME, ugly
         out_ << *e.valuel_get()
@@ -339,40 +314,34 @@ namespace ast
              << *e.expr_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(UnaryExp& e)
+    void PrettyPrinter::operator()(UnaryExp& e)
     {
         //FIXME, ugly
         out_ << op_print[e.op_get()] << *e.exp_get();
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(Id& e)
+    void PrettyPrinter::operator()(Id& e)
     {
         out_ << e.s_get() << " /* " << e.dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(BreakExp& e)
+    void PrettyPrinter::operator()(BreakExp& e)
     {
         out_ << "break" << "/* loop at " << e.loop_get() << "*/";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(ContinueExp& e)
+    void PrettyPrinter::operator()(ContinueExp& e)
     {
         out_ << "continue" << "/* loop at " << e.loop_get() << "*/";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(ArrayAccess& e)
+    void PrettyPrinter::operator()(ArrayAccess& e)
     {
         out_ << *e.val_get()
              << "[" << *e.offset_get() << "]";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(TypeArrayIdentifier& e)
+    void PrettyPrinter::operator()(TypeArrayIdentifier& e)
     {
         out_ << *e.type_name_get();
         if (e.specs_get().size() == 1)
@@ -401,10 +370,13 @@ namespace ast
         out_ << " /* array at " << e.dec_get() << " */ ";
     }
 
-    template<typename T>
-    void PrettyPrinter<T>::operator()(NewExp& e)
+    void PrettyPrinter::operator()(NewExp& e)
     {
         out_ << "new (" << *e.alloc_get() << ")";
     }
 
+    void PrettyPrinter::operator()(OfferExp& e)
+    {
+        out_ << "offer (" << *e.f_get() << ")" ;
+    }
 }

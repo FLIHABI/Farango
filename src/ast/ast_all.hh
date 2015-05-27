@@ -76,6 +76,7 @@ namespace ast
     class TypeArrayIdentifier;
     class NewExp;
     class TypeValue;
+    class OfferExp;
 }
 
 #endif /* AST_ALL_HH */

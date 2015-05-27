@@ -84,6 +84,7 @@
  TYPE         "type"
  IMPORT       "import"
  MODULE       "module"
+ OFFER        "offer"
  COMMA        ","
  COLON        ":"
  DCOLON       "::<"
@@ -296,6 +297,7 @@ value /* ast exist */
     | function_call { $$ = $1; }
     | LPAREN expression RPAREN { $$ = std::make_shared<ast::InnerExp>($2); }
     | LBRACE expression_list RBRACE {$$ = std::make_shared<ast::ExpListInner>(*$2); }
+    | OFFER LPAREN function_call RPAREN { $$ = std::make_shared<ast::OfferExp>($3); }
     ;
 /*
    | LPAREN operator RPAREN //FIXME: Not in ast
