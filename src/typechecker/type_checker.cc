@@ -306,6 +306,10 @@ namespace typechecker
     {
         sanitize(e);
         super::operator()(e);
+
+        if (auto ati = std::dynamic_pointer_cast<ast::AutoTypeIdentifier>(e.return_t_get()))
+            ati->type_set(e.body_get()->type_value_get());
+
         if (e.return_t_get()
                 && !is_equal(e.return_t_get()->dec_get(),
                              e.body_get()->type_value_get().lock()))

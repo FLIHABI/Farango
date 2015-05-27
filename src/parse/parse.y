@@ -476,7 +476,8 @@ func_prototype /* ast exist */
         }
     | FUNCTION func_identifier function_def_generics_list LPAREN proto_parameter_list RPAREN
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, nullptr);
+            std::shared_ptr<ast::TypeIdentifierUse> tiu = std::make_shared<ast::AutoTypeIdentifier>();
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, tiu);
         }
     ;
 
