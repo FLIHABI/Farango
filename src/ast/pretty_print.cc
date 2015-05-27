@@ -25,6 +25,13 @@ namespace ast
         "~"
     };
 
+    std::ostringstream& operator<<(std::ostringstream& out, Ast& ast)
+    {
+        PrettyPrinter p(out);
+        p(ast);
+        return out;
+    }
+
     std::ostream& operator<<(std::ostream& out, Ast& ast)
     {
         PrettyPrinter p(out);

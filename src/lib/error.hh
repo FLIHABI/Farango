@@ -9,6 +9,8 @@
 # include <iosfwd>
 # include <sstream>
 
+# include "ast/ast.hh"
+
 /// Shortcuts.
 /// \{
 #define ice_here() ice(__FILE__, __LINE__)
@@ -61,6 +63,7 @@ namespace misc
 
     /// General method: put the parameter in stream_.
     template <typename T> error& operator<<(const T& t);
+    template <typename T> error& operator<<(T& t);
 
     /// Set the status if \a e is lower than the current status.
     error& operator<<(error_type e);

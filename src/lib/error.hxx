@@ -7,9 +7,23 @@
 # define MISC_ERROR_HXX
 
 # include "error.hh"
+# include "ast/ast_all.hh"
+
+namespace ast
+{
+    misc::error& operator<<(misc::error& out, Ast& ast);
+}
 
 namespace misc
 {
+
+  template <class T>
+  error&
+  error::operator<<(T& t)
+  {
+    stream_ << t;
+    return *this;
+  }
 
   template <class T>
   error&
@@ -18,6 +32,7 @@ namespace misc
     stream_ << t;
     return *this;
   }
+
 
   // Member manipulators.
   inline error&

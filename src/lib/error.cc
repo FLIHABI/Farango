@@ -137,4 +137,12 @@ namespace misc
   }
 
 
+  template <>
+  error&
+  error::operator<<<ast::Ast>(ast::Ast& t)
+  {
+    ast::operator<<(*this, t);
+    return *this;
+  }
+
 } // namespace misc

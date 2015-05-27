@@ -6,6 +6,7 @@
 # define PRETTY_PRINT_HH
 
 # include <iostream>
+# include <sstream>
 
 # include "default_visitor.hh"
 # include "lib/error.hh"
@@ -66,6 +67,7 @@ namespace ast
     };
 
     std::ostream& operator<<(std::ostream& out, Ast& ast);
+    std::ostringstream& operator<<(std::ostringstream& out, Ast& ast);
     misc::error& operator<<(misc::error& out, Ast& ast);
 }
 
