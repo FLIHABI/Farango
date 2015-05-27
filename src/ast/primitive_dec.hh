@@ -114,6 +114,32 @@ namespace ast
             }
 
     };
+
+    class AutoDec : public TypeValue
+    {
+        public:
+            ~AutoDec()
+            {};
+
+            static std::shared_ptr<AutoDec> get_def()
+            {
+                static std::shared_ptr<AutoDec> def = nullptr;
+                if (!def)
+                {
+                    AutoDec* d = new AutoDec();
+                    def = std::shared_ptr<AutoDec>(d);
+                }
+                return def;
+            }
+
+        private:
+            AutoDec()
+            {
+                misc::symbol s("auto");
+                name_ = std::make_shared<Id>(s);
+            }
+
+    };
 }
 
 #endif /* PRIMITIVE_DEC_HH */

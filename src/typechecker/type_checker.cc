@@ -397,6 +397,9 @@ namespace typechecker
         sanitize(e);
         super::operator()(e);
 
+        if (auto ati = std::dynamic_pointer_cast<ast::AutoTypeIdentifier>(e.vardec_get()->type_get()))
+            ati->type_set(e.value_get()->type_value_get());
+
         auto t = e.type_get()->dec_get();
         if (!std::dynamic_pointer_cast<ast::TypeValue>(t))
         {

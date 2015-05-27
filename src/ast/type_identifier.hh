@@ -58,10 +58,9 @@ namespace ast
 
     class AutoTypeIdentifier : public TypeIdentifier<Id> {
         using super = TypeIdentifier<Id>;
-        //static misc::symbol sym = "__auto__";
 
         public:
-            AutoTypeIdentifier() : TypeIdentifier(std::make_shared<Id>(misc::symbol("__auto__"))) {};
+            AutoTypeIdentifier() : TypeIdentifier(std::make_shared<Id>(misc::symbol("auto"))) {};
             virtual ~AutoTypeIdentifier() {};
 
             virtual std::shared_ptr<Id>& type_name_get() override {
