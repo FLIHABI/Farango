@@ -57,7 +57,6 @@ std::string buffer;
 
 %x STRING_STATE
 %x COMMENT_STATE
-%x LINE_COMMENT_STATE
 
 SPACE       [ \t]
 INTEGER     ([0-9]+|0x[[:xdigit:]]+|0b[01]+)
@@ -100,13 +99,7 @@ NEWLINE     \n\r|\r\n|\r|\n
     .        {}
 }
 
-"\/\/" { BEGIN(LINE_COMMENT_STATE); }
-<LINE_COMMENT_STATE>
-{
-    <<EOF>>  { BEGIN(INITIAL); }
-    NEWLINE  { BEGIN(INITIAL); }
-    .        {}
-}
+"//"[^\n]*   {}
 
 "if"         { return TOKEN(IF);  }
 "else"       { return TOKEN(ELSE); }
