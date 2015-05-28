@@ -9,6 +9,7 @@ namespace binder
         s_map_.start_scop();
         s_map_.push_dec(*ast::IntDec::get_def());
         s_map_.push_dec(*ast::StringDec::get_def());
+        s_map_.push_dec(*ast::AutoDec::get_def());
     }
 
 
@@ -71,8 +72,8 @@ namespace binder
             var.accept(*this);
         super::operator()(*e.body_get());
         s_map_.end_scop();
-        if (e.return_t_get())
-            e.return_t_get()->accept(*this);
+
+        e.return_t_get()->accept(*this);
 
         current_loop = aux;
     }
@@ -91,8 +92,7 @@ namespace binder
             var.accept(*this);
         s_map_.end_scop();
 
-        if (e.return_t_get())
-            e.return_t_get()->accept(*this);
+        e.return_t_get()->accept(*this);
     }
 
     void Binder::operator()(ast::IfExp& e)

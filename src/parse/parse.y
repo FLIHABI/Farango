@@ -278,6 +278,11 @@ type_union
 
 typed_var /* ast exist */
     : identifier COLON type_identifier_use { $$ = std::make_shared<ast::VarDec>($1, $3); }
+    | identifier
+    {
+        std::shared_ptr<ast::TypeIdentifierUse> tiu = std::make_shared<ast::AutoTypeIdentifier>();
+        $$ = std::make_shared<ast::VarDec>($1, tiu);
+    }
     ;
 
 var_decl /* ast exist */
@@ -473,7 +478,8 @@ func_prototype /* ast exist */
         }
     | FUNCTION func_identifier function_def_generics_list LPAREN proto_parameter_list RPAREN
         {
-            $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, nullptr);
+            std::shared_ptr<ast::TypeIdentifierUse> tiu = std::make_shared<ast::AutoTypeIdentifier>();
+            $$ = std::make_shared<ast::FunctionPrototype>($2, $3, $5, tiu);
         }
     ;
 

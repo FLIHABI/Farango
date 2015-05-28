@@ -14,6 +14,9 @@ namespace ast
     template <typename T>
     class TypeIdentifier : public Exp
     {
+        protected:
+            TypeIdentifier() {}
+
         public:
             TypeIdentifier(std::shared_ptr<Id> type_name, std::vector<std::shared_ptr<T>> specs)
                 : type_name_(type_name)
@@ -32,12 +35,12 @@ namespace ast
                 v(*this);
             }
 
-            std::shared_ptr<Id>& type_name_get()
+            virtual std::shared_ptr<Id>& type_name_get()
             {
                 return type_name_;
             }
 
-            std::vector<std::shared_ptr<T>>& specs_get()
+            virtual std::vector<std::shared_ptr<T>>& specs_get()
             {
                 return specs_;
             }
@@ -50,6 +53,30 @@ namespace ast
         private:
             std::shared_ptr<Id> type_name_;
             std::vector<std::shared_ptr<T>> specs_;
+    };
+
+    class AutoTypeIdentifier : public TypeIdentifier<Id> {
+        using super = TypeIdentifier<Id>;
+
+        public:
+            AutoTypeIdentifier() : TypeIdentifier(std::make_shared<Id>(misc::symbol("auto"))) {};
+            virtual ~AutoTypeIdentifier() {};
+
+            virtual std::shared_ptr<Id>& type_name_get() override {
+                return type_ ? type_->name_get() : super::type_name_get();
+            }
+
+            void type_set(std::weak_ptr<Declaration> type) {
+                type_ = type.lock();
+            }
+
+            virtual std::shared_ptr<Declaration> dec_get() override {
+                return type_ ? type_ : super::type_name_get()->dec_get();
+            }
+
+        private:
+            std::shared_ptr<Declaration> type_;
+
     };
 }
 

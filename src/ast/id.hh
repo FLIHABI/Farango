@@ -15,7 +15,7 @@ namespace ast
     class Id : public Ast
     {
         public:
-            Id(misc::symbol& s)
+            Id(misc::symbol s)
                 : s_(s)
             {};
             virtual ~Id()

@@ -12,16 +12,8 @@ namespace ast
         public:
             VarAssign(std::shared_ptr<VarDec> dec, std::shared_ptr<Exp> value)
                 : VarDec(*dec)
-                ,  value_(value)
-            {
-                decl_ = true;
-            };
-
-            VarAssign(misc::symbol name, misc::symbol type,
-                      std::shared_ptr<Exp> value)
-                : VarDec(std::make_shared<Id>(name),
-                         std::make_shared<TypeIdentifierUse>(std::make_shared<Id>(type)))
-                ,  value_(value)
+                , value_(value)
+                , vardec_(dec)
             {
                 decl_ = true;
             };
@@ -39,8 +31,14 @@ namespace ast
                 return value_;
             }
 
+            std::shared_ptr<VarDec> vardec_get()
+            {
+                return vardec_;
+            }
+
         private:
             std::shared_ptr<Exp> value_;
+            std::shared_ptr<VarDec> vardec_;
 
     };
 }
