@@ -22,8 +22,8 @@ namespace typechecker
             e.type_value_set(ast::NullDec::get_def());
     }
 
-    bool TypeChecker::is_equal(std::shared_ptr<ast::Declaration> a,
-                               std::shared_ptr<ast::Declaration> b)
+    static bool is_equal_impl(std::shared_ptr<ast::Declaration> a,
+                              std::shared_ptr<ast::Declaration> b)
     {
         {
             auto a_ = std::dynamic_pointer_cast<ast::TypePrototype>(a);
@@ -39,6 +39,20 @@ namespace typechecker
         }
         return (a && a == b);
     }
+
+    bool TypeChecker::is_equal(std::shared_ptr<ast::Declaration> a,
+                               std::shared_ptr<ast::Declaration> b)
+    {
+        return (is_equal_impl(a, ast::AutoDec::get_def()) ^ is_equal_impl(b, ast::AutoDec::get_def()))
+            || is_equal_impl(a, b);
+    }
+
+    static std::weak_ptr<ast::Declaration>& coerce(std::weak_ptr<ast::Declaration> a,
+            std::weak_ptr<ast::Declaration> b)
+    {
+        return (is_equal_impl(a.lock(), ast::AutoDec::get_def())) ? b : a;
+    }
+
 
     bool TypeChecker::is_int(std::shared_ptr<ast::Declaration> a)
     {
@@ -96,7 +110,7 @@ namespace typechecker
                << " is not an int"
                 << std::endl;
         }
-        e.type_value_set(ast::IntDec::get_def());
+        e.type_value_set(coerce(e.valuel_get()->type_value_get(), e.expr_get()->type_value_get()));
     }
 
     void TypeChecker::operator()(ast::DoExp& e)
@@ -245,7 +259,7 @@ namespace typechecker
                << " has not the same type"
                << std::endl;
         }
-        e.type_value_set(e.then_get()->type_value_get());
+        e.type_value_set(coerce(e.then_get()->type_value_get(), e.else_get()->type_value_get()));
     }
 
     void TypeChecker::operator()(ast::Lvalue& e)
@@ -370,8 +384,12 @@ namespace typechecker
         e.type_value_set(ast::IntDec::get_def());
         if (!is_int(e.exp_get()->type_value_get().lock()))
         {
-            e_ << misc::error::error_type::type;
-            e_ << e.exp_get() << " is not an int" << std::endl;
+            if (auto ad = std::dynamic_pointer_cast<ast::AutoDec>(
+                        e.exp_get()->type_value_get().lock()))
+                e.exp_get()->type_value_set(e.type_value_get());
+            else
+                e_ << misc::error::error_type::type
+                   << e.exp_get() << " is not an int" << std::endl;
         }
     }
 
