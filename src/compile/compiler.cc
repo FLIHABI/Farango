@@ -273,8 +273,11 @@ namespace compile {
         long then_instruction = emitter_.get_current_length();
         emitter_.buf_get()[jmp_address].add_operand<int16_t>(then_instruction - jmp_instruction);
 
-        e.else_get()->set_used(e.is_used());
-        e.else_get()->accept(*this);
+        if (e.else_get())
+        {
+            e.else_get()->set_used(e.is_used());
+            e.else_get()->accept(*this);
+        }
         emitter_.buf_get()[then_adress].add_operand<int16_t>(emitter_.get_current_length() - then_instruction);
     }
 
