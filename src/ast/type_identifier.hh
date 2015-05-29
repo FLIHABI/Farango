@@ -55,9 +55,19 @@ namespace ast
                 return type_name_->dec_get();
             }
 
+            void set_checked(bool check)
+            {
+                is_checked_ = check;
+            }
+
+            bool is_checked()
+            {
+                return is_checked_;
+            }
         private:
             std::shared_ptr<Id> type_name_;
             std::vector<std::shared_ptr<T>> specs_;
+            bool is_checked_ = false;
     };
 
     class AutoTypeIdentifier : public TypeIdentifier<Id> {

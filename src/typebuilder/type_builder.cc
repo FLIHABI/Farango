@@ -94,6 +94,9 @@ namespace typebuilder
 
     void TypeBuilder::operator()(ast::TypeIdentifierUse& e)
     {
+        if (e.is_checked())
+            return;
+        e.set_checked(true);
         auto type = std::dynamic_pointer_cast<ast::TypePrototype>(e.type_name_get()->dec_get());
         if (e.specs_get().size() > 0 && type && type->type_get()->specs_get().size() == e.specs_get().size())
         {
