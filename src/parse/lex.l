@@ -86,17 +86,14 @@ NEWLINE     \n\r|\r\n|\r|\n
     .         { buffer += yytext; }
 }
 
-"\/\*" {
-    comment_nest_level = 1;
-    BEGIN(COMMENT_STATE);
-}
+"/*" BEGIN(COMMENT_STATE); comment_nest_level++;
 <COMMENT_STATE>
 {
-    "\/\*"   { ++comment_nest_level; }
-    "\*\/"   { if (!--comment_nest_level) BEGIN(INITIAL); }
-    <<EOF>>  { ABORT("Syntax error: comment: unterminated comment"); }
-    NEWLINE  {}
-    .        {}
+    [^*/]*
+    "/*"    { ++comment_nest_level; }
+    "*/"    { if (!--comment_nest_level) BEGIN(INITIAL); }
+    [*/]
+    <<EOF>> { ABORT("Syntax error: comment: unterminated comment"); }
 }
 
 "//"[^\n]*   {}
