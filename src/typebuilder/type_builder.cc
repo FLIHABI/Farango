@@ -41,7 +41,7 @@ namespace typebuilder
         return true;
     }
 
-    void build_struct(std::shared_ptr<ast::TypeStruct> source,
+    void TypeBuilder::build_struct(std::shared_ptr<ast::TypeStruct> source,
                       ast::TypeIdentifierUse& id,
                       std::map<misc::symbol, std::shared_ptr<ast::Id>>& map)
     {
@@ -54,12 +54,16 @@ namespace typebuilder
             }
         }
 
+        //TODO: manage reccursivity
+
         auto new_struct = std::make_shared<ast::TypeStruct>(
                     std::make_shared<ast::TypeIdentifierDec>(source->type_get()->type_name_get())
                 );
 
         for (auto& spec : id.specs_get())
             new_struct->type_get()->specs_get().push_back(std::make_shared<ast::Declaration>(spec));
+
+        source->sub_type_get().push_back(new_struct);
 
         for (auto& field : source->members_get())
         {
@@ -69,10 +73,13 @@ namespace typebuilder
             else
             {
                 if (map[field.type_get()->type_name_get()->s_get()])
+                {
                     new_struct->members_get().push_back(ast::VarDec(field.name_get(),
                                 std::make_shared<ast::TypeIdentifierUse>(
                                     map[field.type_get()->type_name_get()->s_get()])
                                 ));
+                    //TODO check all the vardec component, that allow user to do something like: type list foo = { a : foo; next : list foo; };
+                }
                 else
                 {
                     //FIXME, error
@@ -80,9 +87,9 @@ namespace typebuilder
             }
         }
 
-        source->sub_type_get().push_back(new_struct);
         id.type_name_get()->dec_change(new_struct);
         new_struct->type_dec_set(new_struct);
+        new_struct->accept(*this);
     }
 
     void TypeBuilder::operator()(ast::TypeIdentifierUse& e)

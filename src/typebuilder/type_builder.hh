@@ -22,6 +22,9 @@ namespace typebuilder
             virtual void operator()(ast::TypeArrayIdentifier& e);
             virtual void operator()(ast::TypeIdentifierUse& e);
         private:
+            void build_struct(std::shared_ptr<ast::TypeStruct>,
+                              ast::TypeIdentifierUse&,
+                              std::map<misc::symbol, std::shared_ptr<ast::Id>>&);
             misc::error& e_;
     };
 }
