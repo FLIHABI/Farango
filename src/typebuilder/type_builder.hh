@@ -20,6 +20,7 @@ namespace typebuilder
 
             virtual void operator()(ast::Ast& a);
             virtual void operator()(ast::TypeArrayIdentifier& e);
+            virtual void operator()(ast::TypeIdentifierUse& e);
         private:
             misc::error& e_;
     };

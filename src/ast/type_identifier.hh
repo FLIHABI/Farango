@@ -40,6 +40,11 @@ namespace ast
                 return type_name_;
             }
 
+            void type_name_set(std::shared_ptr<Id>& id)
+            {
+                type_name_ = id;
+            }
+
             virtual std::vector<std::shared_ptr<T>>& specs_get()
             {
                 return specs_;

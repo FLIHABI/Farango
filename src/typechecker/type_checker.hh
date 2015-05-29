@@ -43,9 +43,9 @@ namespace typechecker
             virtual void operator()(ast::TypeIdentifierUse& e) override;
             virtual void operator()(ast::TypeIdentifierDec& e) override;
             virtual void operator()(ast::TypePrototype& e) override;
-            virtual void operator()(ast::TypeStruct& e) override;
             virtual void operator()(ast::TypeUnion& e) override;
             */
+            virtual void operator()(ast::TypeStruct& e) override;
 
         private:
             bool is_equal(std::shared_ptr<ast::Declaration> a,

@@ -266,6 +266,11 @@ namespace ast
         }
         out_ << misc::decendl<< "}"
              << " /* declared at " << e.type_dec_get() << " */ ";
+        if (e.sub_type_get().size() > 0)
+        {
+            for (auto t : e.sub_type_get())
+                out_ << *t << misc::iendl;
+        }
     }
 
     void PrettyPrinter::operator()(TypeUnion& e)

@@ -42,9 +42,15 @@ namespace ast
                 type_dec_ = t;
             }
 
+            std::vector<std::shared_ptr<TypePrototype>>& sub_type_get()
+            {
+                return sub_type_;
+            }
+
         protected:
             std::shared_ptr<TypeIdentifierDec> type_;
             std::shared_ptr<TypePrototype> type_dec_ = nullptr;
+            std::vector<std::shared_ptr<TypePrototype>> sub_type_;
     };
 }
 # endif /* TYPE_PROTOTYPE_HH */

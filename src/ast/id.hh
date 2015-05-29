@@ -36,6 +36,11 @@ namespace ast
                 return dec_;
             };
 
+            void dec_change(std::shared_ptr<Declaration> dec)
+            {
+                dec_ = dec;
+            };
+
             void dec_set(std::shared_ptr<Declaration> d)
             {
                 dec_ = d;

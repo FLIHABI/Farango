@@ -502,4 +502,8 @@ namespace typechecker
         }
         e.type_value_set(l->access_type());
     }
+
+    void TypeChecker::operator()(ast::TypeStruct& e)
+    {
+    }
 }

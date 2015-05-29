@@ -16,6 +16,10 @@ namespace ast
                 , members_(members)
             {};
 
+            TypeStruct(std::shared_ptr<TypeIdentifierDec> type)
+                : TypePrototype(type)
+            {};
+
             virtual ~TypeStruct()
             {};
 
