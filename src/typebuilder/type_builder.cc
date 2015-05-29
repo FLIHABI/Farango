@@ -45,6 +45,7 @@ namespace typebuilder
                       ast::TypeIdentifierUse& id,
                       std::map<misc::symbol, std::shared_ptr<ast::Id>>& map)
     {
+        //Check for an existing definition
         for (auto p : source->sub_type_get())
         {
             if (*p->type_get() == id)
@@ -54,39 +55,56 @@ namespace typebuilder
             }
         }
 
-        //TODO: manage reccursivity
-
+        //Building the new definition
         auto new_struct = std::make_shared<ast::TypeStruct>(
-                    std::make_shared<ast::TypeIdentifierDec>(source->type_get()->type_name_get())
+                    std::make_shared<ast::TypeIdentifierDec>(
+                        std::make_shared<ast::Id>(source->type_get()->type_name_get()->s_get()))
                 );
 
         for (auto& spec : id.specs_get())
-            new_struct->type_get()->specs_get().push_back(std::make_shared<ast::Declaration>(spec));
+            new_struct->type_get()->specs_get().emplace_back(std::make_shared<ast::Declaration>(
+                        std::make_shared<ast::Id>(spec->s_get())));
 
         source->sub_type_get().push_back(new_struct);
 
+        //Copying the fields
         for (auto& field : source->members_get())
         {
             auto dec = field.type_get()->type_name_get()->dec_get();
             if (std::dynamic_pointer_cast<ast::TypeValue>(dec)) //Not a generic dec
-                new_struct->members_get().push_back(field);
+                new_struct->members_get().emplace_back(ast::VarDec(
+                                std::make_shared<ast::Id>(field.name_get()->s_get()),
+                                std::make_shared<ast::TypeIdentifierUse>(
+                                    std::make_shared<ast::Id>(field.type_get()->type_name_get()->s_get()))
+                            ));
             else
             {
                 if (map[field.type_get()->type_name_get()->s_get()])
                 {
-                    new_struct->members_get().push_back(ast::VarDec(field.name_get(),
+                    new_struct->members_get().emplace_back(ast::VarDec(
+                                std::make_shared<ast::Id>(field.name_get()->s_get()),
                                 std::make_shared<ast::TypeIdentifierUse>(
-                                    map[field.type_get()->type_name_get()->s_get()])
+                                    std::make_shared<ast::Id>(
+                                        map[field.type_get()->type_name_get()->s_get()]->s_get()))
                                 ));
-                    //TODO check all the vardec component, that allow user to do something like: type list foo = { a : foo; next : list foo; };
                 }
                 else
                 {
                     //FIXME, error
                 }
             }
+            auto& new_field = new_struct->members_get()[new_struct->members_get().size() - 1] ;
+            new_field.type_get()->specs_get().clear();
+            for (auto& spec : field.type_get()->specs_get())
+            {
+                if (map[spec->s_get()])
+                    new_field.type_get()->specs_get().push_back(map[spec->s_get()]);
+                else
+                    new_field.type_get()->specs_get().push_back(spec);
+            }
         }
 
+        //Finishing
         id.type_name_get()->dec_change(new_struct);
         new_struct->type_dec_set(new_struct);
         new_struct->accept(*this);
@@ -102,10 +120,12 @@ namespace typebuilder
         {
             std::map<misc::symbol, std::shared_ptr<ast::Id>> mapping;
             for (unsigned i = 0; i < e.specs_get().size(); i++) {
+                if (!std::dynamic_pointer_cast<ast::TypeValue>(e.specs_get()[i]->dec_get())) //Generic usage
+                    return;
                 mapping[type->type_get()->specs_get()[i]->name_get()->s_get()] = e.specs_get()[i];
             }
             auto struct_ = std::dynamic_pointer_cast<ast::TypeStruct>(type);
-            if (type)
+            if (struct_)
                 build_struct(struct_, e, mapping);
         }
         else if (type || e.specs_get().size() > 0) //FIXME ERROR

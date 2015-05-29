@@ -222,7 +222,7 @@ namespace ast
             out_ << " (";
             while (b != end)
             {
-                out_ << *b;
+                out_ << **b;
                 out_ << (++b == end ? "" : ", ");
             }
             out_ << ")";
