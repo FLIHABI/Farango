@@ -58,12 +58,12 @@ namespace typebuilder
         //Building the new definition
         auto new_struct = std::make_shared<ast::TypeStruct>(
                     std::make_shared<ast::TypeIdentifierDec>(
-                        std::make_shared<ast::Id>(source->type_get()->type_name_get()->s_get()))
+                        std::make_shared<ast::Id>(*source->type_get()->type_name_get()))
                 );
 
         for (auto& spec : id.specs_get())
             new_struct->type_get()->specs_get().emplace_back(std::make_shared<ast::Declaration>(
-                        std::make_shared<ast::Id>(spec->s_get())));
+                        std::make_shared<ast::Id>(*spec)));
 
         source->sub_type_get().push_back(new_struct);
 
@@ -73,19 +73,19 @@ namespace typebuilder
             auto dec = field.type_get()->type_name_get()->dec_get();
             if (std::dynamic_pointer_cast<ast::TypeValue>(dec)) //Not a generic dec
                 new_struct->members_get().emplace_back(ast::VarDec(
-                                std::make_shared<ast::Id>(field.name_get()->s_get()),
+                                std::make_shared<ast::Id>(*field.name_get()),
                                 std::make_shared<ast::TypeIdentifierUse>(
-                                    std::make_shared<ast::Id>(field.type_get()->type_name_get()->s_get()))
+                                    std::make_shared<ast::Id>(*field.type_get()->type_name_get()))
                             ));
             else
             {
                 if (map[field.type_get()->type_name_get()->s_get()])
                 {
                     new_struct->members_get().emplace_back(ast::VarDec(
-                                std::make_shared<ast::Id>(field.name_get()->s_get()),
+                                std::make_shared<ast::Id>(*field.name_get()),
                                 std::make_shared<ast::TypeIdentifierUse>(
                                     std::make_shared<ast::Id>(
-                                        map[field.type_get()->type_name_get()->s_get()]->s_get()))
+                                        *map[field.type_get()->type_name_get()->s_get()]))
                                 ));
                 }
                 else
