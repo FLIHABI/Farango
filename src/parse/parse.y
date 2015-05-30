@@ -140,7 +140,7 @@
 %type <std::shared_ptr<ast::TypeIdentifierUse>> type_identifier_use type_allocation aux_use
 %type <std::shared_ptr<ast::TypeArrayIdentifier>> array_identifier array_identifier_allocation
 %type <std::shared_ptr<ast::TypeIdentifierDec>> type_identifier_dec
-%type <std::vector<std::shared_ptr<ast::Id>>> generics_list_use generics_list_inner_use function_use_generics_list
+%type <std::vector<std::shared_ptr<ast::TypeIdentifierUse>>> function_use_generics_list generics_list_use generics_list_inner_use
 %type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec function_def_generics_list
 %type <std::vector<ast::VarDec>> member_list proto_parameter_list proto_parameter_list_rec
 %type <std::vector<ast::TypeIdentifierUse>> type_union
@@ -253,14 +253,28 @@ type_identifier_use /* ast exist */
     ;
 
 generics_list_use /* ast exist */
-    : %empty {$$ = std::vector<std::shared_ptr<ast::Id>>();}
-    | identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
+    : %empty {$$ = std::vector<std::shared_ptr<ast::TypeIdentifierUse>>();}
+/*
+    | type_identifier_use
+    {
+        $$ = std::vector<std::shared_ptr<ast::TypeIdentifierUse>>();
+        $$.push_back($1);
+    }
+*/
     | LPAREN generics_list_inner_use RPAREN { $$ = $2; }
     ;
 
 generics_list_inner_use /* ast exist */
-    : identifier {$$ = std::vector<std::shared_ptr<ast::Id>>(); $$.push_back($1); }
-    | generics_list_inner_use COMMA identifier {$$ = $1; $$.push_back($3); }
+    : type_identifier_use
+    {
+        $$ = std::vector<std::shared_ptr<ast::TypeIdentifierUse>>();
+        $$.push_back($1);
+    }
+    | generics_list_inner_use COMMA type_identifier_use
+    {
+        $$ = $1;
+        $$.push_back($3);
+    }
     ;
 /* */
 
@@ -393,7 +407,7 @@ binop
     | expression USER_OP expression
     {
         std::shared_ptr<ast::Value> op = std::make_shared<ast::Lvalue>($2);
-        std::vector<std::shared_ptr<ast::Id>> empty;
+        std::vector<std::shared_ptr<ast::TypeIdentifierUse>> empty;
         std::shared_ptr<ast::ExpListFunction> params = std::make_shared<ast::ExpListFunction>();
         params->push($1);
         params->push($3);
@@ -421,7 +435,7 @@ expression
     | USER_OP expression %prec UUSER_OP
     {
         std::shared_ptr<ast::Value> op = std::make_shared<ast::Lvalue>($1);
-        std::vector<std::shared_ptr<ast::Id>> empty;
+        std::vector<std::shared_ptr<ast::TypeIdentifierUse>> empty;
         std::shared_ptr<ast::ExpListFunction> params = std::make_shared<ast::ExpListFunction>();
         params->push($2);
         $$ = std::make_shared<ast::FunCall>(op, empty, params);

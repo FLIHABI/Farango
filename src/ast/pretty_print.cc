@@ -212,21 +212,15 @@ namespace ast
         out_ << *e.type_name_get();
         if (e.specs_get().size() == 0)
             return;
-        else if (e.specs_get().size() == 1)
-            out_ << " " << *e.specs_get()[0];
-
-        else
+        auto b = e.specs_get().begin();
+        auto end = e.specs_get().end();
+        out_ << " (";
+        while (b != end)
         {
-            auto b = e.specs_get().begin();
-            auto end = e.specs_get().end();
-            out_ << " (";
-            while (b != end)
-            {
-                out_ << **b;
-                out_ << (++b == end ? "" : ", ");
-            }
-            out_ << ")";
+            out_ << **b;
+            out_ << (++b == end ? "" : ", ");
         }
+        out_ << ")";
     }
 
     void PrettyPrinter::operator()(TypeIdentifierDec& e)

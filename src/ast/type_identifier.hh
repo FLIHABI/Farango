@@ -70,11 +70,32 @@ namespace ast
             bool is_checked_ = false;
     };
 
-    class AutoTypeIdentifier : public TypeIdentifier<Id> {
-        using super = TypeIdentifier<Id>;
+    class TypeIdentifierUse : public TypeIdentifier<TypeIdentifierUse>
+    {
+        public:
+            TypeIdentifierUse(std::shared_ptr<Id> type_name, std::vector<std::shared_ptr<TypeIdentifierUse>> specs)
+                :TypeIdentifier(type_name, specs)
+            {};
+
+            TypeIdentifierUse(std::shared_ptr<Id> type_name)
+                : TypeIdentifier(type_name)
+            {};
+
+            virtual ~TypeIdentifierUse()
+            {};
+
+            void virtual accept(Visitor& v)
+            {
+                v(*this);
+            }
+
+    };
+
+    class AutoTypeIdentifier : public TypeIdentifierUse {
+        using super = TypeIdentifierUse;
 
         public:
-            AutoTypeIdentifier() : TypeIdentifier(std::make_shared<Id>(misc::symbol("auto"))) {};
+            AutoTypeIdentifier() : TypeIdentifierUse(std::make_shared<Id>(misc::symbol("auto"))) {};
             virtual ~AutoTypeIdentifier() {};
 
             virtual std::shared_ptr<Id>& type_name_get() override {

@@ -24,7 +24,7 @@ namespace typebuilder
         private:
             void build_struct(std::shared_ptr<ast::TypeStruct>,
                               ast::TypeIdentifierUse&,
-                              std::map<misc::symbol, std::shared_ptr<ast::Id>>&);
+                              std::map<misc::symbol, std::shared_ptr<ast::TypeIdentifierUse>>&);
             misc::error& e_;
     };
 }

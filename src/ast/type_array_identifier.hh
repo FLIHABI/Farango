@@ -10,7 +10,7 @@ namespace ast
     class TypeArrayIdentifier : public TypeIdentifierUse
     {
         public:
-            TypeArrayIdentifier(TypeIdentifier& t)
+            TypeArrayIdentifier(TypeIdentifierUse& t)
                 : TypeIdentifierUse(t)
             {};
 

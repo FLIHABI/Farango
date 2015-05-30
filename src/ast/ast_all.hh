@@ -64,9 +64,9 @@ namespace ast
     class VarAssign;
     template <typename T>
     class TypeIdentifier;
+    class TypeIdentifierUse;
 
     using TypeIdentifierDec = TypeIdentifier<Declaration>;
-    using TypeIdentifierUse = TypeIdentifier<Id>;
 
     class Visitor;
     class LoopExp;

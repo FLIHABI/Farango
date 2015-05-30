@@ -17,6 +17,8 @@ namespace typebuilder
 
     void TypeBuilder::operator()(ast::TypeArrayIdentifier& e)
     {
+        auto& aux = dynamic_cast<ast::TypeIdentifierUse&>(e);
+        operator()(aux);
         auto dec = e.type_name_get()->dec_get();
         std::shared_ptr<ast::TypeValue> t = std::dynamic_pointer_cast<ast::TypeValue>(dec);
         if (!t)
@@ -35,7 +37,7 @@ namespace typebuilder
             return false;
         for (unsigned i = 0; i < dec.specs_get().size(); i++)
         {
-            if (dec.specs_get()[i]->name_get()->s_get() != use.specs_get()[i]->s_get())
+            if (dec.specs_get()[i]->name_get()->s_get() != use.specs_get()[i]->type_name_get()->s_get())
                 return false;
         }
         return true;
@@ -43,7 +45,7 @@ namespace typebuilder
 
     void TypeBuilder::build_struct(std::shared_ptr<ast::TypeStruct> source,
                       ast::TypeIdentifierUse& id,
-                      std::map<misc::symbol, std::shared_ptr<ast::Id>>& map)
+                      std::map<misc::symbol, std::shared_ptr<ast::TypeIdentifierUse>>& map)
     {
         //Check for an existing definition
         for (auto p : source->sub_type_get())
@@ -63,7 +65,7 @@ namespace typebuilder
 
         for (auto& spec : id.specs_get())
             new_struct->type_get()->specs_get().emplace_back(std::make_shared<ast::Declaration>(
-                        std::make_shared<ast::Id>(*spec)));
+                        std::make_shared<ast::Id>(*spec->type_name_get())));
 
         source->sub_type_get().push_back(new_struct);
 
@@ -85,7 +87,7 @@ namespace typebuilder
                                 std::make_shared<ast::Id>(*field.name_get()),
                                 std::make_shared<ast::TypeIdentifierUse>(
                                     std::make_shared<ast::Id>(
-                                        *map[field.type_get()->type_name_get()->s_get()]))
+                                        *map[field.type_get()->type_name_get()->s_get()]->type_name_get()))
                                 ));
                 }
                 else
@@ -97,8 +99,8 @@ namespace typebuilder
             new_field.type_get()->specs_get().clear();
             for (auto& spec : field.type_get()->specs_get())
             {
-                if (map[spec->s_get()])
-                    new_field.type_get()->specs_get().push_back(map[spec->s_get()]);
+                if (map[spec->type_name_get()->s_get()])
+                    new_field.type_get()->specs_get().push_back(map[spec->type_name_get()->s_get()]);
                 else
                     new_field.type_get()->specs_get().push_back(spec);
             }
@@ -115,10 +117,12 @@ namespace typebuilder
         if (e.is_checked())
             return;
         e.set_checked(true);
+        for (auto& spec : e.specs_get())
+            spec->accept(*this);
         auto type = std::dynamic_pointer_cast<ast::TypePrototype>(e.type_name_get()->dec_get());
         if (e.specs_get().size() > 0 && type && type->type_get()->specs_get().size() == e.specs_get().size())
         {
-            std::map<misc::symbol, std::shared_ptr<ast::Id>> mapping;
+            std::map<misc::symbol, std::shared_ptr<ast::TypeIdentifierUse>> mapping;
             for (unsigned i = 0; i < e.specs_get().size(); i++) {
                 if (!std::dynamic_pointer_cast<ast::TypeValue>(e.specs_get()[i]->dec_get())) //Generic usage
                     return;
@@ -128,7 +132,9 @@ namespace typebuilder
             if (struct_)
                 build_struct(struct_, e, mapping);
         }
-        else if (type || e.specs_get().size() > 0) //FIXME ERROR
-            std::cout << "Can't work on " << e<< std::endl;
+        else if (type || e.specs_get().size() > 0)
+        {
+            //FIXME: check the condition, maybe send an error
+        }
     }
 }
