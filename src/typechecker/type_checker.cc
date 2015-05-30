@@ -3,6 +3,7 @@
 # include "ast/pretty_print.hh"
 # include "ast/all.hh"
 # include "type_checker.hh"
+# include "typebuilder/type_builder.hh"
 
 namespace typechecker
 {
@@ -505,5 +506,14 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::TypeStruct& e)
     {
+    }
+
+    void TypeChecker::operator()(ast::OfferExp& e)
+    {
+        e.f_get()->accept(*this);
+        e.wrapper_get()->specs_get().push_back(e.f_get()->func_get()->return_t_get());
+        typebuilder::TypeBuilder builder(e_);
+        builder(*e.wrapper_get());
+        e.type_value_set(e.wrapper_get()->dec_get());
     }
 }

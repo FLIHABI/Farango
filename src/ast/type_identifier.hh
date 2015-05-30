@@ -64,7 +64,8 @@ namespace ast
             {
                 return is_checked_;
             }
-        private:
+
+        protected:
             std::shared_ptr<Id> type_name_;
             std::vector<std::shared_ptr<T>> specs_;
             bool is_checked_ = false;

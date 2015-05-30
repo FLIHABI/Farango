@@ -151,4 +151,5 @@ namespace typebuilder
             //FIXME: check the condition, maybe send an error
         }
     }
+
 }

@@ -262,8 +262,12 @@ namespace ast
              << " /* declared at " << e.type_dec_get() << " */ ";
         if (e.sub_type_get().size() > 0)
         {
+            out_ << "/*";
+            out_ << misc::incendl;
             for (auto t : e.sub_type_get())
                 out_ << *t << misc::iendl;
+            out_ << misc::decendl;
+            out_ << "*/";
         }
     }
 
@@ -384,6 +388,8 @@ namespace ast
     void PrettyPrinter::operator()(OfferExp& e)
     {
         out_ << "offer (" << *e.f_get() << ")" ;
+        if (e.wrapper_get())
+            out_ << "/* " << *e.wrapper_get() << " */";
     }
 
     void PrettyPrinter::operator()(TypeValue& e)

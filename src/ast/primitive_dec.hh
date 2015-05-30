@@ -1,9 +1,13 @@
 #ifndef PRIMITIVE_DEC_HH
 # define PRIMITIVE_DEC_HH
 
-# include "declaration.hh"
 # include "lib/symbol.hh"
+
+# include "ast_all.hh"
+# include "declaration.hh"
 # include "type_value.hh"
+# include "type_identifier.hh"
+# include "type_struct.hh"
 
 /* FIXME
  * Reffactor with template
@@ -139,6 +143,35 @@ namespace ast
                 name_ = std::make_shared<Id>(s);
             }
 
+    };
+
+    /*
+     * Used by offer and get
+     */
+    class GetDec : public TypeStruct
+    {
+        public:
+            static std::shared_ptr<GetDec> get_def()
+            {
+                static std::shared_ptr<GetDec> def = nullptr;
+                if (!def)
+                {
+                    GetDec* d = new GetDec(
+                            );
+                    def = std::shared_ptr<GetDec>(d);
+                }
+                return def;
+            }
+        private:
+            GetDec()
+                : TypeStruct(
+                        std::make_shared<TypeIdentifierDec>(std::make_shared<ast::Id>("lol")
+                        ))
+            {
+               type_get()->specs_get().push_back(
+                       std::make_shared<ast::Declaration>(std::make_shared<ast::Id>("A"))
+                       );
+            };
     };
 }
 

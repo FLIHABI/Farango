@@ -30,8 +30,19 @@ namespace ast
                 return f_;
             }
 
+            std::shared_ptr<TypeIdentifierUse> wrapper_get()
+            {
+                return wrapper_;
+            }
+
+            void wrapper_set(std::shared_ptr<TypeIdentifierUse> wrapper)
+            {
+                wrapper_ = wrapper;
+            }
+
         private:
             std::shared_ptr<FunCall> f_;
+            std::shared_ptr<TypeIdentifierUse> wrapper_;
     };
 }
 

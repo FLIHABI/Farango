@@ -10,6 +10,7 @@ namespace binder
         s_map_.push_dec(*ast::IntDec::get_def());
         s_map_.push_dec(*ast::StringDec::get_def());
         s_map_.push_dec(*ast::AutoDec::get_def());
+        ast::GetDec::get_def()->accept(*this);
     }
 
 
@@ -243,4 +244,12 @@ namespace binder
         e.loop_set(current_loop);
     }
 
+    void Binder::operator()(ast::OfferExp& e)
+    {
+        e.f_get()->accept(*this);
+        auto wrapper = std::make_shared<ast::TypeIdentifierUse>(
+                ast::GetDec::get_def()->type_get()->type_name_get()
+            );
+        e.wrapper_set(wrapper);
+    }
 }

@@ -71,7 +71,6 @@ namespace compile {
             f->body_get()->accept(*this);
             uint16_t end = register_id_;
             f->reg_offset_set(start);
-            std::cout << end - start  << std::endl;
             f->reg_size_set(end - start);
         }
     }

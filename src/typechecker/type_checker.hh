@@ -46,6 +46,7 @@ namespace typechecker
             virtual void operator()(ast::TypeUnion& e) override;
             */
             virtual void operator()(ast::TypeStruct& e) override;
+            virtual void operator()(ast::OfferExp& e) override;
 
         private:
             bool is_equal(std::shared_ptr<ast::Declaration> a,
