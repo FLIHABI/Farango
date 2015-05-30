@@ -47,10 +47,15 @@ namespace ast
                 return sub_type_;
             }
 
+            std::vector<std::shared_ptr<TypeIdentifierUse>>& spec_kind_get()
+            {
+                return spec_kind_;
+            }
         protected:
             std::shared_ptr<TypeIdentifierDec> type_;
             std::shared_ptr<TypePrototype> type_dec_ = nullptr;
             std::vector<std::shared_ptr<TypePrototype>> sub_type_;
+            std::vector<std::shared_ptr<TypeIdentifierUse>> spec_kind_;
     };
 }
 # endif /* TYPE_PROTOTYPE_HH */

@@ -30,14 +30,25 @@ namespace typebuilder
         e.set_dec(std::make_shared<ast::TypeArray>(t, e.depth_get()));
     }
 
-
-    bool operator==(ast::TypeIdentifierDec& dec, ast::TypeIdentifierUse& use)
+    bool operator==(ast::TypeIdentifierUse& t1, ast::TypeIdentifierUse& t2)
     {
-        if (dec.specs_get().size() != use.specs_get().size())
+        if (t1.type_name_get()->dec_get() != t2.type_name_get()->dec_get())
             return false;
-        for (unsigned i = 0; i < dec.specs_get().size(); i++)
+        if (t1.specs_get().size() != t2.specs_get().size())
+            return false;
+        for (unsigned i = 0; i < t1.specs_get().size(); i++)
+            if (!(*t1.specs_get()[i] == *t2.specs_get()[i]))
+                    return false;
+        return true;
+    }
+
+    bool operator==(ast::TypePrototype& dec, ast::TypeIdentifierUse& use)
+    {
+        if (dec.spec_kind_get().size() != use.specs_get().size())
+            return false;
+        for (unsigned i = 0; i < dec.spec_kind_get().size(); i++)
         {
-            if (dec.specs_get()[i]->name_get()->s_get() != use.specs_get()[i]->type_name_get()->s_get())
+            if (!(*dec.spec_kind_get()[i] == *use.specs_get()[i]))
                 return false;
         }
         return true;
@@ -50,7 +61,7 @@ namespace typebuilder
         //Check for an existing definition
         for (auto p : source->sub_type_get())
         {
-            if (*p->type_get() == id)
+            if (*p == id)
             {
                 id.type_name_get()->dec_change(p);
                 return;
@@ -66,6 +77,9 @@ namespace typebuilder
         for (auto& spec : id.specs_get())
             new_struct->type_get()->specs_get().emplace_back(std::make_shared<ast::Declaration>(
                         std::make_shared<ast::Id>(*spec->type_name_get())));
+
+        for (auto& spec : id.specs_get())
+            new_struct->spec_kind_get().push_back(spec);
 
         source->sub_type_get().push_back(new_struct);
 
