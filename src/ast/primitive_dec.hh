@@ -162,6 +162,11 @@ namespace ast
                 }
                 return def;
             }
+
+            GetDec(std::shared_ptr<TypeIdentifierDec> dec)
+                : TypeStruct(dec)
+            {};
+
         private:
             GetDec()
                 : TypeStruct(

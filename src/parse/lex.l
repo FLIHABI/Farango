@@ -114,6 +114,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "import"     { return TOKEN(IMPORT); }
 "module"     { return TOKEN(MODULE); }
 "offer"      { return TOKEN(OFFER); }
+"get"        { return TOKEN(GET); }
 ","          { return TOKEN(COMMA); }
 ":"          { return TOKEN(COLON); }
 "::<"        { return TOKEN(DCOLON); }

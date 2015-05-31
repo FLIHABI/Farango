@@ -242,4 +242,9 @@ namespace ast
     {
         e.f_get()->accept(*this);
     }
+
+    void DefaultVisitor::operator()(GetExp& e)
+    {
+        e.value_get()->accept(*this);
+    }
 }

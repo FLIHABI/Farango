@@ -68,11 +68,18 @@ namespace typebuilder
             }
         }
 
+        std::shared_ptr<ast::TypeStruct> new_struct;
         //Building the new definition
-        auto new_struct = std::make_shared<ast::TypeStruct>(
+        if (std::dynamic_pointer_cast<ast::GetDec>(source))
+            new_struct = std::make_shared<ast::GetDec>(
                     std::make_shared<ast::TypeIdentifierDec>(
                         std::make_shared<ast::Id>(*source->type_get()->type_name_get()))
-                );
+                    );
+        else
+            new_struct = std::make_shared<ast::TypeStruct>(
+                    std::make_shared<ast::TypeIdentifierDec>(
+                        std::make_shared<ast::Id>(*source->type_get()->type_name_get()))
+                    );
 
         for (auto& spec : id.specs_get())
             new_struct->type_get()->specs_get().emplace_back(std::make_shared<ast::Declaration>(

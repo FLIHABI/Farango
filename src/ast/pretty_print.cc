@@ -387,9 +387,14 @@ namespace ast
 
     void PrettyPrinter::operator()(OfferExp& e)
     {
-        out_ << "offer (" << *e.f_get() << ")" ;
+        out_ << "offer (" << *e.f_get() << ")";
         if (e.wrapper_get())
             out_ << "/* " << *e.wrapper_get() << " */";
+    }
+
+    void PrettyPrinter::operator()(GetExp& e)
+    {
+        out_ << "get (" << *e.value_get() << ")";
     }
 
     void PrettyPrinter::operator()(TypeValue& e)

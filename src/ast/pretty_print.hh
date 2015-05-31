@@ -62,6 +62,7 @@ namespace ast
             virtual void operator()(TypeArrayIdentifier& e) override;
             virtual void operator()(NewExp& e) override;
             virtual void operator()(OfferExp& e) override;
+            virtual void operator()(GetExp& e) override;
             virtual void operator()(TypeValue& e) override;
 
         private:

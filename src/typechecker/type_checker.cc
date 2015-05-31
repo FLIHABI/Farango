@@ -516,4 +516,19 @@ namespace typechecker
         builder(*e.wrapper_get());
         e.type_value_set(e.wrapper_get()->dec_get());
     }
+
+    void TypeChecker::operator()(ast::GetExp& e)
+    {
+        e.value_get()->accept(*this);
+        auto get = std::dynamic_pointer_cast<ast::GetDec>(e.value_get()->type_value_get().lock());
+        if (!get)
+        {
+            e_<< misc::error::error_type::type;
+            e_<< *e.value_get() << "is not a valid get value" << std::endl;
+            e_ << "it is a " << *e.value_get()->type_value_get().lock() << std::endl;
+            e.type_value_set(ast::VoidDec::get_def());
+            return;
+        }
+        e.type_value_set(get->spec_kind_get()[0]->dec_get());
+    }
 }

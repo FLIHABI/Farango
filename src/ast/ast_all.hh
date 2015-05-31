@@ -77,6 +77,7 @@ namespace ast
     class NewExp;
     class TypeValue;
     class OfferExp;
+    class GetExp;
 
 }
 
