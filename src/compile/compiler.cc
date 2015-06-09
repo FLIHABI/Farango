@@ -434,9 +434,11 @@ namespace compile {
 
         tolk::FuncTable f;
         for (auto e : dec_) {
-            f.insert(e->number_get(),
-                     tolk::Function(e->function_offset_get(), e->reg_size_get(), e->reg_offset_get())
-                    );
+            tolk::Function fun(e->function_offset_get(), e->reg_size_get(), e->reg_offset_get());
+            for (auto& var : e->params_get()) {
+                fun.params.push_back(var.type_get()->dec_get()->number_get());
+            }
+            f.insert(e->number_get(), fun);
         }
         t.set_functable(f);
 
