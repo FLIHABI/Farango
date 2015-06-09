@@ -35,6 +35,7 @@ namespace ast
         private:
             IntDec()
             {
+                number_ = 0;
                 misc::symbol s("int");
                 name_ = std::make_shared<Id>(s);
             }
@@ -173,6 +174,7 @@ namespace ast
                         std::make_shared<TypeIdentifierDec>(std::make_shared<ast::Id>("lol")
                         ))
             {
+              number_ = 1;
                type_get()->specs_get().push_back(
                        std::make_shared<ast::Declaration>(std::make_shared<ast::Id>("A"))
                        );

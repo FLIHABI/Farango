@@ -24,7 +24,9 @@ namespace compile {
         using super = ast::DefaultVisitor;
 
         public:
-            Register(std::vector<ast::FunctionDec*>& dec);
+            Register(std::vector<ast::FunctionDec*>&,
+                     std::vector<ast::TypeStruct*>&,
+                     std::vector<ast::TypeUnion*>&);
             void process(ast::Ast&);
             virtual void operator()(ast::Ast& a) override;
             virtual void operator()(ast::FunctionDec& e) override;
@@ -35,9 +37,11 @@ namespace compile {
 
         private:
             uint16_t type_id_ = 0;
-            uint16_t register_id_ = 1; //reg 0 is used by compiler
+            uint16_t register_id_ = 2; //reg 0 and 1 are used by compiler
             uint16_t function_id_ = 0;
             std::vector<ast::FunctionDec*>& dec_;
+            std::vector<ast::TypeStruct*>& struct_table_;
+            std::vector<ast::TypeUnion*>& union_table_;
     };
 }
 

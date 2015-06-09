@@ -423,12 +423,15 @@ namespace compile {
         file << emitter_;
     }
 
+    //FIXME split in multiple function
     void Compile::save(tolk::TolkFile& t) {
+
         std::vector<char> end;
         for (auto& Ub : emitter_.buf_get()) {
             end.insert(end.end(), Ub.args_.begin(), Ub.args_.end());
         }
         t.set_bytecode(end);
+
         tolk::FuncTable f;
         for (auto e : dec_) {
             f.insert(e->number_get(),
@@ -436,6 +439,26 @@ namespace compile {
                     );
         }
         t.set_functable(f);
+
+        tolk::StructTable st;
+        for (auto e : struct_table_) {
+            tolk::Struct s;
+            for (auto& var : e->members_get())  {
+                s.component.push_back(var.type_get()->dec_get()->number_get());
+            }
+            st.insert(e->number_get(), s);
+        }
+        t.set_structtable(st);
+
+        st = tolk::StructTable();
+        for (auto e : union_table_) {
+            tolk::Struct s;
+            for (auto& type: e->unions_get())  {
+                s.component.push_back(type.dec_get()->number_get());
+            }
+            st.insert(e->number_get(), s);
+        }
+        t.set_uniontable(st);
     }
 
 }

@@ -50,7 +50,7 @@ int main (int argc, char **argv) {
     std::cout << *fp.ast_;
 
     compile::Compile c;
-    compile::Register r(c.dec_get());
+    compile::Register r(c.dec_get(), c.struct_table_get(), c.union_table_get());
     r.process(*fp.ast_);
 
     c.process(*fp.ast_);

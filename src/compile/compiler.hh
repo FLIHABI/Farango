@@ -47,6 +47,16 @@ namespace compile {
             return dec_;
         }
 
+        std::vector<ast::TypeStruct*>& struct_table_get()
+        {
+            return struct_table_;
+        }
+
+        std::vector<ast::TypeUnion*>& union_table_get()
+        {
+            return union_table_;
+        }
+
 
     private:
         void assign_array(ast::ArrayAccess&, ast::AssignExp&);
@@ -57,6 +67,8 @@ namespace compile {
 
         Emitter emitter_;
         std::vector<ast::FunctionDec*> dec_;
+        std::vector<ast::TypeStruct*> struct_table_;
+        std::vector<ast::TypeUnion*> union_table_;
     };
 }
 
