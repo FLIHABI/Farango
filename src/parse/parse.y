@@ -277,7 +277,6 @@ generics_list_inner_use /* ast exist */
         $$.push_back($3);
     }
     ;
-/* */
 
 type_decl
     : TYPE type_identifier_dec ASSIGN LBRACE member_list RBRACE {$$ = std::make_shared<ast::TypeStruct>($2, $5); }
@@ -286,6 +285,7 @@ type_decl
     | TYPE type_identifier_dec {$$ = std::make_shared<ast::TypePrototype>($2); }
     ;
 
+/* FIXME: refactor in : identifier type_identifier_use  */
 type_union
     : type_identifier_use { $$ = std::vector<ast::TypeIdentifierUse>(), $$.push_back(*$1); }
     | type_union OR type_identifier_use { $$ = $1, $$.push_back(*$3); }
@@ -420,6 +420,7 @@ binop
 lvalue /* ast exist */
     : member_access { $$ = $1; }
     | func_identifier { $$ = std::make_shared<ast::Lvalue>($1); }
+    | identifier identifier { $$ = std::make_shared<ast::Lvalue>($1); }
     | array_access { $$ = $1; }
     ;
 

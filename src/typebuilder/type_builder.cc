@@ -70,6 +70,9 @@ namespace typebuilder
 
         std::shared_ptr<ast::TypeStruct> new_struct;
         //Building the new definition
+
+
+        //FIXME
         if (std::dynamic_pointer_cast<ast::GetDec>(source))
             new_struct = std::make_shared<ast::GetDec>(
                     std::make_shared<ast::TypeIdentifierDec>(
@@ -90,6 +93,7 @@ namespace typebuilder
 
         source->sub_type_get().push_back(new_struct);
 
+        //FIXME: above this, could be factorised to be used in union type
         //Copying the fields
         for (auto& field : source->members_get())
         {
