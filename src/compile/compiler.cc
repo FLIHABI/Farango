@@ -402,6 +402,22 @@ namespace compile {
             emitter_.emit<OP_CREATE>();
     }
 
+    void Compile::operator()(ast::OfferExp& e) {
+        e.f_get()->list_get()->accept(*this);
+        emitter_.emit<OP_PCALL, uint16_t>(e.f_get()->func_get()->number_get());
+
+        if (!e.is_used())
+            emitter_.emit<OP_POP>();
+    }
+
+    void Compile::operator()(ast::GetExp& e) {
+        e.value_get()->set_used(true);
+        e.value_get()->accept(*this);
+        emitter_.emit<OP_PWAIT>();
+
+        if (!e.is_used())
+            emitter_.emit<OP_POP>();
+    }
     void Compile::write(const char* filename) {
         std::ofstream file(filename);
         file << emitter_;
@@ -421,4 +437,5 @@ namespace compile {
         }
         t.set_functable(f);
     }
+
 }
