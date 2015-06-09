@@ -341,8 +341,8 @@ namespace compile {
     }
 
     void Compile::operator()(ast::FunCall& e) {
-        emitter_.emit<OP_SAVE,uint16_t>(e.func_get()->number_get());
         e.list_get()->accept(*this);
+        emitter_.emit<OP_SAVE,uint16_t>(e.func_get()->number_get());
         emitter_.emit<OP_CALL,uint16_t>(e.func_get()->number_get());
         emitter_.emit<OP_RESTORE,uint16_t>(e.func_get()->number_get());
         if (e.is_used())
