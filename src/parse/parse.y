@@ -149,6 +149,10 @@
  *                  PRECEDENCE                  *
  ************************************************/
 
+%nonassoc THEN
+%nonassoc ELSE
+%precedence WHILER FORR
+
 %left ASSIGN
 
 %left LOR
@@ -162,10 +166,6 @@
 %left LSHIFT RSHIFT
 %left USER_OP
 %left UMINUS UPLUS ULNOT UNOT UUSER_OP
-
-%nonassoc THEN
-%nonassoc ELSE
-%precedence WHILER FORR
 
 %start program
 
