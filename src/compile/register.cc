@@ -20,7 +20,7 @@ namespace compile {
     /* --- */
 
     Register::Register(std::vector<ast::FunctionDec*>& dec,
-                       std::vector<ast::TypeStruct*>& struct_table, 
+                       std::vector<ast::TypeStruct*>& struct_table,
                        std::vector<ast::TypeUnion*>& union_table)
         : dec_(dec)
         , struct_table_(struct_table)
@@ -42,12 +42,16 @@ namespace compile {
     {
         e.number_set(type_id_++);
         struct_table_.push_back(&e);
+        for (auto& sub : e.sub_type_get())
+            sub->accept(*this);
     }
 
     void Register::operator()(ast::TypeUnion& e)
     {
         e.number_set(type_id_++);
         union_table_.push_back(&e);
+        for (auto& sub : e.sub_type_get())
+            sub->accept(*this);
     }
 
     void Register::operator()(ast::VarDec& e)
