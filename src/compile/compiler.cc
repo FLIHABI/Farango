@@ -438,6 +438,7 @@ namespace compile {
             for (auto& var : e->params_get()) {
                 fun.params.push_back(var.type_get()->dec_get()->number_get());
             }
+            fun.return_value = e->return_t_get()->dec_get()->number_get();
             f.insert(e->number_get(), fun);
         }
         t.set_functable(f);
@@ -462,5 +463,4 @@ namespace compile {
         }
         t.set_uniontable(st);
     }
-
 }

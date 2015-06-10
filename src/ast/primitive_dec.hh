@@ -62,6 +62,7 @@ namespace ast
         private:
             VoidDec()
             {
+                number_ = -1;
                 misc::symbol s("void");
                 name_ = std::make_shared<Id>(s);
             }
