@@ -37,6 +37,7 @@ namespace ast
             virtual void operator()(TypePrototype& e) override;
             virtual void operator()(TypeStruct& e) override;
             virtual void operator()(TypeUnion& e) override;
+            virtual void operator()(TypeArray& e) override;
             virtual void operator()(UnaryExp& e) override;
             virtual void operator()(Value& e) override;
             virtual void operator()(VarDec& e) override;

@@ -32,8 +32,14 @@ namespace compile {
             virtual void operator()(ast::FunctionDec& e) override;
             virtual void operator()(ast::TypeStruct& e) override;
             virtual void operator()(ast::TypeUnion& e) override;
+            virtual void operator()(ast::TypeArray& e) override;
             virtual void operator()(ast::VarDec& e) override;
             virtual void operator()(ast::VarAssign& e) override;
+
+            inline uint16_t get_register_size()
+            {
+                return register_id_;
+            }
 
         private:
             uint16_t type_id_ = 2;

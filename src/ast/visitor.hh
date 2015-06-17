@@ -35,6 +35,7 @@ namespace ast
             virtual void operator()(TypePrototype& e) = 0;
             virtual void operator()(TypeStruct& e) = 0;
             virtual void operator()(TypeUnion& e) = 0;
+            virtual void operator()(TypeArray& e) = 0;
             virtual void operator()(UnaryExp& e) = 0;
             virtual void operator()(Value& e) = 0;
             virtual void operator()(VarDec& e) = 0;

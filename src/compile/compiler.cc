@@ -8,6 +8,7 @@ namespace compile {
 
     void Compile::process(ast::Ast& a)
     {
+        register_.process(a);
         operator()(a);
         emitter_.emit<OP_HALT>();
         for (auto e : dec_)
@@ -418,6 +419,7 @@ namespace compile {
         if (!e.is_used())
             emitter_.emit<OP_POP>();
     }
+
     void Compile::write(const char* filename) {
         std::ofstream file(filename);
         file << emitter_;
@@ -427,6 +429,7 @@ namespace compile {
     void Compile::save(tolk::TolkFile& t) {
 
         std::vector<char> end;
+        t.set_register_number(register_.get_register_size());
         for (auto& Ub : emitter_.buf_get()) {
             end.insert(end.end(), Ub.args_.begin(), Ub.args_.end());
         }
@@ -462,5 +465,13 @@ namespace compile {
             st.insert(e->number_get(), s);
         }
         t.set_uniontable(st);
+
+        tolk::SymTable arrays;
+        for (auto& p : ast::ArrayBuilder::get().map_get())
+        {
+            tolk::Symbol s(p.second->access_type()->number_get());
+            arrays.insert(p.second->number_get(), s);
+        }
+        t.set_arraytable(arrays);
     }
 }

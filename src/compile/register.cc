@@ -54,6 +54,11 @@ namespace compile {
             sub->accept(*this);
     }
 
+    void Register::operator()(ast::TypeArray& e)
+    {
+        std::cout << "Just find a type array" << std::endl;
+    }
+
     void Register::operator()(ast::VarDec& e)
     {
         e.number_set(register_id_++);
@@ -82,6 +87,11 @@ namespace compile {
             uint16_t end = register_id_;
             f->reg_offset_set(start);
             f->reg_size_set(end - start);
+        }
+
+        for (auto& p : ast::ArrayBuilder::get().map_get())
+        {
+            p.second->number_set(type_id_++);
         }
     }
 }

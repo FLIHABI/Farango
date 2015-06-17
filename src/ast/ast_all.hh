@@ -53,6 +53,7 @@ namespace ast
     class TypePrototype;
     class TypeStruct;
     class TypeUnion;
+    class TypeArray;
     class String;
     class InnerExp;
     class ForExp;

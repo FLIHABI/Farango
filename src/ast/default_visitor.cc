@@ -238,6 +238,12 @@ namespace ast
         e.accept(*this);
     }
 
+    void DefaultVisitor::operator()(TypeArray& e)
+    {
+        if (e.sub_type_get())
+            e.sub_type_get()->accept(*this);
+    }
+
     void DefaultVisitor::operator()(OfferExp& e)
     {
         e.f_get()->accept(*this);

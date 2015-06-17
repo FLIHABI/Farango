@@ -27,7 +27,7 @@ namespace typebuilder
             e_ << dec << " is not a type" << std::endl;
             return;
         }
-        e.set_dec(std::make_shared<ast::TypeArray>(t, e.depth_get()));
+        e.set_dec(ast::ArrayBuilder::get().build(e.depth_get(), t));
     }
 
     bool operator==(ast::TypeIdentifierUse& t1, ast::TypeIdentifierUse& t2)
