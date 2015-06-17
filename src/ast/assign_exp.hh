@@ -33,6 +33,14 @@ namespace ast
                 return exp_;
             }
 
+#if 0
+            virtual AssignExp* clone()
+            {
+                return new AssignExp(std::shared_ptr<Value>(lvalue_->clone()),
+                                     std::shared_ptr<Exp>(exp_->clone()));
+            }
+#endif
+
         private:
             std::shared_ptr<Value> lvalue_;
             std::shared_ptr<Exp> exp_;

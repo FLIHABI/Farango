@@ -85,11 +85,11 @@ namespace typebuilder
                     );
 
         for (auto& spec : id.specs_get())
+        {
             new_struct->type_get()->specs_get().emplace_back(std::make_shared<ast::Declaration>(
                         std::make_shared<ast::Id>(*spec->type_name_get())));
-
-        for (auto& spec : id.specs_get())
             new_struct->spec_kind_get().push_back(spec);
+        }
 
         source->sub_type_get().push_back(new_struct);
 

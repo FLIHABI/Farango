@@ -36,6 +36,14 @@ namespace ast
                 return body_;
             }
 
+#if 0
+            virtual DoExp* clone()
+            {
+                return new DoExp(std::shared_ptr<Exp>(condition_->clone()),
+                                 std::shared_ptr<Exp>(body_->clone()));
+            }
+#endif
+
         private:
             std::shared_ptr<Exp> condition_;
             std::shared_ptr<Exp> body_;

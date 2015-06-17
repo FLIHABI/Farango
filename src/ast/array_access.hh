@@ -34,6 +34,13 @@ namespace ast
                 return offset_;
             }
 
+#if 0
+            virtual ArrayAccess* clone()
+            {
+                return new ArrayAccess(std::shared_ptr<Value>(val_->clone()),
+                                       std::shared_ptr<Exp>(offset_->clone()));
+            }
+#endif
         private:
             std::shared_ptr<Value> val_;
             std::shared_ptr<Exp> offset_;

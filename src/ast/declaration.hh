@@ -34,6 +34,13 @@ namespace ast
                 number_ = num;
             }
 
+#if 0
+            virtual Declaration* clone()
+            {
+                return new Declaration(std::shared_ptr<Id>(name_->clone()));
+            }
+#endif
+
         protected:
             Declaration()
             {};

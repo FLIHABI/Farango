@@ -33,6 +33,14 @@ namespace ast
                 loop_ = loop;
             }
 
+#if 0
+            virtual BreakExp* clone()
+            {
+                //FIXME, think about loop
+                return new BreakExp();
+            }
+#endif
+
         private:
             std::shared_ptr<LoopExp> loop_;
     };

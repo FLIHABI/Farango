@@ -510,6 +510,7 @@ namespace typechecker
 
     void TypeChecker::operator()(ast::OfferExp& e)
     {
+        //FIXME: check function
         e.f_get()->accept(*this);
         e.wrapper_get()->specs_get().push_back(e.f_get()->func_get()->return_t_get());
         typebuilder::TypeBuilder builder(e_);

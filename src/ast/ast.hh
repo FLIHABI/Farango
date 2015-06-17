@@ -1,7 +1,9 @@
 #ifndef AST_HH
 # define AST_HH
 
-#include "ast_all.hh"
+# include <memory>
+
+# include "ast_all.hh"
 
 namespace ast
 {
@@ -12,6 +14,10 @@ namespace ast
             {}
             virtual ~Ast()
             {}
+
+#if 0
+            virtual Ast* clone() = 0;
+#endif
 
             void virtual accept(Visitor& v) = 0;
     };

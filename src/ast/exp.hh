@@ -38,6 +38,11 @@ namespace ast
                 used_ = used;
             }
 
+#if 0
+            virtual Exp* clone() = 0;
+#endif
+
+
         protected:
             std::weak_ptr<Declaration> type_value_;
             bool used_ = false;

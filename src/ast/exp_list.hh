@@ -21,9 +21,13 @@ namespace ast
             void virtual accept(Visitor& v);
 
             void push(std::shared_ptr<Exp> e);
+
+#if 0
+            virtual ExpList* clone();
+#endif
             std::vector<std::shared_ptr<Exp>>& list_get();
 
-        private:
+        protected:
             std::vector<std::shared_ptr<Exp>> list_;
     };
 
@@ -43,6 +47,10 @@ namespace ast
             {
                 v(*this);
             }
+
+#if 0
+            virtual ExpListInner* clone();
+#endif
     };
 
     class ExpListFunction : public ExpList
@@ -60,6 +68,10 @@ namespace ast
             {
                 v(*this);
             }
+
+#if 0
+            virtual ExpListFunction* clone();
+#endif
     };
 }
 

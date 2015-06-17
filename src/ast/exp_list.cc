@@ -16,4 +16,30 @@ namespace ast
     {
         return list_;
     }
+
+#if 0
+    ExpList* ExpList::clone()
+    {
+        ExpList* ptr = new ExpList();
+        for (auto p : list_)
+            ptr->list_.emplace_back(p->clone());
+        return ptr;
+    }
+
+    ExpListInner* ExpListInner::clone()
+    {
+        ExpListInner* ptr = new ExpListInner();
+        for (auto p : list_)
+            ptr->list_.emplace_back(p->clone());
+        return ptr;
+    }
+
+    ExpListFunction* ExpListFunction::clone()
+    {
+        ExpListFunction* ptr = new ExpListFunction();
+        for (auto p : list_)
+            ptr->list_.emplace_back(p->clone());
+        return ptr;
+    }
+#endif
 }

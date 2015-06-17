@@ -48,6 +48,16 @@ namespace ast
                 return opsym_;
             }
 
+#if 0
+            virtual BinaryExp* clone()
+            {
+                return new BinaryExp(std::shared_ptr<Exp>(valuel_->clone()),
+                                     op_,
+                                     std::shared_ptr<Exp>(expr_->clone()),
+                                     opsym_);
+            }
+#endif
+
         private:
             std::shared_ptr<Exp> valuel_;
             Operator op_;
