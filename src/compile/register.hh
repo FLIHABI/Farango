@@ -36,8 +36,8 @@ namespace compile {
             virtual void operator()(ast::VarAssign& e) override;
 
         private:
-            uint16_t type_id_ = 0;
-            uint16_t register_id_ = 2; //reg 0 and 1 are used by compiler
+            uint16_t type_id_ = 2;
+            uint16_t register_id_ = 1; //reg 0 and 1 are used by compiler
             uint16_t function_id_ = 0;
             std::vector<ast::FunctionDec*>& dec_;
             std::vector<ast::TypeStruct*>& struct_table_;
