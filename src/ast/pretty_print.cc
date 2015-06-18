@@ -278,7 +278,7 @@ namespace ast
         auto end = e.unions_get().end();
         while (b != end)
         {
-            out_ << *b;
+            out_ << *const_cast<TypeIdentifierUse*>(&**b);
             out_ << misc::iendl << (++b == end ? "" : "| ");
         }
         out_ << misc::decendl;

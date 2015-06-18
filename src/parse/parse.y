@@ -86,6 +86,8 @@
  MODULE       "module"
  OFFER        "offer"
  GET          "get"
+ MATCH        "match"
+ WITH         "with"
  COMMA        ","
  COLON        ":"
  DCOLON       "::<"
@@ -117,6 +119,7 @@
  TILDE        "~"
  LSHIFT       "<<"
  RSHIFT       ">>"
+ ARROW        "->"
  ASSIGN       "="
  DOUBLE       "DOUBLE"
  END_OF_FILE 0 "<EOF>"
@@ -144,11 +147,13 @@
 %type <std::vector<std::shared_ptr<ast::TypeIdentifierUse>>> function_use_generics_list generics_list_use generics_list_inner_use
 %type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec function_def_generics_list
 %type <std::vector<ast::VarDec>> member_list proto_parameter_list proto_parameter_list_rec
-%type <std::vector<ast::TypeIdentifierUse>> type_union
+%type <std::set<std::shared_ptr<ast::TypeIdentifierUse>>> type_union
 /************************************************
  *                  PRECEDENCE                  *
  ************************************************/
 
+%nonassoc IN
+%nonassoc ARROW
 %nonassoc THEN
 %nonassoc ELSE
 %precedence WHILER FORR
@@ -287,8 +292,8 @@ type_decl
 
 /* FIXME: refactor in : identifier type_identifier_use  */
 type_union
-    : type_identifier_use { $$ = std::vector<ast::TypeIdentifierUse>(), $$.push_back(*$1); }
-    | type_union OR type_identifier_use { $$ = $1, $$.push_back(*$3); }
+    : type_identifier_use { $$ = std::set<std::shared_ptr<ast::TypeIdentifierUse>>(), $$.insert($1); }
+    | type_union OR type_identifier_use { $$ = $1, $$.insert($3); }
     ;
 
 typed_var /* ast exist */
@@ -319,6 +324,21 @@ value /* ast exist */
     | LBRACE expression_list RBRACE {$$ = std::make_shared<ast::ExpListInner>(*$2); }
     | OFFER LPAREN function_call RPAREN { $$ = std::make_shared<ast::OfferExp>($3); }
     | GET LPAREN value RPAREN { $$ = std::make_shared<ast::GetExp>($3); }
+    | matching { $$ = nullptr; } /* FIXME  */
+    ;
+
+matching
+    : MATCH value WITH match_list
+    ;
+
+match_list
+    : match_exp
+    | match_exp match_list
+    ;
+
+
+match_exp
+    : ARROW identifier COLON type_identifier_use ARROW LBRACE expression_list RBRACE /* Find a better grammar*/
     ;
 /*
    | LPAREN operator RPAREN //FIXME: Not in ast

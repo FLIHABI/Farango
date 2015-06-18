@@ -456,6 +456,7 @@ namespace compile {
         }
         t.set_structtable(st);
 
+#if 0
         st = tolk::StructTable();
         for (auto e : union_table_) {
             tolk::Struct s;
@@ -465,6 +466,7 @@ namespace compile {
             st.insert(e->number_get(), s);
         }
         t.set_uniontable(st);
+#endif
 
         tolk::SymTable arrays;
         for (auto& p : ast::ArrayBuilder::get().map_get())

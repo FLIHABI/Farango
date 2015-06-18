@@ -168,7 +168,7 @@ namespace binder
             aux->name_get()->accept(*this);
         }
         for (auto& id : e.unions_get())
-            id.accept(*this);
+            id->accept(*this);
         s_map_.end_scop();
     }
 

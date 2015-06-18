@@ -2,6 +2,8 @@
 # define TYPE_UNION_HH
 
 # include <vector>
+# include <memory>
+# include <set>
 
 # include "vardec.hh"
 # include "type_prototype.hh"
@@ -12,7 +14,7 @@ namespace ast
     class TypeUnion : public TypePrototype
     {
         public:
-            TypeUnion(std::shared_ptr<TypeIdentifierDec> type, std::vector<TypeIdentifierUse> unions)
+            TypeUnion(std::shared_ptr<TypeIdentifierDec> type, std::set<std::shared_ptr<TypeIdentifierUse>> unions)
                 : TypePrototype(type)
                 , unions_(unions)
             {};
@@ -25,13 +27,13 @@ namespace ast
                 v(*this);
             }
 
-            std::vector<TypeIdentifierUse>& unions_get()
+            std::set<std::shared_ptr<TypeIdentifierUse>>& unions_get()
             {
                 return unions_;
             }
 
         private:
-            std::vector<TypeIdentifierUse> unions_;
+            std::set<std::shared_ptr<TypeIdentifierUse>> unions_;
     };
 }
 

@@ -157,7 +157,7 @@ namespace ast
     {
         e.type_get()->accept(*this);
         for (auto& var : e.unions_get())
-            var.accept(*this);
+            var->accept(*this);
     }
 
     void DefaultVisitor::operator()(UnaryExp& e)
