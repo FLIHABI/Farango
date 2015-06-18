@@ -7,7 +7,6 @@
 
 namespace typechecker
 {
-    using namespace ast;
     //TODO expression printing
 
     bool operator==(ast::TypeArray& a, ast::TypeArray& b)
@@ -42,12 +41,42 @@ namespace typechecker
         return (a && a == b);
     }
 
+    bool TypeChecker::equal(ast::Exp& e1, ast::Exp& e2)
+    {
+        if (e1.type_value_get().lock() && e2.type_value_get().lock())
+            return is_equal(e1.type_value_get().lock(), e2.type_value_get().lock());
+        else if (e1.types_values_get() && e2.types_values_get())
+            return are_equal(*e1.types_values_get(), *e2.types_values_get());
+        else
+            return false;
+    }
+
     bool TypeChecker::is_equal(std::shared_ptr<ast::Declaration> a,
                                std::shared_ptr<ast::Declaration> b)
     {
         return (is_equal_impl(a, ast::AutoDec::get_def()) ^ is_equal_impl(b, ast::AutoDec::get_def()))
             || is_equal_impl(a, b);
     }
+
+    bool TypeChecker::are_equal(std::set<std::weak_ptr<ast::Declaration>>& a,
+                          std::set<std::weak_ptr<ast::Declaration>>& b)
+    {
+        //TODO: make something better than n ** 2
+        for (auto p1 : a)
+        {
+            bool found = false;
+            for (auto p2 : b)
+            {
+                found |= is_equal(p1.lock(), p2.lock());
+                if (found)
+                    break;
+            }
+            if (!found)
+                return false;
+        }
+        return true;
+    }
+
 
     static std::weak_ptr<ast::Declaration>& coerce(std::weak_ptr<ast::Declaration> a,
             std::weak_ptr<ast::Declaration> b)

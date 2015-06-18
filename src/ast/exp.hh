@@ -28,6 +28,16 @@ namespace ast
                 type_value_ = t;
             }
 
+            inline std::shared_ptr<std::set<std::weak_ptr<Declaration>>>& types_values_get()
+            {
+                return types_values_;
+            }
+
+            inline void types_values_set(std::shared_ptr<std::set<std::weak_ptr<Declaration>>> t)
+            {
+                types_values_ = t;
+            }
+
             inline bool is_used()
             {
                 return used_;
@@ -38,6 +48,14 @@ namespace ast
                 used_ = used;
             }
 
+            void recover_value(Exp& e)
+            {
+                if (e.type_value_.lock())
+                    type_value_ = e.type_value_;
+                else
+                    types_values_ = e.types_values_;
+            }
+
 #if 0
             virtual Exp* clone() = 0;
 #endif
@@ -45,6 +63,7 @@ namespace ast
 
         protected:
             std::weak_ptr<Declaration> type_value_;
+            std::shared_ptr<std::set<std::weak_ptr<Declaration>>> types_values_;
             bool used_ = false;
 
     };

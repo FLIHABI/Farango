@@ -50,8 +50,14 @@ namespace typechecker
             virtual void operator()(ast::GetExp& e) override;
 
         private:
+            bool equal(ast::Exp& e1, ast::Exp& e2);
+
             bool is_equal(std::shared_ptr<ast::Declaration> a,
                           std::shared_ptr<ast::Declaration> b);
+
+            bool are_equal(std::set<std::weak_ptr<ast::Declaration>>& a,
+                           std::set<std::weak_ptr<ast::Declaration>>& b);
+
             bool is_int(std::shared_ptr<ast::Declaration> a);
             misc::error& e_;
     };
