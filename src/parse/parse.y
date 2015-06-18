@@ -143,10 +143,12 @@
 %type <std::shared_ptr<ast::FunctionPrototype>> func_decl func_prototype
 %type <std::shared_ptr<ast::TypeIdentifierUse>> type_identifier_use type_allocation aux_use
 %type <std::shared_ptr<ast::TypeArrayIdentifier>> array_identifier array_identifier_allocation
+%type <std::shared_ptr<ast::TypeFunctionIdentifier>> function_identifier
 %type <std::shared_ptr<ast::TypeIdentifierDec>> type_identifier_dec
 %type <std::vector<std::shared_ptr<ast::TypeIdentifierUse>>> function_use_generics_list generics_list_use generics_list_inner_use
 %type <std::vector<std::shared_ptr<ast::Declaration>>> generics_list_dec generics_list_inner_dec function_def_generics_list
 %type <std::vector<ast::VarDec>> member_list proto_parameter_list proto_parameter_list_rec
+%type <std::vector<std::shared_ptr<ast::TypeIdentifierUse>>> proto_type_list proto_type_list_rec
 %type <std::set<std::shared_ptr<ast::TypeIdentifierUse>>> type_union
 /************************************************
  *                  PRECEDENCE                  *
@@ -252,10 +254,14 @@ array_identifier
     | array_identifier LSQUARE RSQUARE {$$ = $1; $$->depth_set($$->depth_get() + 1); }
     ;
 
+function_identifier
+    : LPAREN proto_type_list RPAREN COLON type_identifier_use { $$ = std::make_shared<ast::TypeFunctionIdentifier>($2, $5); }
+    ;
 /* */
 type_identifier_use /* ast exist */
     : aux_use { $$ = $1;}
     | array_identifier { $$ = $1; }
+    | function_identifier { $$ = $1; }
     ;
 
 generics_list_use /* ast exist */
@@ -496,6 +502,16 @@ proto_parameter_list /* ast exist */
 proto_parameter_list_rec /* ast exist */
     : typed_var { $$ = std::vector<ast::VarDec>(); $$.push_back(*$1);}
     | proto_parameter_list_rec COMMA typed_var  { $$ = $1; $$.push_back(*$3);}
+    ;
+
+proto_type_list /* ast exist */
+    : %empty { $$ = std::vector<std::shared_ptr<ast::TypeIdentifierUse>>(); }
+    | proto_type_list_rec {$$ = $1; }
+    ;
+
+proto_type_list_rec /* ast exist */
+    : type_identifier_use  { $$ = std::vector<std::shared_ptr<ast::TypeIdentifierUse>>(); $$.push_back($1);}
+    | proto_type_list_rec COMMA type_identifier_use { $$ = $1; $$.push_back($3);}
     ;
 
 function_def_generics_list

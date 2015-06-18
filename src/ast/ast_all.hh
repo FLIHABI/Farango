@@ -66,6 +66,7 @@ namespace ast
     template <typename T>
     class TypeIdentifier;
     class TypeIdentifierUse;
+    class TypeFunctionIdentifier;
 
     using TypeIdentifierDec = TypeIdentifier<Declaration>;
 

@@ -35,6 +35,7 @@
 #include "break_exp.hh"
 #include "array_access.hh"
 #include "type_array_identifier.hh"
+#include "type_function_identifier.hh"
 #include "new_exp.hh"
 #include "type_array.hh"
 #include "offer_exp.hh"
