@@ -541,6 +541,11 @@ namespace typechecker
     {
         //FIXME: check function
         e.f_get()->accept(*this);
+        if (e.f_get()->func_get() == nullptr)
+        {
+            e.type_value_set(ast::VoidDec::get_def());
+            return;
+        }
         e.wrapper_get()->specs_get().push_back(e.f_get()->func_get()->return_t_get());
         typebuilder::TypeBuilder builder(e_);
         builder(*e.wrapper_get());
