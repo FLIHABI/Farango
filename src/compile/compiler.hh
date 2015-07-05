@@ -45,6 +45,7 @@ namespace compile {
         virtual void operator()(ast::InnerExp& e) override;
         virtual void operator()(ast::OfferExp& e) override;
         virtual void operator()(ast::GetExp& e) override;
+        virtual void operator()(ast::AskExp& e) override;
 
         std::vector<ast::FunctionDec*>& dec_get()
         {

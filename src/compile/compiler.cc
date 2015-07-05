@@ -352,8 +352,15 @@ namespace compile {
         }
     }
 
-    void Compile::operator()(ast::Ask& e) {
-        e.list_get()->accept(*this);
+    void Compile::operator()(ast::AskExp& e) {
+        auto b = e.f_get()->list_get()->list_get().cbegin();
+        auto end = e.f_get()->list_get()->list_get().cend();
+        while (b != end) {
+            (*b)->set_used(true);
+            (*b)->accept(*this);
+            ++b;
+        }
+        emitter_.emit<OP_PUSH, int64_t>(e.f_get()->list_get()->list_get().size());
         emitter_.emit<OP_ASK,uint16_t>(e.number_get());
     }
 
