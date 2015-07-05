@@ -22,11 +22,13 @@ namespace compile {
     Register::Register(std::vector<ast::FunctionDec*>& dec,
                        std::vector<ast::TypeStruct*>& struct_table,
                        std::vector<ast::TypeUnion*>& union_table,
-                       std::vector<ast::Id*>& ask_table)
+                       std::vector<ast::Id*>& ask_table,
+                       std::vector<ast::String*>& string_table)
         : dec_(dec)
         , struct_table_(struct_table)
         , union_table_(union_table)
         , ask_table_(ask_table)
+        , string_table_(string_table)
     {
     }
 
@@ -64,6 +66,12 @@ namespace compile {
     void Register::operator()(ast::VarDec& e)
     {
         e.number_set(register_id_++);
+    }
+
+    void Register::operator()(ast::String& e)
+    {
+        e.number_set(ask_id_++);
+        string_table_.push_back(&e);
     }
 
     void Register::operator()(ast::VarAssign& e)

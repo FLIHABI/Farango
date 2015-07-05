@@ -12,7 +12,7 @@ namespace compile {
 
     public:
         Compile()
-            : register_(dec_, struct_table_, union_table_, ask_table_)
+            : register_(dec_, struct_table_, union_table_, ask_table_, string_table_)
         {}
         void write(const char* filename);
         void save(tolk::TolkFile&);
@@ -36,7 +36,7 @@ namespace compile {
         virtual void operator()(ast::ArrayAccess& e) override;
         virtual void operator()(ast::UnaryExp& e) override;
         virtual void operator()(ast::WhileExp& e) override;
-        //TODO virtual void operator()(ast::String& e) override;
+        virtual void operator()(ast::String& e) override;
         virtual void operator()(ast::ExpListFunction& e) override;
         virtual void operator()(ast::VarAssign& e) override;
         //TODO virtual void operator()(ast::BreakExp& e) override;
@@ -74,6 +74,7 @@ namespace compile {
         std::vector<ast::TypeStruct*> struct_table_;
         std::vector<ast::TypeUnion*> union_table_;
         std::vector<ast::Id*> ask_table_;
+        std::vector<ast::String*> string_table_;
         Emitter emitter_;
         Register register_;
     };

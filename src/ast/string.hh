@@ -34,8 +34,17 @@ namespace ast
                 value_ = value;
             }
 
+            inline uint16_t number_get() {
+                return number_;
+            }
+
+            inline void number_set(const uint16_t num) {
+                number_ = num;
+            }
+
         private:
             std::string value_;
+            uint16_t number_;
     };
 }
 

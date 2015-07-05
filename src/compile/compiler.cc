@@ -183,6 +183,11 @@ namespace compile {
             emitter_.emit<OP_PUSH, uint64_t>(e.value_get());
     }
 
+    void Compile::operator()(ast::String& e) {
+        if (e.is_used())
+            emitter_.emit<OP_PUSH, uint64_t>(e.number_get());
+    }
+
     void Compile::operator()(ast::DoExp& e) {
         if (e.is_used())
             emitter_.emit<OP_PUSH, uint64_t>(0);
@@ -491,10 +496,10 @@ namespace compile {
 
         tolk::StrTable str;
         for (auto id : ask_table_)
-        {
             str.insert(id->number_get(), id->s_get().name_get());
-        }
 
+        for (auto string : string_table_)
+            str.insert(string->number_get(), string->value_get());
         t.set_strtable(str);
     }
 }
