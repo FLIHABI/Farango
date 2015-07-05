@@ -48,6 +48,7 @@ namespace typechecker
             virtual void operator()(ast::TypeStruct& e) override;
             virtual void operator()(ast::OfferExp& e) override;
             virtual void operator()(ast::GetExp& e) override;
+            virtual void operator()(ast::AskExp& e) override;
 
         private:
             bool equal(ast::Exp& e1, ast::Exp& e2);

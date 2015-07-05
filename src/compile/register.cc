@@ -21,10 +21,12 @@ namespace compile {
 
     Register::Register(std::vector<ast::FunctionDec*>& dec,
                        std::vector<ast::TypeStruct*>& struct_table,
-                       std::vector<ast::TypeUnion*>& union_table)
+                       std::vector<ast::TypeUnion*>& union_table,
+                       std::vector<ast::Id*>& ask_table)
         : dec_(dec)
         , struct_table_(struct_table)
         , union_table_(union_table)
+        , ask_table_(ask_table)
     {
     }
 
@@ -68,6 +70,18 @@ namespace compile {
     {
         e.number_set(register_id_++);
         e.value_get()->accept(*this);
+    }
+
+    void Register::operator()(ast::AskExp& e)
+    {
+        e.f_get()->list_get()->accept(*this);
+        std::shared_ptr<ast::Lvalue> id =
+            std::dynamic_pointer_cast<ast::Lvalue>(e.f_get()->value_get());
+        //Assert != nullptr
+        e.number_set(register_id_);
+        id->s_get()->number_set(register_id_++);
+
+        ask_table_.push_back(&*id->s_get());
     }
 
     void Register::process(ast::Ast& a)

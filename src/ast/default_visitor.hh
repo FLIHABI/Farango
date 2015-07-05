@@ -58,6 +58,7 @@ namespace ast
             virtual void operator()(TypeValue& e) override;
             virtual void operator()(OfferExp& e) override;
             virtual void operator()(GetExp& e) override;
+            virtual void operator()(AskExp& e) override;
 
     };
 }

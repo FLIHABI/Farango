@@ -566,4 +566,21 @@ namespace typechecker
         }
         e.type_value_set(get->spec_kind_get()[0]->dec_get());
     }
+
+    void TypeChecker::operator()(ast::AskExp& e)
+    {
+        e.type_value_set(ast::VoidDec::get_def());
+        e.f_get()->list_get()->accept(*this);
+
+        std::shared_ptr<ast::Lvalue> id =
+            std::dynamic_pointer_cast<ast::Lvalue>(e.f_get()->value_get());
+        if (!id)
+        {
+            e_ << misc::error::error_type::type;
+            e_ << *e.f_get()->value_get()
+               << " is not callable"
+               << std::endl;
+            return;
+        }
+    }
 }

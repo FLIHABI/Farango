@@ -352,6 +352,12 @@ namespace compile {
         }
     }
 
+    void Compile::operator()(ast::Ask& e) {
+        e.list_get()->accept(*this);
+        emitter_.emit<OP_ASK,uint16_t>(e.number_get());
+    }
+
+
     void Compile::operator()(ast::FunctionDec& e) {
         //Everything is ok;
     }
@@ -475,5 +481,13 @@ namespace compile {
             arrays.insert(p.second->number_get(), s);
         }
         t.set_arraytable(arrays);
+
+        tolk::StrTable str;
+        for (auto id : ask_table_)
+        {
+            str.insert(id->number_get(), id->s_get().name_get());
+        }
+
+        t.set_strtable(str);
     }
 }

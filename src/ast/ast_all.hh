@@ -80,6 +80,7 @@ namespace ast
     class TypeValue;
     class OfferExp;
     class GetExp;
+    class AskExp;
 
 }
 

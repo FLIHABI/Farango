@@ -46,9 +46,19 @@ namespace ast
                 dec_ = d;
             };
 
+            inline uint16_t number_get() {
+                return number_;
+            }
+
+            inline void number_set(const uint16_t num) {
+                number_ = num;
+            }
+
         private:
             misc::symbol s_;
             std::shared_ptr<Declaration> dec_;
+            uint16_t number_;
+
     };
 }
 

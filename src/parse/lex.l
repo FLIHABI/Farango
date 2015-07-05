@@ -115,6 +115,7 @@ NEWLINE     \n\r|\r\n|\r|\n
 "module"     { return TOKEN(MODULE); }
 "offer"      { return TOKEN(OFFER); }
 "get"        { return TOKEN(GET); }
+"ask"        { return TOKEN(ASK); }
 "match"      { return TOKEN(MATCH); }
 "with"       { return TOKEN(WITH); }
 ","          { return TOKEN(COMMA); }

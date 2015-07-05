@@ -26,7 +26,8 @@ namespace compile {
         public:
             Register(std::vector<ast::FunctionDec*>&,
                      std::vector<ast::TypeStruct*>&,
-                     std::vector<ast::TypeUnion*>&);
+                     std::vector<ast::TypeUnion*>&,
+                     std::vector<ast::Id*>&);
             void process(ast::Ast&);
             virtual void operator()(ast::Ast& a) override;
             virtual void operator()(ast::FunctionDec& e) override;
@@ -35,6 +36,7 @@ namespace compile {
             virtual void operator()(ast::TypeArray& e) override;
             virtual void operator()(ast::VarDec& e) override;
             virtual void operator()(ast::VarAssign& e) override;
+            virtual void operator()(ast::AskExp& e) override;
 
             inline uint16_t get_register_size()
             {
@@ -45,9 +47,11 @@ namespace compile {
             uint16_t type_id_ = 2;
             uint16_t register_id_ = 1; //reg 0 and 1 are used by compiler
             uint16_t function_id_ = 0;
+            uint16_t ask_id_ = 0;
             std::vector<ast::FunctionDec*>& dec_;
             std::vector<ast::TypeStruct*>& struct_table_;
             std::vector<ast::TypeUnion*>& union_table_;
+            std::vector<ast::Id*>& ask_table_;
     };
 }
 

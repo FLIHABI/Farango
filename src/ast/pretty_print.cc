@@ -397,6 +397,11 @@ namespace ast
         out_ << "get (" << *e.value_get() << ")";
     }
 
+    void PrettyPrinter::operator()(AskExp& e)
+    {
+        out_ << "ask (" << *e.f_get() << ")";
+    }
+
     void PrettyPrinter::operator()(TypeValue& e)
     {
         e.accept(*this);

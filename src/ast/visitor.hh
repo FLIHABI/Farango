@@ -56,6 +56,7 @@ namespace ast
             virtual void operator()(TypeValue& e) = 0;
             virtual void operator()(OfferExp& e) = 0;
             virtual void operator()(GetExp& e) = 0;
+            virtual void operator()(AskExp& e) = 0;
 
             template <class E> void operator()(E* e);
             template <typename E> void accept(E* e);

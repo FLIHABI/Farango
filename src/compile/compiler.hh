@@ -11,8 +11,8 @@ namespace compile {
         using super = ast::DefaultVisitor;
 
     public:
-        Compile() 
-            : register_(dec_, struct_table_, union_table_)
+        Compile()
+            : register_(dec_, struct_table_, union_table_, ask_table_)
         {}
         void write(const char* filename);
         void save(tolk::TolkFile&);
@@ -72,6 +72,7 @@ namespace compile {
         std::vector<ast::FunctionDec*> dec_;
         std::vector<ast::TypeStruct*> struct_table_;
         std::vector<ast::TypeUnion*> union_table_;
+        std::vector<ast::Id*> ask_table_;
         Emitter emitter_;
         Register register_;
     };

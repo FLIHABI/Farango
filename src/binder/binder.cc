@@ -252,4 +252,11 @@ namespace binder
             );
         e.wrapper_set(wrapper);
     }
+
+    void Binder::operator()(ast::AskExp& e)
+    {
+        s_map_.start_scop();
+        e.f_get()->list_get()->accept(*this);
+        s_map_.end_scop();
+    }
 }

@@ -86,6 +86,7 @@
  MODULE       "module"
  OFFER        "offer"
  GET          "get"
+ ASK          "ask"
  MATCH        "match"
  WITH         "with"
  COMMA        ","
@@ -330,6 +331,7 @@ value /* ast exist */
     | LBRACE expression_list RBRACE {$$ = std::make_shared<ast::ExpListInner>(*$2); }
     | OFFER LPAREN function_call RPAREN { $$ = std::make_shared<ast::OfferExp>($3); }
     | GET LPAREN value RPAREN { $$ = std::make_shared<ast::GetExp>($3); }
+    | ASK LPAREN function_call RPAREN { $$ = std::make_shared<ast::AskExp>($3); }
     | matching { $$ = nullptr; } /* FIXME  */
     ;
 
