@@ -42,7 +42,7 @@ namespace ast
                 , depth_(depth)
             {
                 if (depth_ > 1)
-                    sub_type_ = ArrayBuilder::get().build(depth, type);
+                    sub_type_ = ArrayBuilder::get().build(depth - 1, type);
             }
 
             virtual ~TypeArray()
